@@ -1,4 +1,4 @@
-from cifpy.preprocess.environment import get_all_labels_connections
+from cifpy.preprocessors.environment import get_all_labels_connections
 from deepdiff import DeepDiff
 
 

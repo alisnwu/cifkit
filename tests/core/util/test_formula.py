@@ -1,5 +1,5 @@
 import pytest
-from cifpy.util.formula import (
+from cifpy.utils.formula import (
     get_validated_formula_label,
     get_parsed_formula,
     get_unique_element_count,
@@ -9,7 +9,7 @@ from cifpy.util.formula import (
     get_parsed_norm_formula,
 )
 
-from cifpy.util.error_messages import GeneralError
+from cifpy.utils.error_messages import GeneralError
 
 
 @pytest.mark.parametrize(

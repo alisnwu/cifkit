@@ -1,4 +1,4 @@
-from cifpy.util import cif_parser
+from cifpy.utils import cif_parser
 
 
 def remove_author_loop(file_path: str) -> None:

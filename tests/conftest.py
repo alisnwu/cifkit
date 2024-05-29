@@ -1,8 +1,8 @@
 # conftest.py
 import pytest
 import sys
-from cifpy.preprocess import supercell
-from cifpy.util import cif_parser, unit
+from cifpy.preprocessors import supercell
+from cifpy.utils import cif_parser, unit
 
 
 @pytest.fixture(scope="module")

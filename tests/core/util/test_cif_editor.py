@@ -4,10 +4,10 @@ import tempfile
 import os
 import filecmp
 
-from cifpy.util.cif_editor import (
+from cifpy.utils.cif_editor import (
     remove_author_loop,
 )
-from cifpy.util import cif_parser, folder, string_parser
+from cifpy.utils import cif_parser, folder, string_parser
 
 
 @pytest.fixture

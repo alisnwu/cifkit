@@ -1,6 +1,6 @@
 import pytest
-from cifpy.util.error_messages import GeneralError, CifParserError
-from cifpy.util.cif_parser import (
+from cifpy.utils.error_messages import GeneralError, CifParserError
+from cifpy.utils.cif_parser import (
     get_cif_block,
     parse_unit_cell_lengths_angles,
     get_loop_tags,

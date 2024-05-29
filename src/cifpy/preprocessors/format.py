@@ -1,4 +1,4 @@
-from cifpy.util import cif_parser, string_parser
+from cifpy.utils import cif_parser, string_parser
 import re
 
 

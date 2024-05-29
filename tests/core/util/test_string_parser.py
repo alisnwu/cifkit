@@ -1,7 +1,7 @@
 import pytest
 import logging
-from cifpy.util.error_messages import GeneralError, StringParserError
-from cifpy.util.string_parser import (
+from cifpy.utils.error_messages import GeneralError, StringParserError
+from cifpy.utils.string_parser import (
     get_atom_type_from_label,
     trim_remove_braket,
     clean_parsed_formula,

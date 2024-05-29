@@ -1,6 +1,6 @@
 import numpy as np
-from cifpy.preprocess import supercell
-from cifpy.util import unit, distance
+from cifpy.preprocessors import supercell
+from cifpy.utils import unit, distance
 
 
 def get_nearest_dists_per_site(
@@ -117,8 +117,8 @@ def get_most_connected_point_per_site(label, dist_dict, dist_set):
     within the shortest distances from a set of distances.
     """
     sorted_unique_dists = sorted(dist_set)
-    # Get the 7 shortest distances
-    shortest_dists = sorted_unique_dists[:7]
+    # Get the 5 shortest distances
+    shortest_dists = sorted_unique_dists[:5]
 
     # Variables to track the reference point with the highest count
     max_count = 0

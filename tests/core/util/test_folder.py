@@ -1,6 +1,6 @@
 import pytest
 import os
-from cifpy.util.folder import get_file_count, get_file_path_list
+from cifpy.utils.folder import get_file_count, get_file_path_list
 
 
 @pytest.fixture

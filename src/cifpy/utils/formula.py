@@ -3,7 +3,7 @@ Parses a formula
 """
 
 import re
-from cifpy.util.error_messages import GeneralError
+from cifpy.utils.error_messages import GeneralError
 
 
 def get_validated_formula_label(formula: str):

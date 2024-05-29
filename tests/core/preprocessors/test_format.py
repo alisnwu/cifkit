@@ -4,10 +4,10 @@ import tempfile
 import os
 import filecmp
 
-from cifpy.preprocess.format import (
+from cifpy.preprocessors.format import (
     preprocess_cif_file_on_label_element,
 )
-from cifpy.util import cif_parser, folder, string_parser
+from cifpy.utils import cif_parser, folder, string_parser
 
 
 def run_preprocess_test_on_cif_files(cif_dir):

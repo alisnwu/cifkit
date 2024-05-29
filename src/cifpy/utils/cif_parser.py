@@ -4,8 +4,8 @@ Parses attributes from a .cif file.
 
 import gemmi
 from gemmi.cif import Block
-from cifpy.util.string_parser import trim_remove_braket
-from cifpy.util import error_messages
+from cifpy.utils.string_parser import trim_remove_braket
+from cifpy.utils import error_messages
 
 
 def get_cif_block(file_path: str) -> Block:
@@ -185,9 +185,11 @@ def get_start_end_line_indexes(
     return start_index, end_index
 
 
-def get_line_content_from_tag(file_path, start_keyword):
+def get_line_content_from_tag(
+    file_path: str, start_keyword: str
+) -> list[str]:
     """
-    Returns section content with starting keyword.
+    Returns a list containing file content with starting keyword.
     """
     start_index, end_index = get_start_end_line_indexes(
         file_path, start_keyword

@@ -1,7 +1,7 @@
 import re
 import logging
-from cifpy.util import formula
-from cifpy.util.error_messages import GeneralError
+from cifpy.utils import formula
+from cifpy.utils.error_messages import GeneralError
 
 
 def get_atom_type_from_label(site_label: str) -> str:
