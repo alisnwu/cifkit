@@ -3,6 +3,60 @@ from cifpy.preprocessors import supercell
 from cifpy.utils import unit, distance
 
 
+def get_all_labels_connections(
+    labels,
+    unitcell_points,
+    supercell_points,
+    lengths,
+    angles,
+    is_cn_used,
+    cutoff_radius=10.0,
+):
+
+
+    """
+    Compute all pair distances per site label.
+    """
+    all_labels_connections = {}
+    for site_label in labels:
+        filtered_unitcell_points = [
+            point
+            for point in unitcell_points
+            if point[3] == site_label
+        ]
+
+        dist_result = get_nearest_dists_per_site(
+            filtered_unitcell_points,
+            supercell_points,
+            cutoff_radius,
+            lengths,
+            angles,
+        )
+
+        dist_dict, dist_set = dist_result
+
+        (
+            label,
+            connections,
+        ) = get_most_connected_point_per_site(
+            site_label, dist_dict, dist_set
+        )
+
+        all_labels_connections[label] = connections
+
+    # Determine coordination number
+    if is_cn_used:
+        all_labels_connections = filter_connections_with_cn(
+            all_labels_connections
+        )
+
+    all_labels_connections = add_diff_after(
+        all_labels_connections, is_cn_used
+    )
+
+    return all_labels_connections
+
+
 def get_nearest_dists_per_site(
     filtered_unitcell_points,
     supercell_points,
@@ -64,7 +118,7 @@ def get_nearest_dists_per_site(
 
 def calculate_normalized_dist_diffs(normalized_distances):
     """
-    Calculates differences between consecutive normalized distances.
+    Calculate differences between consecutive normalized distances.
     """
     normalized_dist_diffs = [
         normalized_distances[k + 1] - normalized_distances[k]
@@ -75,7 +129,7 @@ def calculate_normalized_dist_diffs(normalized_distances):
 
 def add_diff_after(all_labels_connections, is_cn_used):
     """
-    Adds the diff_after value to each connection.
+    Add the diff_after value to each connection.
     """
     updated_connections = {}
     for label, connections in all_labels_connections.items():
@@ -151,63 +205,11 @@ def get_most_connected_point_per_site(label, dist_dict, dist_set):
         ]
 
 
-def get_all_labels_connections(
-    labels,
-    unitcell_points,
-    supercell_points,
-    lengths,
-    angles,
-    is_cn_used,
-    cutoff_radius=10.0,
-):
-    """
-    Computes all pair distances per site label.
-    """
-    all_labels_connections = {}
-    for site_label in labels:
-        filtered_unitcell_points = [
-            point
-            for point in unitcell_points
-            if point[3] == site_label
-        ]
-
-        dist_result = get_nearest_dists_per_site(
-            filtered_unitcell_points,
-            supercell_points,
-            cutoff_radius,
-            lengths,
-            angles,
-        )
-
-        dist_dict, dist_set = dist_result
-
-        (
-            label,
-            connections,
-        ) = get_most_connected_point_per_site(
-            site_label, dist_dict, dist_set
-        )
-
-        all_labels_connections[label] = connections
-
-    # Determine coordination number
-    if is_cn_used:
-        all_labels_connections = filter_connections_with_cn(
-            all_labels_connections
-        )
-
-    all_labels_connections = add_diff_after(
-        all_labels_connections, is_cn_used
-    )
-    print(all_labels_connections)
-    return all_labels_connections
-
-
 def filter_connections_with_cn(
     labels_connections, nearest_neighbor_max_count=20
 ):
     """
-    Reduces the number of connections based on the CN.
+    Reduce the number of connections based on the CN.
     """
     filtered_connections = {}
     for label, label_data in labels_connections.items():
@@ -240,7 +242,7 @@ def filter_connections_with_cn(
 
 def calculate_normalized_distances(connections):
     """
-    Calculates normalized distances for each connection
+    Calculate normalized distances for each connection
     """
     min_dist = connections[0][1]
     normalized_distances = [

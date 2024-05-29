@@ -2,12 +2,13 @@ import pytest
 from cifpy.utils.error_messages import GeneralError, CifParserError
 from cifpy.utils.cif_parser import (
     get_cif_block,
-    parse_unit_cell_lengths_angles,
+    get_unitcell_lengths,
+    get_unitcell_angles_rad,
     get_loop_tags,
     get_loop_values,
-    get_num_of_unique_atom_labels,
+    get_unique_label_count,
     get_unique_elements,
-    get_atom_label_list,
+    get_unique_site_labels,
     get_label_occupancy_coordinates,
     get_loop_value_dict,
     get_start_end_line_indexes,
@@ -20,10 +21,11 @@ def test_get_cif_block(cif_block_URhIn):
 
 
 def test_get_unit_cell_lengths_angles(cif_block_URhIn):
-    lengths, angles = parse_unit_cell_lengths_angles(cif_block_URhIn)
+    lengths = get_unitcell_lengths(cif_block_URhIn)
+    angles = get_unitcell_angles_rad(cif_block_URhIn)
 
     assert lengths == [7.476, 7.476, 3.881]
-    assert angles == [90.0, 90.0, 120.0]
+    assert angles == [1.5708, 1.5708, 2.0944]
 
 
 def test_get_loop_tags():
@@ -64,7 +66,7 @@ def test_get_loop_values_wrong_loop_number():
 
 
 def test_get_num_of_atom_unique_labels(loop_values_URhIn):
-    assert get_num_of_unique_atom_labels(loop_values_URhIn) == 4
+    assert get_unique_label_count(loop_values_URhIn) == 4
 
 
 def test_get_unique_elements(loop_values_URhIn):
@@ -72,7 +74,7 @@ def test_get_unique_elements(loop_values_URhIn):
 
 
 def test_get_atom_labels(loop_values_URhIn):
-    assert get_atom_label_list(loop_values_URhIn) == [
+    assert get_unique_site_labels(loop_values_URhIn) == [
         "In1",
         "U1",
         "Rh1",

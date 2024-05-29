@@ -10,7 +10,7 @@ def get_supercell_points(
     supercell_generation_method,
 ) -> list[tuple[float, float, float, str]]:
     """
-    Returns supercell points
+    Return supercell points
     """
     supercell_points = []
     loop_values = cif_parser.get_loop_values(block)
@@ -44,7 +44,7 @@ def get_unitcell_coords_for_all_labels(
     block: Block,
 ) -> list[tuple[float, float, float, str]]:
     """
-    Computes the new coordinates after applying
+    Compute the new coordinates after applying
     symmetry operations to the initial coordinates.
     """
 
@@ -73,7 +73,7 @@ def get_unitcell_coords_after_sym_operations_per_label(
     atom_site_label: str,
 ) -> list[tuple[float, float, float, str]]:
     """
-    Generates a list of coordinates for each atom
+    Generate a list of coordinates for each atom
     site after applying symmetry operations.
     """
     all_coords = set()
@@ -122,7 +122,7 @@ def shift_and_append_points(
     supercell_generation_method: int,
 ):
     """
-    Shifts and duplicates points to create a supercell.
+    Shift and duplicate points to create a supercell.
     """
 
     # Method 1 - No sfhits

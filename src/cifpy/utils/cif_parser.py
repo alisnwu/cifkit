@@ -5,12 +5,13 @@ Parses attributes from a .cif file.
 import gemmi
 from gemmi.cif import Block
 from cifpy.utils.string_parser import trim_remove_braket
+from cifpy.utils import unit
 from cifpy.utils import error_messages
 
 
 def get_cif_block(file_path: str) -> Block:
     """
-    Returns CIF block from file path.
+    Return CIF block from file path.
     """
     doc = gemmi.cif.read_file(file_path)
     block = doc.sole_block()
@@ -18,38 +19,50 @@ def get_cif_block(file_path: str) -> Block:
     return block
 
 
-def parse_unit_cell_lengths_angles(
+def get_unitcell_lengths(
     block: Block,
-) -> tuple[list[str], list[str]]:
+) -> list[float]:
     """
-    Returns the unit cell lengths and angles.
+    Return the unit cell lengths.
     """
     keys_lengths = [
         "_cell_length_a",
         "_cell_length_b",
         "_cell_length_c",
     ]
+
+    lengths = [
+        trim_remove_braket(block.find_value(key))
+        for key in keys_lengths
+    ]
+
+    return lengths
+
+
+def get_unitcell_angles_rad(
+    block: Block,
+) -> list[float]:
+    """
+    Return the unit cell angles.
+    """
+
     keys_angles = [
         "_cell_angle_alpha",
         "_cell_angle_beta",
         "_cell_angle_gamma",
     ]
 
-    lengths = [
-        trim_remove_braket(block.find_value(key))
-        for key in keys_lengths
-    ]
     angles = [
         trim_remove_braket(block.find_value(key))
         for key in keys_angles
     ]
 
-    return lengths, angles
+    return unit.get_radians_from_degrees(angles)
 
 
 def get_loop_tags() -> list[str]:
     """
-    Returns tags commonly used for atomic description.
+    Return tags commonly used for atomic description.
     """
     loop_tags = [
         "_atom_site_label",
@@ -87,7 +100,7 @@ def get_loop_values(block: Block) -> list[str]:
     return loop_values
 
 
-def get_num_of_unique_atom_labels(loop_values: list) -> int:
+def get_unique_label_count(loop_values: list) -> int:
     """
     Counts the number of labels in the loop.
     """
@@ -98,7 +111,7 @@ def get_unique_elements(loop_values: list) -> set[str]:
     """
     Returns a list of unique elements from loop values.
     """
-    num_atom_labels = get_num_of_unique_atom_labels(loop_values)
+    num_atom_labels = get_unique_label_count(loop_values)
     element_list = []
     for i in range(num_atom_labels):
         element = loop_values[1][i]
@@ -106,11 +119,11 @@ def get_unique_elements(loop_values: list) -> set[str]:
     return set(element_list)
 
 
-def get_atom_label_list(loop_values: list) -> list[str]:
+def get_unique_site_labels(loop_values: list) -> list[str]:
     """
     Returns a list of atom labels from loop values.
     """
-    num_atom_labels = get_num_of_unique_atom_labels(loop_values)
+    num_atom_labels = get_unique_label_count(loop_values)
     label_list = []
     for i in range(num_atom_labels):
         element = loop_values[0][i]
@@ -126,7 +139,7 @@ def get_label_occupancy_coordinates(
     Gets atom information (label, occupancy, coordinates) for the i-th atom.
     """
     label = loop_values[0][i]
-    occupancy = float((loop_values[7][i]))
+    occupancy = trim_remove_braket(loop_values[7][i])
     coordinates = (
         trim_remove_braket(loop_values[4][i]),
         trim_remove_braket(loop_values[5][i]),
@@ -138,10 +151,10 @@ def get_label_occupancy_coordinates(
 
 def get_loop_value_dict(loop_values: list) -> dict:
     """
-    Creates a dictionary containing CIF loop values for each label.
+    Create a dictionary containing CIF loop values for each label.
     """
     loop_value_dict = {}
-    num_of_atom_labels = get_num_of_unique_atom_labels(loop_values)
+    num_of_atom_labels = get_unique_label_count(loop_values)
 
     for i in range(num_of_atom_labels):
         label, occupancy, coordinates = (
@@ -158,7 +171,7 @@ def get_start_end_line_indexes(
     file_path: str, start_keyword: str
 ) -> tuple[int, int]:
     """
-    Finds the starting and ending indexes of the lines in atom_site_loop
+    Find the starting and ending indexes of the lines in atom_site_loop
     """
 
     with open(file_path, "r") as f:

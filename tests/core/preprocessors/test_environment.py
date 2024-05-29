@@ -23,18 +23,18 @@ def test_get_nearest_dists_per_site_cooridnation_number(
     site_labels_URhIn,
     unitcell_points_URhIn,
     supercell_points_URhIn,
-    angles_lenghts_URhIn,
+    lenghts_URhIn,
+    angles_rad_URhIn,
 ):
 
-    lengths, angles_rad = angles_lenghts_URhIn
     is_cn_used = True
 
     all_label_connections = get_all_labels_connections(
         site_labels_URhIn,
         unitcell_points_URhIn,
         supercell_points_URhIn,
-        lengths,
-        angles_rad,
+        lenghts_URhIn,
+        angles_rad_URhIn,
         is_cn_used,
     )
 
@@ -53,18 +53,18 @@ def test_get_nearest_dists_per_site_cutoff_radius(
     site_labels_URhIn,
     unitcell_points_URhIn,
     supercell_points_URhIn,
-    angles_lenghts_URhIn,
+    lenghts_URhIn,
+    angles_rad_URhIn,
 ):
 
-    lengths, angles_rad = angles_lenghts_URhIn
     is_cn_used = False
 
     all_label_connections = get_all_labels_connections(
         site_labels_URhIn,
         unitcell_points_URhIn,
         supercell_points_URhIn,
-        lengths,
-        angles_rad,
+        lenghts_URhIn,
+        angles_rad_URhIn,
         is_cn_used,
         cutoff_radius=3.9,
     )

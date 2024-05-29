@@ -38,13 +38,17 @@ def supercell_points_URhIn(cif_block_URhIn):
 
 
 @pytest.fixture(scope="module")
-def angles_lenghts_URhIn(cif_block_URhIn):
-    lenghts, angles = cif_parser.parse_unit_cell_lengths_angles(
-        cif_block_URhIn
-    )
-    return lenghts, unit.get_radians_from_degrees(angles)
+def lenghts_URhIn(cif_block_URhIn):
+    lenghts = cif_parser.get_unitcell_lengths(cif_block_URhIn)
+    return lenghts
+
+
+@pytest.fixture(scope="module")
+def angles_rad_URhIn(cif_block_URhIn):
+    angles_rad = cif_parser.get_unitcell_angles_rad(cif_block_URhIn)
+    return angles_rad
 
 
 @pytest.fixture(scope="module")
 def site_labels_URhIn(loop_values_URhIn):
-    return cif_parser.get_atom_label_list(loop_values_URhIn)
+    return cif_parser.get_unique_site_labels(loop_values_URhIn)

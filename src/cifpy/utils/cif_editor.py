@@ -3,7 +3,7 @@ from cifpy.utils import cif_parser
 
 def remove_author_loop(file_path: str) -> None:
     """
-    Removes the author section from a .cif file to prevent parsing problems
+    Remove the author section from a .cif file to prevent parsing problems
     caused by a wrongly formatted author block.
     """
     (

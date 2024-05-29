@@ -6,7 +6,7 @@ from cifpy.utils.error_messages import GeneralError
 
 def get_atom_type_from_label(site_label: str) -> str:
     """
-    Returns the element from the given label.
+    Return the element from the given label.
     """
     validated_label = formula.get_validated_formula_label(site_label)
     if not isinstance(validated_label, str):
@@ -27,7 +27,7 @@ def get_atom_type_from_label(site_label: str) -> str:
 
 def trim_remove_braket(value_string: str) -> float:
     """
-    Removes parentheses from a value string and convert to float.
+    Remove parentheses from a value string and convert to float.
     """
     value_string = value_string.strip()
 
@@ -39,8 +39,14 @@ def trim_remove_braket(value_string: str) -> float:
 
 
 def clean_parsed_formula(formula):
+    """
+    Remove "~", " ", and "'" characters from the parsed formula.
+    """
     return formula.replace("~", "").replace(" ", "").replace("'", "")
 
 
 def clean_parsed_structure(structure_type):
+    """
+    Split the parsed structure text and remove "~".
+    """
     return structure_type.split(",")[0].replace("~", "")

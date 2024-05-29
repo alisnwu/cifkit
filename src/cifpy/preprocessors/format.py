@@ -3,6 +3,12 @@ import re
 
 
 def preprocess_cif_file_on_label_element(file_path):
+    """
+    Modify the atomic label site text in a .cif file. .cif files may
+    have the atomic labels in symbolic forms such as "M1" and some also
+    have two elements provided such as "In1,Co3B". Each case is handled
+    with specific examples demonstrated in the source and test code.
+    """
     is_cif_file_updated = False
     cif_block = cif_parser.get_cif_block(file_path)
     loop_values = cif_parser.get_loop_values(cif_block)
