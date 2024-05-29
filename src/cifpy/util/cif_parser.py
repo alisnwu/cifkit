@@ -18,7 +18,9 @@ def get_cif_block(file_path: str) -> Block:
     return block
 
 
-def get_unit_cell_lengths_angles(block: Block) -> tuple[list[str], list[str]]:
+def parse_unit_cell_lengths_angles(
+    block: Block,
+) -> tuple[list[str], list[str]]:
     """
     Returns the unit cell lengths and angles.
     """
@@ -34,9 +36,13 @@ def get_unit_cell_lengths_angles(block: Block) -> tuple[list[str], list[str]]:
     ]
 
     lengths = [
-        trim_remove_braket(block.find_value(key)) for key in keys_lengths
+        trim_remove_braket(block.find_value(key))
+        for key in keys_lengths
     ]
-    angles = [trim_remove_braket(block.find_value(key)) for key in keys_angles]
+    angles = [
+        trim_remove_braket(block.find_value(key))
+        for key in keys_angles
+    ]
 
     return lengths, angles
 
@@ -61,7 +67,8 @@ def get_loop_tags() -> list[str]:
 
 def get_loop_values(block: Block) -> list[str]:
     """
-    Retrieve a list of predefined loop tags for atomic site description.
+    Retrieve a list of predefined loop tags for
+    atomic site description.
     """
     loop_tags = get_loop_tags()
 
@@ -114,7 +121,7 @@ def get_atom_label_list(loop_values: list) -> list[str]:
 
 def get_label_occupancy_coordinates(
     loop_values: list, i
-) -> tuple[str, float, tuple[float, float, float]]:
+) -> tuple[str, float, list[float, float, float]]:
     """
     Gets atom information (label, occupancy, coordinates) for the i-th atom.
     """
@@ -137,8 +144,8 @@ def get_loop_value_dict(loop_values: list) -> dict:
     num_of_atom_labels = get_num_of_unique_atom_labels(loop_values)
 
     for i in range(num_of_atom_labels):
-        label, occupancy, coordinates = get_label_occupancy_coordinates(
-            loop_values, i
+        label, occupancy, coordinates = (
+            get_label_occupancy_coordinates(loop_values, i)
         )
         loop_value_dict[label] = {}
         loop_value_dict[label]["occupancy"] = occupancy

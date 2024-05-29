@@ -1,23 +1,19 @@
 import numpy as np
 from cifpy.util import unit
-import difflib
-import pprint
+import pytest
 
 
 from cifpy.preprocess.supercell import (
-    get_coords_after_sym_operations,
-    fractional_to_cartesian,
-    get_coords_list,
+    get_unitcell_coords_after_sym_operations_per_label,
+    get_unitcell_coords_for_all_labels,
+    flatten_original_coordinates,
+    get_supercell_points,
 )
 
 
-def test_get_unit_cell_coordinates(cif_block_URhIn, loop_values_URhIn):
-    coordinates = get_coords_list(cif_block_URhIn, loop_values_URhIn)
-    # Flatten the coordinates for comparision with the expected
-    coordinates_set = set(
-        tuple(coord) for sublist in coordinates for coord in sublist
-    )
-    expected_set = set(
+@pytest.fixture
+def unitcell_points_URhIn():
+    unitcell_points = set(
         (
             (-0.2505, -0.2505, 0.5, "In1"),
             (0.0, 0.2505, 0.5, "In1"),
@@ -43,24 +39,167 @@ def test_get_unit_cell_coordinates(cif_block_URhIn, loop_values_URhIn):
             (0.0, 0.0, 0.0, "Rh2"),
         )
     )
+    yield unitcell_points
+
+
+@pytest.fixture
+def supercell_2_points_URhIn():
+    unitcell_points = set(
+        (
+            (0.2505, 1.0, 1.5, "In1"),
+            (-0.33333, -0.66667, -0.5, "Rh1"),
+            (0.33333, -0.33333, 0.5, "Rh1"),
+            (0.7495, -0.2505, 1.5, "In1"),
+            (0.66667, -0.66667, 1.5, "Rh1"),
+            (1.0, 0.2505, 0.5, "In1"),
+            (1.0, 1.5925, 1.0, "U1"),
+            (1.0, 1.2505, -0.5, "In1"),
+            (1.66667, 0.33333, 0.5, "Rh1"),
+            (0.7495, -0.2505, -0.5, "In1"),
+            (0.33333, -0.33333, 1.5, "Rh1"),
+            (1.33333, 0.66667, -0.5, "Rh1"),
+            (-0.5925, -0.5925, 0.0, "U1"),
+            (-0.33333, 0.33333, 1.5, "Rh1"),
+            (0.0, 1.2505, 1.5, "In1"),
+            (1.2505, 1.0, 1.5, "In1"),
+            (0.33333, 0.66667, 0.5, "Rh1"),
+            (0.66667, 0.33333, 0.5, "Rh1"),
+            (0.0, 1.0, 1.0, "Rh2"),
+            (0.33333, -0.33333, -0.5, "Rh1"),
+            (1.0, 0.2505, -0.5, "In1"),
+            (1.5925, 1.0, 1.0, "U1"),
+            (1.0, 0.0, 0.0, "Rh2"),
+            (-0.2505, 0.7495, 1.5, "In1"),
+            (0.4075, -0.5925, 0.0, "U1"),
+            (0.0, 1.2505, -0.5, "In1"),
+            (1.33333, -0.33333, 1.5, "Rh1"),
+            (0.33333, 1.66667, 0.5, "Rh1"),
+            (1.66667, 0.33333, -0.5, "Rh1"),
+            (-0.2505, -0.2505, 0.5, "In1"),
+            (0.2505, 0.0, 1.5, "In1"),
+            (0.7495, 0.7495, 0.5, "In1"),
+            (0.66667, 1.33333, 0.5, "Rh1"),
+            (0.66667, 0.33333, 1.5, "Rh1"),
+            (0.5925, 0.0, 1.0, "U1"),
+            (0.33333, 1.66667, 1.5, "Rh1"),
+            (0.66667, 0.33333, -0.5, "Rh1"),
+            (0.33333, 0.66667, -0.5, "Rh1"),
+            (-0.5925, 0.4075, 0.0, "U1"),
+            (-0.33333, -0.66667, 0.5, "Rh1"),
+            (0.0, 0.2505, 1.5, "In1"),
+            (1.0, 1.2505, 1.5, "In1"),
+            (0.0, 0.5925, 0.0, "U1"),
+            (0.66667, 1.33333, 1.5, "Rh1"),
+            (0.33333, 1.66667, -0.5, "Rh1"),
+            (1.66667, 1.33333, 1.5, "Rh1"),
+            (-0.2505, -0.2505, -0.5, "In1"),
+            (-0.33333, 1.33333, 0.5, "Rh1"),
+            (0.66667, -0.66667, 0.5, "Rh1"),
+            (0.7495, 0.7495, -0.5, "In1"),
+            (1.2505, 0.0, 0.5, "In1"),
+            (0.66667, 1.33333, -0.5, "Rh1"),
+            (-0.66667, -0.33333, 0.5, "Rh1"),
+            (0.0, 1.5925, 1.0, "U1"),
+            (0.4075, 0.4075, 1.0, "U1"),
+            (0.5925, 1.0, 1.0, "U1"),
+            (1.0, 0.5925, 0.0, "U1"),
+            (0.33333, 0.66667, 1.5, "Rh1"),
+            (-0.33333, 0.33333, 0.5, "Rh1"),
+            (1.66667, 0.33333, 1.5, "Rh1"),
+            (1.2505, 1.0, 0.5, "In1"),
+            (0.0, 1.0, 0.0, "Rh2"),
+            (-0.5925, -0.5925, 1.0, "U1"),
+            (0.66667, -0.66667, -0.5, "Rh1"),
+            (0.4075, -0.5925, 1.0, "U1"),
+            (1.2505, 0.0, -0.5, "In1"),
+            (-0.2505, 0.7495, 0.5, "In1"),
+            (1.33333, 1.66667, 0.5, "Rh1"),
+            (-0.66667, 0.66667, 0.5, "Rh1"),
+            (1.0, 1.0, 1.0, "Rh2"),
+            (0.0, 0.0, 0.0, "Rh2"),
+            (0.2505, 1.0, 0.5, "In1"),
+            (0.4075, 0.4075, 0.0, "U1"),
+            (1.33333, 0.66667, 1.5, "Rh1"),
+            (1.0, 0.0, 1.0, "Rh2"),
+            (1.0, 1.5925, 0.0, "U1"),
+            (-0.33333, 0.33333, -0.5, "Rh1"),
+            (-0.2505, -0.2505, 1.5, "In1"),
+            (1.2505, 1.0, -0.5, "In1"),
+            (1.0, 0.2505, 1.5, "In1"),
+            (0.0, 0.5925, 1.0, "U1"),
+            (0.0, 0.2505, 0.5, "In1"),
+            (1.33333, 1.66667, -0.5, "Rh1"),
+            (-0.66667, 0.66667, -0.5, "Rh1"),
+            (-0.33333, -0.66667, 1.5, "Rh1"),
+            (-0.33333, 1.33333, 1.5, "Rh1"),
+            (1.66667, 1.33333, 0.5, "Rh1"),
+            (0.2505, 1.0, -0.5, "In1"),
+            (1.5925, 0.0, 1.0, "U1"),
+            (1.2505, 0.0, 1.5, "In1"),
+            (1.5925, 1.0, 0.0, "U1"),
+            (1.33333, -0.33333, 0.5, "Rh1"),
+            (0.0, 1.2505, 0.5, "In1"),
+            (-0.33333, 1.33333, -0.5, "Rh1"),
+            (0.0, 1.5925, 0.0, "U1"),
+            (0.2505, 0.0, 0.5, "In1"),
+            (0.5925, 1.0, 0.0, "U1"),
+            (0.0, 0.2505, -0.5, "In1"),
+            (-0.66667, -0.33333, 1.5, "Rh1"),
+            (1.5925, 0.0, 0.0, "U1"),
+            (-0.66667, -0.33333, -0.5, "Rh1"),
+            (1.66667, 1.33333, -0.5, "Rh1"),
+            (1.0, 0.5925, 1.0, "U1"),
+            (0.7495, 0.7495, 1.5, "In1"),
+            (1.0, 1.2505, 0.5, "In1"),
+            (-0.5925, 0.4075, 1.0, "U1"),
+            (0.7495, -0.2505, 0.5, "In1"),
+            (1.33333, -0.33333, -0.5, "Rh1"),
+            (0.5925, 0.0, 0.0, "U1"),
+            (1.0, 1.0, 0.0, "Rh2"),
+            (1.33333, 0.66667, 0.5, "Rh1"),
+            (0.2505, 0.0, -0.5, "In1"),
+            (-0.2505, 0.7495, -0.5, "In1"),
+            (1.33333, 1.66667, 1.5, "Rh1"),
+            (-0.66667, 0.66667, 1.5, "Rh1"),
+            (0.0, 0.0, 1.0, "Rh2"),
+        )
+    )
+    yield unitcell_points
+
+
+def test_get_unit_cell_coordinates(
+    cif_block_URhIn, unitcell_points_URhIn
+):
+    coordinates = get_unitcell_coords_for_all_labels(cif_block_URhIn)
+
+    # Flatten the coordinates for comparision with the expected
+    coordinates_set = set(
+        tuple(coord) for sublist in coordinates for coord in sublist
+    )
 
     # Compare the two sets
-    assert (
-        coordinates_set == expected_set
-    ), f"Expected {expected_set}, but got {coordinates_set}"
+    assert coordinates_set == unitcell_points_URhIn
 
 
-def test_fractional_to_cartesian():
-    frac_pts = [0.2505, 0, 0.5]
-    lengths = [7.476, 7.476, 3.881]
-    angles = [90, 90, 120]
-    angles_rad = unit.get_radians_from_degrees(angles)
+def test_get_supercell_points_full_shift(cif_block_URhIn):
+    # +-1 +-1 +-1 shifts
+    supercell_points = get_supercell_points(cif_block_URhIn, 3)
+    assert len(supercell_points) == 336
 
-    # Expected cartesian coordinates
-    expected_cart = [1.87273087, -1.23458760e-05, 1.94050000]
 
-    # Actual cartesian coordinates from function
-    cart_1 = fractional_to_cartesian(frac_pts, lengths, angles_rad)
-    assert np.allclose(
-        cart_1, expected_cart, atol=1e-4
-    ), f"Expected {expected_cart}, but got {cart_1}"
+def test_get_supercell_points_one_direction_shift(
+    cif_block_URhIn, supercell_2_points_URhIn
+):
+    # +1 +1 +1 shifts
+    supercell_points = get_supercell_points(cif_block_URhIn, 2)
+    assert set(supercell_points) == supercell_2_points_URhIn
+    assert len(supercell_points) == 116
+
+
+def test_get_supercell_points_no_shift(
+    cif_block_URhIn, unitcell_points_URhIn
+):
+    # No sfhits
+    supercell_points = get_supercell_points(cif_block_URhIn, 1)
+    assert set(supercell_points) == unitcell_points_URhIn
+    assert len(supercell_points) == 22

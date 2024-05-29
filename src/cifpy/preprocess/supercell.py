@@ -1,44 +1,85 @@
 import numpy as np
 import gemmi
-from cifpy.util.cif_parser import trim_remove_braket
 from gemmi.cif import Block
+from cifpy.util import cif_parser, string_parser
+from cifpy.util import error_messages
 
 
-def get_coords_list(block: Block, loop_values: list):
+def get_supercell_points(
+    block,
+    supercell_generation_method,
+) -> list[tuple[float, float, float, str]]:
+    """
+    Returns supercell points
+    """
+    supercell_points = []
+    loop_values = cif_parser.get_loop_values(block)
+    all_coords_list = get_unitcell_coords_for_all_labels(block)
+    # Get the total number of atoms in the unit cell
+
+    for i, all_coords in enumerate(all_coords_list):
+        points = flatten_original_coordinates(all_coords)
+        atom_site_label = loop_values[0][i]
+        atom_site_type = loop_values[1][i]
+
+        supercell_points.extend(
+            shift_and_append_points(
+                points,
+                atom_site_label,
+                supercell_generation_method,
+            )
+        )
+
+        if (
+            string_parser.get_atom_type_from_label(atom_site_label)
+            != atom_site_type
+        ):
+            raise RuntimeError(
+                "Different elements found in atom site and label"
+            )
+    return list(set(supercell_points))
+
+
+def get_unitcell_coords_for_all_labels(
+    block: Block,
+) -> list[tuple[float, float, float, str]]:
     """
     Computes the new coordinates after applying
     symmetry operations to the initial coordinates.
     """
 
+    loop_values = cif_parser.get_loop_values(block)
     loop_length = len(loop_values[0])
     coords_list = []
     for i in range(loop_length):
-        atom_site_x = float(trim_remove_braket(loop_values[4][i]))
-        atom_site_y = float(trim_remove_braket(loop_values[5][i]))
-        atom_site_z = float(trim_remove_braket(loop_values[6][i]))
-        atom_site_label = loop_values[0][i]
-
-        coords_after_symmetry_operations = get_coords_after_sym_operations(
-            block,
-            [atom_site_x, atom_site_y, atom_site_z],
-            atom_site_label,
+        site_label, _, coordinates = (
+            cif_parser.get_label_occupancy_coordinates(loop_values, i)
+        )
+        coords_after_symmetry_operations = (
+            get_unitcell_coords_after_sym_operations_per_label(
+                block,
+                coordinates,
+                site_label,
+            )
         )
         coords_list.append(coords_after_symmetry_operations)
 
     return coords_list
 
 
-def get_coords_after_sym_operations(
+def get_unitcell_coords_after_sym_operations_per_label(
     block: Block,
     atom_site_fracs: list[float],
     atom_site_label: str,
 ) -> list[tuple[float, float, float, str]]:
     """
-    Generates a list of coordinates for each atom site after applying
-    symmetry operations.
+    Generates a list of coordinates for each atom
+    site after applying symmetry operations.
     """
     all_coords = set()
-    for operation in block.find_loop("_space_group_symop_operation_xyz"):
+    for operation in block.find_loop(
+        "_space_group_symop_operation_xyz"
+    ):
         operation = operation.replace("'", "")
         try:
             op = gemmi.Op(operation)
@@ -62,63 +103,102 @@ def get_coords_after_sym_operations(
         except RuntimeError as e:
             print(f"Skipping operation '{operation}': {str(e)}")
             raise RuntimeError(
-                "An error occurred while processing symmetry operation"
+                error_messages.StringParserError.INVALID_PARSED_ELEMENT.value
             ) from e
 
     return list(all_coords)
 
 
-def fractional_to_cartesian(
-    fractional_coords: list[float],
-    cell_lengths: list[float],
-    rad_angles: list[float],
-) -> list[float]:
-    """
-    Converts fractional coordinates to Cartesian
-    coordinates using cell lengths and angles.
-    """
-    alpha, beta, gamma = rad_angles
-
-    # Calculate the components of the transformation matrix
-    a, b, c = cell_lengths
-    cos_alpha = np.cos(alpha)
-    cos_beta = np.cos(beta)
-    cos_gamma = np.cos(gamma)
-    sin_gamma = np.sin(gamma)
-
-    # The volume of the unit cell
-    volume = (
-        a
-        * b
-        * c
-        * np.sqrt(
-            1
-            - cos_alpha**2
-            - cos_beta**2
-            - cos_gamma**2
-            + 2 * cos_alpha * cos_beta * cos_gamma
-        )
+def flatten_original_coordinates(all_coords):
+    points = np.array(
+        [list(map(float, coord[:-1])) for coord in all_coords]
     )
+    return points
 
-    # Transformation matrix from fractional to Cartesian coordinates
-    matrix = np.array(
-        [
-            [a, b * cos_gamma, c * cos_beta],
+
+def shift_and_append_points(
+    points,
+    atom_site_label: str,
+    supercell_generation_method: int,
+):
+    """
+    Shifts and duplicates points to create a supercell.
+    """
+
+    # Method 1 - No sfhits
+    # Method 2 - +1 +1 +1 shifts
+    # Method 3 - +-1 +-1 +-1 shifts
+
+    if supercell_generation_method == 1:
+        shifts = np.array([[0, 0, 0]])
+        shifted_points = points[:, None, :] + shifts[None, :, :]
+        all_points = []
+        for point_group in shifted_points:
+            for point in point_group:
+                new_point = (*np.round(point, 5), atom_site_label)
+                all_points.append(new_point)
+        return all_points
+
+    if supercell_generation_method == 2:
+        shifts = np.array(
             [
-                0,
-                b * sin_gamma,
-                c * (cos_alpha - cos_beta * cos_gamma) / sin_gamma,
-            ],
-            [0, 0, volume / (a * b * sin_gamma)],
-        ]
-    )
+                [0, 0, 0],
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1],
+                [1, 1, 0],
+                [1, 0, 1],
+                [0, 1, 1],
+                [1, 1, 1],
+            ]
+        )
+        shifted_points = points[:, None, :] + shifts[None, :, :]
+        all_points = []
+        for point_group in shifted_points:
+            for point in point_group:
+                new_point = (*np.round(point, 5), atom_site_label)
+                all_points.append(new_point)
 
-    # Convert fractional coordinates to Cartesian coordinates
-    fractional_coords = np.array(fractional_coords)
-    if fractional_coords.ndim == 1:
-        fractional_coords = fractional_coords[:, np.newaxis]
+        return all_points
 
-    cartesian_coords = np.dot(matrix, fractional_coords).flatten()
-    print(cartesian_coords)
+    if supercell_generation_method == 3:
+        shifts = np.array(
+            [
+                [0, 0, 0],
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1],
+                [-1, 0, 0],
+                [0, -1, 0],
+                [0, 0, -1],
+                [1, 1, 0],
+                [1, -1, 0],
+                [-1, 1, 0],
+                [-1, -1, 0],
+                [1, 0, 1],
+                [1, 0, -1],
+                [0, 1, 1],
+                [0, 1, -1],
+                [-1, 0, 1],
+                [-1, 0, -1],
+                [0, -1, 1],
+                [0, -1, -1],
+                [1, 1, 1],
+                [1, 1, -1],
+                [1, -1, 1],
+                [1, -1, -1],
+                [-1, 1, 1],
+                [-1, 1, -1],
+                [-1, -1, 1],
+                [-1, -1, -1],
+            ]
+        )
 
-    return cartesian_coords
+        shifted_points = points[:, None, :] + shifts[None, :, :]
+        all_points = []
+        for point_group in shifted_points:
+            for point in point_group:
+                new_point = (*np.round(point, 5), atom_site_label)
+                all_points.append(new_point)
+
+        return all_points

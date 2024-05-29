@@ -2,7 +2,7 @@ import pytest
 from cifpy.util.error_messages import GeneralError, CifParserError
 from cifpy.util.cif_parser import (
     get_cif_block,
-    get_unit_cell_lengths_angles,
+    parse_unit_cell_lengths_angles,
     get_loop_tags,
     get_loop_values,
     get_num_of_unique_atom_labels,
@@ -20,7 +20,7 @@ def test_get_cif_block(cif_block_URhIn):
 
 
 def test_get_unit_cell_lengths_angles(cif_block_URhIn):
-    lengths, angles = get_unit_cell_lengths_angles(cif_block_URhIn)
+    lengths, angles = parse_unit_cell_lengths_angles(cif_block_URhIn)
 
     assert lengths == [7.476, 7.476, 3.881]
     assert angles == [90.0, 90.0, 120.0]
@@ -99,7 +99,10 @@ def test_get_label_occupancy_coordinates(loop_values_URhIn):
 def test_get_loop_value_dict(loop_values_URhIn):
     expected_dict = {
         "In1": {"coords": (0.2505, 0.0, 0.5), "occupancy": 1.0},
-        "Rh1": {"coords": (0.333333, 0.666667, 0.5), "occupancy": 1.0},
+        "Rh1": {
+            "coords": (0.333333, 0.666667, 0.5),
+            "occupancy": 1.0,
+        },
         "Rh2": {"coords": (0.0, 0.0, 0.0), "occupancy": 1.0},
         "U1": {"coords": (0.5925, 0.0, 0.0), "occupancy": 1.0},
     }
@@ -125,5 +128,8 @@ def test_get_line_content_from_tag(file_path_URhIn):
     assert len(content_lines) == 4
     assert content_lines[0].strip() == "In1 In 3 g 0.2505 0 0.5 1"
     assert content_lines[1].strip() == "U1 U 3 f 0.5925 0 0 1"
-    assert content_lines[2].strip() == "Rh1 Rh 2 d 0.333333 0.666667 0.5 1"
+    assert (
+        content_lines[2].strip()
+        == "Rh1 Rh 2 d 0.333333 0.666667 0.5 1"
+    )
     assert content_lines[3].strip() == "Rh2 Rh 1 a 0 0 0 1"

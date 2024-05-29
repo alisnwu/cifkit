@@ -56,7 +56,10 @@ def test_get_atom_type_with_error():
         ("100", 100.00),  # No parentheses, simple integer
         ("4500.00", 4500.00),  # No parentheses, decimal
         ("0(99)", 0),  # Zero with parentheses
-        ("-123.456(789)", -123.456),  # Negative decimal with parentheses
+        (
+            "-123.456(789)",
+            -123.456,
+        ),  # Negative decimal with parentheses
     ],
 )
 def test_remove_string_braket(value_string, expected):

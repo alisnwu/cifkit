@@ -3,6 +3,7 @@ import numpy as np
 from cifpy.util.unit import (
     get_radians_from_degrees,
     round_float,
+    fractional_to_cartesian,
 )
 
 
@@ -31,3 +32,19 @@ def test_rounded_distance():
     expected_rounded = 123.4568
     result = round_float(distance, precision)
     assert result == expected_rounded
+
+
+def test_fractional_to_cartesian():
+    frac_pts = [0.2505, 0, 0.5]
+    lengths = [7.476, 7.476, 3.881]
+    angles = [90, 90, 120]
+    angles_rad = get_radians_from_degrees(angles)
+
+    # Expected cartesian coordinates
+    expected_cart = [1.87273087, -1.23458760e-05, 1.94050000]
+
+    # Actual cartesian coordinates from function
+    cart_1 = fractional_to_cartesian(frac_pts, lengths, angles_rad)
+    assert np.allclose(
+        cart_1, expected_cart, atol=1e-4
+    ), f"Expected {expected_cart}, but got {cart_1}"
