@@ -1,22 +1,19 @@
 import numpy as np
 from cifpy.preprocessors import supercell
-from cifpy.utils import unit, distance
+from cifpy.utils import unit, distance, cif_parser
 
 
-def get_all_labels_connections(
-    labels,
+def get_site_connections(
+    parsed_data,
     unitcell_points,
     supercell_points,
-    lengths,
-    angles,
     is_cn_used,
     cutoff_radius=10.0,
 ):
-
-
     """
     Compute all pair distances per site label.
     """
+    labels, lengths, angles = parsed_data
     all_labels_connections = {}
     for site_label in labels:
         filtered_unitcell_points = [

@@ -34,6 +34,11 @@ The package is able to
 - [ ] finds all site and element information
 
 
+
+20240529
+
+- The `Cif` class is used to store parsed information and nearest neighbors.
+
 ## Nodemon setup
 
 ```json

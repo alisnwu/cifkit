@@ -67,13 +67,18 @@ def get_parsed_norm_formula(formula: str) -> list[tuple[str, str]]:
     return parsed_normalized_formula
 
 
+def get_unique_elements(formula: str) -> list[str]:
+    "Return a set of elements parsed from a formula."
+    elements = get_parsed_formula(formula)
+    unique_elements = [element for element, _ in elements]
+    return unique_elements
+
+
 def get_unique_element_count(formula: str) -> int:
     """
     Return the number of unique elements in the chemical formula.
     """
-    elements = get_parsed_formula(formula)
-    unique_elements = set([element for element, _ in elements])
-    return len(unique_elements)
+    return len(get_unique_elements(formula))
 
 
 def get_unique_elements_from_formulas(formulas: list) -> list[str]:

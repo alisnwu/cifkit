@@ -2,6 +2,7 @@ import pytest
 from cifpy.utils.formula import (
     get_validated_formula_label,
     get_parsed_formula,
+    get_unique_elements,
     get_unique_element_count,
     get_unique_elements_from_formulas,
     get_subscripted_formula,
@@ -52,6 +53,18 @@ def test_get_validated_formula_error():
 )
 def test_get_parsed_formula_valid_input(formula, expected):
     assert get_parsed_formula(formula) == expected
+
+
+@pytest.mark.parametrize(
+    "formula, expected",
+    [
+        ("H2", ["H"]),
+        ("C6H12O6", ["C", "H", "O"]),
+        ("Na0.5Cl0.5", ["Na", "Cl"]),
+    ],
+)
+def test_get_unique_element(formula, expected):
+    assert get_unique_elements(formula) == expected
 
 
 @pytest.mark.parametrize(
