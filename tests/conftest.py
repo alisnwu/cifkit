@@ -1,13 +1,22 @@
 # conftest.py
 import pytest
 import sys
-from cifpy.preprocessors import supercell, environment
+from cifpy.preprocessors import (
+    supercell,
+    environment,
+    environment_util,
+)
 from cifpy.utils import cif_parser
 
 
 @pytest.fixture(scope="module")
 def file_path_URhIn():
     return "tests/data/cif/URhIn.cif"
+
+
+@pytest.fixture(scope="module")
+def formula_URhIn():
+    return "URhIn"
 
 
 @pytest.fixture(scope="module")
@@ -78,4 +87,11 @@ def site_connections_URhIn(
         unitcell_points_URhIn,
         supercell_points_URhIn,
         False,
+    )
+
+
+@pytest.fixture(scope="module")
+def flattened_connections_URhIn(site_connections_URhIn):
+    return environment_util.flat_site_connections(
+        site_connections_URhIn
     )

@@ -1,4 +1,4 @@
-from cifpy.utils import string_parser
+from cifpy.utils import string_parser, bond_pair
 
 
 def get_min_distance_pair(
@@ -56,4 +56,10 @@ def normalize_and_sort_tuples(
     return sorted_tuples
 
 
-# Generate all possible homo bonding pairs
+def get_heterogenous_bond_dists(connections, formula_str):
+    # Get all pairs using the formula str
+    bond_pairs = bond_pair.get_possible_heterogenous_element_pairs(
+        formula_str
+    )
+
+    pass
