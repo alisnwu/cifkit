@@ -42,7 +42,7 @@ def get_supercell_points(
 
 def get_unitcell_coords_for_all_labels(
     block: Block,
-) -> list[tuple[float, float, float, str]]:
+) -> list[list[tuple[float, float, float, str]]]:
     """
     Compute the new coordinates after applying
     symmetry operations to the initial coordinates.
@@ -69,13 +69,14 @@ def get_unitcell_coords_for_all_labels(
 
 def get_unitcell_coords_after_sym_operations_per_label(
     block: Block,
-    atom_site_fracs: list[float],
+    atom_site_fracs: tuple[float, float, float],
     atom_site_label: str,
 ) -> list[tuple[float, float, float, str]]:
     """
     Generate a list of coordinates for each atom
     site after applying symmetry operations.
     """
+
     all_coords = set()
     for operation in block.find_loop(
         "_space_group_symop_operation_xyz"
@@ -109,7 +110,9 @@ def get_unitcell_coords_after_sym_operations_per_label(
     return list(all_coords)
 
 
-def flatten_original_coordinates(all_coords):
+def flatten_original_coordinates(
+    all_coords: list[tuple[float, float, float, str]]
+):
     points = np.array(
         [list(map(float, coord[:-1])) for coord in all_coords]
     )

@@ -25,4 +25,11 @@ class CifParserError(Enum):
         "The returned loop tags do not match the expected tags."
     )
     WRONG_LOOP_VALUE = "Wrong number of values in loop _atom_site_*"
-    MISSING_COORDINATES = "Missing fractional coordinates in the loop values."
+    MISSING_COORDINATES = (
+        "Missing fractional coordinates in the loop values."
+    )
+
+
+class FileError(Enum):
+    FILE_NOT_FOUND = "The file at {file_path} was not found."
+    FILE_IS_EMPTY = "The file at {file_path} is empty."

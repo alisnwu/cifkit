@@ -3,7 +3,8 @@ Parses attributes from a .cif file.
 """
 
 import gemmi
-from gemmi.cif import Block
+from typing import Any
+from gemmi.cif import Block, Column
 from cifpy.utils.string_parser import trim_remove_braket
 from cifpy.utils import unit
 from cifpy.utils import error_messages
@@ -78,7 +79,7 @@ def get_loop_tags() -> list[str]:
     return loop_tags
 
 
-def get_loop_values(block: Block) -> list[str]:
+def get_loop_values(block: Block) -> list[Column]:
     """
     Retrieve a list of predefined loop tags for
     atomic site description.
@@ -134,13 +135,13 @@ def get_unique_site_labels(loop_values: list) -> list[str]:
 
 def get_label_occupancy_coordinates(
     loop_values: list, i
-) -> tuple[str, float, list[float, float, float]]:
+) -> tuple[str, float, tuple[float, float, float]]:
     """
     Gets atom information (label, occupancy, coordinates) for the i-th atom.
     """
-    label = loop_values[0][i]
-    occupancy = trim_remove_braket(loop_values[7][i])
-    coordinates = (
+    label: str = loop_values[0][i]
+    occupancy: float = trim_remove_braket(loop_values[7][i])
+    coordinates: tuple[float, float, float] = (
         trim_remove_braket(loop_values[4][i]),
         trim_remove_braket(loop_values[5][i]),
         trim_remove_braket(loop_values[6][i]),
@@ -149,7 +150,9 @@ def get_label_occupancy_coordinates(
     return label, occupancy, coordinates
 
 
-def get_loop_value_dict(loop_values: list) -> dict:
+def get_loop_value_dict(
+    loop_values: list,
+) -> dict[str, dict[str, Any]]:
     """
     Create a dictionary containing CIF loop values for each label.
     """
@@ -160,9 +163,10 @@ def get_loop_value_dict(loop_values: list) -> dict:
         label, occupancy, coordinates = (
             get_label_occupancy_coordinates(loop_values, i)
         )
-        loop_value_dict[label] = {}
-        loop_value_dict[label]["occupancy"] = occupancy
-        loop_value_dict[label]["coords"] = coordinates
+        loop_value_dict[label] = {
+            "occupancy": occupancy,
+            "coords": coordinates,
+        }
 
     return loop_value_dict
 
@@ -177,17 +181,14 @@ def get_start_end_line_indexes(
     with open(file_path, "r") as f:
         lines = f.readlines()
 
-    start_index = None
-    end_index = None
+    start_index = 0
+    end_index = 0
 
     # Find the start index
     for i, line in enumerate(lines):
         if start_keyword in line:
             start_index = i + 1
             break
-
-    if start_index is None:
-        return None, None
 
     # Find the end index
     for i in range(start_index, len(lines)):

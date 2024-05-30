@@ -31,14 +31,14 @@ def get_normalized_formula(formula: str, demical_places=3) -> str:
     """
     Return a formula with the stoichiometry coefficient sum of 1
     """
-    index_sum = 0
+    index_sum = 0.0
     normalized_formula_parts = []
     parsed_formula_set = get_parsed_formula(formula)
 
     # Calculate the sum of all indices
     for element, element_index in parsed_formula_set:
         if element_index == "":
-            index_sum += 1  # Treat missing indices as 1
+            index_sum += 1.0
         else:
             index_sum += float(element_index)
 
@@ -81,7 +81,7 @@ def get_unique_element_count(formula: str) -> int:
     return len(get_unique_elements(formula))
 
 
-def get_unique_elements_from_formulas(formulas: list) -> list[str]:
+def get_unique_elements_from_formulas(formulas: list) -> set[str]:
     """
     Return unique elements from a list of formulas.
     """

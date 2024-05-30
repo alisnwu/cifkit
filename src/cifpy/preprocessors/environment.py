@@ -4,10 +4,10 @@ from cifpy.utils import unit, distance, cif_parser
 
 
 def get_site_connections(
-    parsed_data,
+    parsed_data: list[str],
     unitcell_points,
     supercell_points,
-    is_cn_used,
+    is_cn_used: bool,
     cutoff_radius=10.0,
 ):
     """

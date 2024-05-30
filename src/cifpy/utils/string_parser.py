@@ -1,7 +1,7 @@
 import re
 import logging
 from cifpy.utils import formula
-from cifpy.utils.error_messages import GeneralError
+from cifpy.utils.error_messages import GeneralError, StringParserError
 
 
 def get_atom_type_from_label(site_label: str) -> str:
@@ -23,6 +23,7 @@ def get_atom_type_from_label(site_label: str) -> str:
         match = re.search(r"([A-Z][a-z]*)", part)
         if match:
             return match.group(1)
+    raise ValueError(StringParserError.INVALID_PARSED_ELEMENT.value)
 
 
 def trim_remove_braket(value_string: str) -> float:

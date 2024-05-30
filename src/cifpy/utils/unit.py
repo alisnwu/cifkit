@@ -61,11 +61,6 @@ def fractional_to_cartesian(
         ]
     )
 
-    # Convert fractional coordinates to Cartesian coordinates
-    fractional_coords = np.array(fractional_coords)
-    if fractional_coords.ndim == 1:
-        fractional_coords = fractional_coords[:, np.newaxis]
-
     cartesian_coords = np.dot(matrix, fractional_coords).flatten()
 
     return cartesian_coords
