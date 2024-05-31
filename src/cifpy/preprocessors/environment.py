@@ -14,6 +14,7 @@ def get_site_connections(
     Compute all pair distances per site label.
     """
     labels, lengths, angles = parsed_data
+
     all_labels_connections = {}
     for site_label in labels:
         filtered_unitcell_points = [

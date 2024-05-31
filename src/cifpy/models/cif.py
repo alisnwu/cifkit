@@ -5,7 +5,6 @@ from cifpy.utils.cif_parser import (
     get_unitcell_angles_rad,
     get_unique_site_labels,
     get_unique_elements_from_loop,
-    get_unique_label_count,
     get_formula_structure_weight_s_group,
 )
 
@@ -19,7 +18,7 @@ class Cif:
     def __init__(self, file_path: str) -> None:
         """Initialize the Cif object with the file path."""
         self.file_path = file_path
-        self.connections: dict = None  # Initialize nearest neighbor as None
+        self.connections = None  # Private attribute to store connections
         self._load_data()
 
     def _load_data(self):
@@ -50,41 +49,36 @@ class Cif:
         self.unitcell_atom_count = get_cell_atom_count(self.unitcell_points)
         self.supercell_atom_count = get_cell_atom_count(self.supercell_points)
 
+    def compute_connections(self, cutoff_radius=5.0, is_CN_used=False):
+        """Compute nearest neighbor connections per site label."""
+        self.connections = environment.get_site_connections(
+            [self.site_labels, self.unitcell_lengths, self.unitcell_angles],
+            self.unitcell_points,
+            self.supercell_points,
+            is_CN_used,
+            cutoff_radius=cutoff_radius,
+        )
 
-#     def compute_connections(self, cutoff_radius=5.0):
-#         """
-#         Compute nearest neighbor connections per site label. It is not called
-#         during initialization due to extensive computation.
-#         """
-#         if not self.connections:
-#             self.connections = environment.get_site_connections(
-#                 self.site_labels,
-#                 self.unitcell_points,
-#                 self.supercell_points,
-#                 self.unitcell_lengths,
-#                 self.unitcell_angles,
-#                 False,
-#                 cutoff_radius=cutoff_radius,
-#             )
-
-
-# # TODO - Store the shortest distance per pair, Store the shortest distances per pair
-
-# Usage example
-
+# Example usage
 file_paths = folder.get_file_path_list("tests/data/cif/folder")
+
 for file_path in file_paths:
     cif = Cif(file_path)
     print(cif.file_path)
     print(cif.unique_elements)
     print(cif.formula)
-    print(cif.unique_elements)
     print(cif.structure)
     print(cif.site_labels)
     print(cif.unitcell_atom_count)
     print(cif.supercell_atom_count)
     print(cif.space_group_name)
     print(cif.space_group_number)
-    # cif.compute_connections()  # Computes and stores the connections
-    # print(cif.connections)
-    print()
+    cut_off_radius = 5
+    cif.compute_connections(cut_off_radius)
+    prompt.log_conneted_points(cif.connections)
+
+
+# TODO: Generate polyhedron .gif files
+# TODO: Generate shortest atomic site information (CBA)
+# TODO: Generate histograms
+# TODO: Generate coordination numbers
