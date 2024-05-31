@@ -36,9 +36,7 @@ def make_output_folder(dir_path: str, new_folder_name: str) -> str:
         os.makedirs(full_path)
         print(f"Folder '{new_folder_name}' created at '{dir_path}'.")
     else:
-        print(
-            f"Folder '{new_folder_name}' already exists at '{dir_path}'."
-        )
+        print(f"Folder '{new_folder_name}' already exists at '{dir_path}'.")
     return full_path
 
 

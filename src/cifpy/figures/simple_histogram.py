@@ -4,19 +4,15 @@ Histgoram for supercell size, minimum distances
 
 import os
 import matplotlib.pyplot as plt
-from cifpy.utils import folder
+from cifpy.utils import folder, prompt
 
 
 def generate_histogram(
-    data: list, dir_path: str, settings: dict
+    data: list[int] | list[float], dir_path: str, settings: dict
 ) -> None:
     """
-    Generates a histogram from the provided data and saves it to a specified directory.
-
-    Parameters:
-        data (list): List of data points to plot.
-        dir_path (str): Directory path where the histogram will be saved.
-        settings (dict): Dictionary containing settings for the plot.
+    Generate a histogram from a list of numbers and save
+    it to a specified directory.
     """
     output_dir_path = folder.make_output_folder(dir_path, "plot")
     output_file_path = folder.get_file_path(
@@ -36,4 +32,4 @@ def generate_histogram(
     plt.savefig(output_file_path, dpi=300)
     plt.close()
 
-    print(f"Histogram has been saved in {output_file_path}")
+    prompt.log_save_file_message("Histogram", output_file_path)

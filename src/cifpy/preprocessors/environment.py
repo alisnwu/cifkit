@@ -17,9 +17,7 @@ def get_site_connections(
     all_labels_connections = {}
     for site_label in labels:
         filtered_unitcell_points = [
-            point
-            for point in unitcell_points
-            if point[3] == site_label
+            point for point in unitcell_points if point[3] == site_label
         ]
 
         dist_result = get_nearest_dists_per_site(
@@ -35,9 +33,7 @@ def get_site_connections(
         (
             label,
             connections,
-        ) = get_most_connected_point_per_site(
-            site_label, dist_dict, dist_set
-        )
+        ) = get_most_connected_point_per_site(site_label, dist_dict, dist_set)
 
         all_labels_connections[label] = connections
 
@@ -47,9 +43,7 @@ def get_site_connections(
             all_labels_connections
         )
 
-    all_labels_connections = add_diff_after(
-        all_labels_connections, is_cn_used
-    )
+    all_labels_connections = add_diff_after(all_labels_connections, is_cn_used)
 
     return all_labels_connections
 
@@ -133,9 +127,7 @@ def add_diff_after(all_labels_connections, is_cn_used):
         updated_connections[label] = []
 
         # Calculate normalized distances and their differences
-        normalized_distances = calculate_normalized_distances(
-            connections
-        )
+        normalized_distances = calculate_normalized_distances(connections)
         normalized_dist_diffs = calculate_normalized_dist_diffs(
             normalized_distances
         )
@@ -230,9 +222,7 @@ def filter_connections_with_cn(
         if normalized_dist_diffs:
             max_gap = max(normalized_dist_diffs)
             max_gap_index = normalized_dist_diffs.index(max_gap) + 2
-            filtered_connections[label] = limited_label_data[
-                :max_gap_index
-            ]
+            filtered_connections[label] = limited_label_data[:max_gap_index]
 
     return filtered_connections
 

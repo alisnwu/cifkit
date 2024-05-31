@@ -5,7 +5,11 @@ Parses attributes from a .cif file.
 import gemmi
 from typing import Any
 from gemmi.cif import Block, Column
-from cifpy.utils.string_parser import trim_remove_braket
+from cifpy.utils.string_parser import (
+    get_string_to_formatted_float,
+    trim_string,
+    clean_parsed_structure,
+)
 from cifpy.utils import unit
 from cifpy.utils import error_messages
 
@@ -33,7 +37,7 @@ def get_unitcell_lengths(
     ]
 
     lengths = [
-        trim_remove_braket(block.find_value(key))
+        get_string_to_formatted_float(block.find_value(key))
         for key in keys_lengths
     ]
 
@@ -54,7 +58,7 @@ def get_unitcell_angles_rad(
     ]
 
     angles = [
-        trim_remove_braket(block.find_value(key))
+        get_string_to_formatted_float(block.find_value(key))
         for key in keys_angles
     ]
 
@@ -103,14 +107,14 @@ def get_loop_values(block: Block) -> list[Column]:
 
 def get_unique_label_count(loop_values: list) -> int:
     """
-    Counts the number of labels in the loop.
+    Count the number of labels in the loop.
     """
     return len(loop_values[0])
 
 
-def get_unique_elements(loop_values: list) -> set[str]:
+def get_unique_elements_from_loop(loop_values: list) -> set[str]:
     """
-    Returns a list of unique elements from loop values.
+    Return a list of unique elements from loop values.
     """
     num_atom_labels = get_unique_label_count(loop_values)
     element_list = []
@@ -122,7 +126,7 @@ def get_unique_elements(loop_values: list) -> set[str]:
 
 def get_unique_site_labels(loop_values: list) -> list[str]:
     """
-    Returns a list of atom labels from loop values.
+    Return a list of atom labels from loop values.
     """
     num_atom_labels = get_unique_label_count(loop_values)
     label_list = []
@@ -137,14 +141,14 @@ def get_label_occupancy_coordinates(
     loop_values: list, i
 ) -> tuple[str, float, tuple[float, float, float]]:
     """
-    Gets atom information (label, occupancy, coordinates) for the i-th atom.
+    Return atom information (label, occupancy, coordinates) for the i-th atom.
     """
     label: str = loop_values[0][i]
-    occupancy: float = trim_remove_braket(loop_values[7][i])
+    occupancy: float = get_string_to_formatted_float(loop_values[7][i])
     coordinates: tuple[float, float, float] = (
-        trim_remove_braket(loop_values[4][i]),
-        trim_remove_braket(loop_values[5][i]),
-        trim_remove_braket(loop_values[6][i]),
+        get_string_to_formatted_float(loop_values[4][i]),
+        get_string_to_formatted_float(loop_values[5][i]),
+        get_string_to_formatted_float(loop_values[6][i]),
     )
 
     return label, occupancy, coordinates
@@ -160,8 +164,8 @@ def get_loop_value_dict(
     num_of_atom_labels = get_unique_label_count(loop_values)
 
     for i in range(num_of_atom_labels):
-        label, occupancy, coordinates = (
-            get_label_occupancy_coordinates(loop_values, i)
+        label, occupancy, coordinates = get_label_occupancy_coordinates(
+            loop_values, i
         )
         loop_value_dict[label] = {
             "occupancy": occupancy,
@@ -199,9 +203,7 @@ def get_start_end_line_indexes(
     return start_index, end_index
 
 
-def get_line_content_from_tag(
-    file_path: str, start_keyword: str
-) -> list[str]:
+def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
     """
     Returns a list containing file content with starting keyword.
     """
@@ -220,3 +222,56 @@ def get_line_content_from_tag(
     content_lines = lines[start_index:end_index]
 
     return content_lines
+
+
+def get_formula_structure_weight_s_group(
+    block: Block,
+) -> tuple[str, str, float, int, str]:
+    """
+    Return the unit cell lengths.
+    """
+    keys = [
+        "_chemical_formula_structural",
+        "_chemical_name_structure_type",
+        "_chemical_formula_weight",
+        "_space_group_IT_number",
+        "_space_group_name_H-M_alt",
+    ]
+
+    values = [(block.find_value(key)) for key in keys]
+
+    formula = trim_string(values[0])
+    structure = clean_parsed_structure(values[1])
+    weight = get_string_to_formatted_float(values[2])
+    s_group_num = int(trim_string(values[3]))
+    s_group_name = trim_string(values[4])
+
+    return (formula, structure, weight, s_group_num, s_group_name)
+
+
+def get_unique_formulas_structures_weights_s_groups(
+    file_path_list: list[str],
+) -> tuple[set[str], set[str], set[float], set[int], set[str]]:
+    """
+    Find all unique structures, formulas, weights, space groups.
+    This function requires no initialization and should be more efficient
+    in analyzing and filtering a dataset.
+    """
+    formulas = set()
+    structures = set()
+    weights = set()
+    s_group_nums = set()
+    s_group_names = set()
+    for file_path in file_path_list:
+        block = get_cif_block(file_path)
+        formula, structure, weight, s_group_num, s_group_name = (
+            get_formula_structure_weight_s_group(block)
+        )
+
+        formulas.add(formula)
+        structures.add(structure)
+        weights.add(weight)
+        s_group_nums.add(s_group_num)
+        s_group_names.add(s_group_name)
+
+    return formulas, structures, weights, s_group_nums, s_group_names

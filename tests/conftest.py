@@ -9,6 +9,22 @@ from cifpy.preprocessors import (
 from cifpy.utils import cif_parser
 
 
+# Folder
+@pytest.fixture(scope="module")
+def cif_folder_path_test():
+    return "tests/data/cif/folder"
+
+
+# Multiple files
+@pytest.fixture(scope="module")
+def parsed_formula_weight_structure_s_group_data(cif_folder_path_test):
+    results = cif_parser.get_unique_formulas_structures_weights_s_groups(
+        cif_folder_path_test
+    )
+    return results
+
+
+# Individual file of URhIn
 @pytest.fixture(scope="module")
 def file_path_URhIn():
     return "tests/data/cif/URhIn.cif"
@@ -36,9 +52,7 @@ def loop_values_URhIn(cif_block_URhIn):
 
 @pytest.fixture(scope="module")
 def unitcell_coords_URhIn(cif_block_URhIn):
-    return supercell.get_unitcell_coords_for_all_labels(
-        cif_block_URhIn
-    )
+    return supercell.get_unitcell_coords_for_all_labels(cif_block_URhIn)
 
 
 @pytest.fixture(scope="module")
@@ -92,6 +106,4 @@ def site_connections_URhIn(
 
 @pytest.fixture(scope="module")
 def flattened_connections_URhIn(site_connections_URhIn):
-    return environment_util.flat_site_connections(
-        site_connections_URhIn
-    )
+    return environment_util.flat_site_connections(site_connections_URhIn)

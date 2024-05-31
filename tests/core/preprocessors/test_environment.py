@@ -2,9 +2,7 @@ from cifpy.preprocessors.environment import get_site_connections
 from deepdiff import DeepDiff
 
 
-def assert_minimum_distance(
-    label, connections_dict, expected_min_distance
-):
+def assert_minimum_distance(label, connections_dict, expected_min_distance):
     """
     Asserts that the minimum distance for a given label in the
     connections dictionary matches the expected minimum distance.
@@ -13,9 +11,7 @@ def assert_minimum_distance(
 
     # Check if there are any connections, and calculate the minimum distance
     if connections:
-        min_distance = min(
-            connection[1] for connection in connections
-        )
+        min_distance = min(connection[1] for connection in connections)
         assert min_distance == expected_min_distance
 
 

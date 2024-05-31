@@ -28,12 +28,8 @@ def get_min_distance_pair_per_site_label(
         other_label = min_dist_pair_data[0]
         distance = min_dist_pair_data[1]
 
-        ref_element = string_parser.get_atom_type_from_label(
-            ref_label
-        )
-        other_element = string_parser.get_atom_type_from_label(
-            other_label
-        )
+        ref_element = string_parser.get_atom_type_from_label(ref_label)
+        other_element = string_parser.get_atom_type_from_label(other_label)
 
         element_pairs.append(((ref_element, other_element), distance))
     sorted_tuples = sort.sort_element_pair_tuples(element_pairs)

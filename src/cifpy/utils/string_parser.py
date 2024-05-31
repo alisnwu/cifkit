@@ -26,27 +26,28 @@ def get_atom_type_from_label(site_label: str) -> str:
     raise ValueError(StringParserError.INVALID_PARSED_ELEMENT.value)
 
 
-def trim_remove_braket(value_string: str) -> float:
+def get_string_to_formatted_float(str_value: str) -> float:
     """
     Remove parentheses from a value string and convert to float.
     """
-    value_string = value_string.strip()
+    str_value = str_value.strip()
+    isinstance
 
     return (
-        float(value_string.split("(")[0])
-        if "(" in value_string
-        else float(value_string)
+        float(str_value.split("(")[0])
+        if "(" in str_value
+        else float(str_value)
     )
 
 
-def clean_parsed_formula(formula):
+def trim_string(formula: str) -> str:
     """
     Remove "~", " ", and "'" characters from the parsed formula.
     """
     return formula.replace("~", "").replace(" ", "").replace("'", "")
 
 
-def clean_parsed_structure(structure_type):
+def clean_parsed_structure(structure_type: str) -> str:
     """
     Split the parsed structure text and remove "~".
     """

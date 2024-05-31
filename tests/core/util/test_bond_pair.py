@@ -10,9 +10,7 @@ from cifpy.utils.bond_pair import (
     [
         (
             "NaCl",
-            [
-                ("Cl", "Na")
-            ],  # Ensure internal tuple order is consistent
+            [("Cl", "Na")],  # Ensure internal tuple order is consistent
         ),  # Binary example
         (
             "URhIn",

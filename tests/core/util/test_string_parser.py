@@ -3,8 +3,8 @@ import logging
 from cifpy.utils.error_messages import GeneralError, StringParserError
 from cifpy.utils.string_parser import (
     get_atom_type_from_label,
-    trim_remove_braket,
-    clean_parsed_formula,
+    get_string_to_formatted_float,
+    trim_string,
     clean_parsed_structure,
 )
 
@@ -63,7 +63,7 @@ def test_get_atom_type_with_error():
     ],
 )
 def test_remove_string_braket(value_string, expected):
-    assert trim_remove_braket(value_string) == expected
+    assert get_string_to_formatted_float(value_string) == expected
 
 
 @pytest.mark.parametrize(
@@ -75,7 +75,7 @@ def test_remove_string_braket(value_string, expected):
     ],
 )
 def test_clean_parsed_formula(value_string, expected):
-    assert clean_parsed_formula(value_string) == expected
+    assert trim_string(value_string) == expected
 
 
 @pytest.mark.parametrize(
