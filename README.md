@@ -49,3 +49,45 @@ The package is able to
     "watch": ["*.*"]
   }
 ```
+
+
+Initialize
+cif_eb
+
+System Analysis:
+
+[ ] CifEsemble.analyze_binary_system
+[ ] CifEsemble.analyze_ternary_system
+[ ] CifEsemble.analyze_ternary_binary_systems
+
+Bonding Analysis
+[ ] CifEsemble.conduct_site_bonding_analysis
+[ ] CifEsemble.
+
+Stats:
+
+[ ] CifEsemble.get_unique_formulas(folder_path: str)csv
+[ ] CifEsemble.get_unique_formulas_stats(folder_path: str)
+[ ] CifEsemble.get_unique_structures(folder_path: str)
+[ ] CifEsemble.get_unique_weights(folder_path: str)
+[ ] CifEsemble.get_unique_space_groups(folder_path; str)
+[ ] CifEsemble.get_unique_space_grouop_numbers
+[ ] CifEsemble.generate_formula_histograms(folder_path: )
+[ ] CifEsemble.generate_all_unique_stats( )
+[ ] CifEsemble.generate_structure_histograms(folder_path: )
+[ ] CifEsemble.get_unique_site_labels
+[ ] CfiEssemble.generate
+
+Filter:
+
+[ ] CifEsemble.copy_files_by_elements(elements: list[str], from, to)
+[ ] CifEsemble.move_files_by_elements(elements: list[str], from, to)
+[ ] CifEsemble.copy_files_by_formula(structure)
+[ ] CifEsemble.copy_files_by_formula(structure)
+[ ] CifEsemble.copy_files_by_formula(structure)
+[ ] CifEsemble.copy_files_by_structure(structure)
+[ ] CifEsemble.copy_files_by_structure(structure)
+[ ] CifEsemble.copy_files_by_space_group(structure)
+[ ] CifEsemble.move_files_based_on_wrong_format( )
+[ ] CifEsemble.format_files_for_CIF_processing()
+

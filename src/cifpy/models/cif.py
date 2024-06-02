@@ -11,6 +11,7 @@ from cifpy.utils.cif_parser import (
 from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
 from cifpy.preprocessors import environment
+from cifpy.coordination import polyhedron
 from cifpy.utils import prompt, folder
 
 
@@ -58,25 +59,28 @@ class Cif:
             is_CN_used,
             cutoff_radius=cutoff_radius,
         )
+        
+    def draw_polyhedron(self):
+        polyhedron.draw_polyhedrons_from_connections(self.connections)
+        
+    def print_connected_points(self):
+        prompt.log_conneted_points(self.connections)
+        
+# # Example usage
+# file_paths = folder.get_file_path_list("tests/data/cif/folder")
 
-# Example usage
-file_paths = folder.get_file_path_list("tests/data/cif/folder")
-
-for file_path in file_paths:
-    cif = Cif(file_path)
-    print(cif.file_path)
-    print(cif.unique_elements)
-    print(cif.formula)
-    print(cif.structure)
-    print(cif.site_labels)
-    print(cif.unitcell_atom_count)
-    print(cif.supercell_atom_count)
-    print(cif.space_group_name)
-    print(cif.space_group_number)
-    cut_off_radius = 5
-    cif.compute_connections(cut_off_radius)
-    prompt.log_conneted_points(cif.connections)
-
+# for file_path in file_paths:
+#     cif = Cif(file_path)
+#     print(cif.unique_elements)
+#     print(cif.formula)
+#     print(cif.structure)
+#     print(cif.site_labels)
+#     print(cif.space_group_name)
+#     print(cif.space_group_number)
+#     cut_off_radius = 5
+#     cif.compute_connections(cut_off_radius)
+#     cif.draw_polyhedron()
+#     prompt.log_conneted_points(cif.connections)
 
 # TODO: Generate polyhedron .gif files
 # TODO: Generate shortest atomic site information (CBA)
