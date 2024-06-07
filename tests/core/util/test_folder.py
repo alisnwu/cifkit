@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 import os
 from cifpy.utils.folder import (
     get_file_path,
@@ -7,8 +8,9 @@ from cifpy.utils.folder import (
     make_output_folder,
     check_file_exists,
     check_file_not_empty,
+    move_files,
+    copy_files,
 )
-
 from cifpy.utils.error_messages import FileError
 
 
@@ -90,3 +92,46 @@ def test_check_file_not_empty(tmp_path):
     assert str(e.value) == FileError.FILE_IS_EMPTY.value.format(
         file_path=empty_file
     )
+
+
+def test_move_files(tmp_path, cif_folder_path_test, file_paths_test):
+    dest_dir = tmp_path / "destination"
+    # Initial file count in the source directory
+    initial_file_count = get_file_count(cif_folder_path_test)
+
+    # Move files to the destination directory
+    move_files(dest_dir, file_paths_test)
+
+    # Check the file count in the source directory after move
+    assert get_file_count(cif_folder_path_test) == initial_file_count - len(
+        file_paths_test
+    )
+    # Move files back to the original source directory
+    move_files(str(cif_folder_path_test), get_file_path_list(str(dest_dir)))
+
+    # Final file count in the source directory
+    final_file_count = get_file_count(cif_folder_path_test)
+    assert final_file_count == initial_file_count
+
+
+def test_copy_files(tmp_path, cif_folder_path_test, file_paths_test):
+    dest_dir = tmp_path / "destination"
+    dest_dir.mkdir()  # Ensure destination directory exists
+
+    # Copy files to the destination directory
+    copy_files(str(dest_dir), file_paths_test)
+
+    # Retrieve lists of file paths in both directories
+    source_files = get_file_path_list(cif_folder_path_test)
+    destination_files = get_file_path_list(str(dest_dir))
+
+    # Extract basenames and sort to ensure order does not affect comparison
+    source_basenames = sorted(
+        [Path(file_path).name for file_path in source_files]
+    )
+    destination_basenames = sorted(
+        [Path(file_path).name for file_path in destination_files]
+    )
+
+    # Check the basenames in the source directory match those in the destination
+    assert source_basenames == destination_basenames

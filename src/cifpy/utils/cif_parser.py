@@ -275,3 +275,29 @@ def get_unique_formulas_structures_weights_s_groups(
         s_group_names.add(s_group_name)
 
     return formulas, structures, weights, s_group_nums, s_group_names
+
+
+def get_tag_from_third_line(file_path: str) -> str:
+    """
+    Extract the tag from the provided CIF file path.
+    """
+    with open(file_path, "r") as f:
+        # Read first three lines
+        f.readline()  # First line
+        f.readline()  # Second line
+        third_line = f.readline().strip()  # Thrid line
+        third_line = third_line.replace(",", "")
+
+        # Split based on '#' and filter out empty strings
+        third_line_parts = [
+            part.strip() for part in third_line.split("#") if part.strip()
+        ]
+
+        formula_tag = third_line_parts[1]
+        parts = formula_tag.split()
+
+        # Return concatenated string of parts excluding the first one
+        if len(parts) > 1:
+            return "_".join(parts[1:])
+        else:
+            return ""

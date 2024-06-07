@@ -6,34 +6,30 @@ pip install -e .
 
 Tasks
 
-The package is able to
-
-- Preproces atomic sites that have symbols instead of element names
-- Compute the coordination number from atomic label site.
-- Compute the distance from each atomic site within a cutoff radius
-- Distnace
-  - Minimum distances from each atomic site
-  - Homoatomic pair minimum distances
-  - Heteroatomic pair minimum distances
-- Generate a supercell
+- [x] Parse tag from a cif file
+- [x] Determine the shortest distance pair in a cif file
+- [x] Get unique distances in CifEnsemble
+- [x] Get unique supercell size
+- [ ] Determine the coordination number from each atomic label
+- [ ] Move files based on tags, sgroup, sgname, supercell size, elements, structure, formula
+- [ ] Copy files based on tags, sgroup, sgname, supercell size, elements, structure, formula
+- [ ] Move files based on min distance
+- [ ] Copy files based on min distance
+- [ ] Generate histrograms for tags, sgroup, sgname, supercell size, elements, structure, formula
 
 
 - [x] preprocess symbolic labels
 - [x] remove author loop content
 - [x] generate supercell of 2 by 2 by 2
 - [x] compute distance between element sites
-- [x] compute the coordination number
-- [x] compute minimum distance within cutoff radius
-- [ ] compute all nearest site bonding (CBA) work
-- [ ] compute all homoatomic shortest distances
-- [ ] compute supercell, min distance histrogram
-- [ ] compute all heteroatomic shortest distances
-- [ ] compute most common bond distribution in a folder across all sites
-- [ ] finds all possible bonds
-- [ ] finds bonds that are missing 
-- [ ] finds all site and element information
-
-
+- [x] CIF: compute the coordination number
+- [x] CIF: compute minimum distance within cutoff radius
+- [x] Get unique  tags, sgroup, sgname, supercell size, elements, structure, formula
+- [ ] CifEnsemble: compute supercell, min distance histrogram
+- [ ] CIF: compute all homoatomic shortest distances
+- [ ] CIF: compute all heteroatomic shortest distances
+- [ ] CIF: finds all possible bonds
+- [ ] CIF: finds bonds that are missing from shortest distance site
 
 20240529
 
@@ -62,7 +58,6 @@ System Analysis:
 
 Bonding Analysis
 [ ] CifEsemble.conduct_site_bonding_analysis
-[ ] CifEsemble.
 
 Stats:
 
@@ -78,16 +73,4 @@ Stats:
 [ ] CifEsemble.get_unique_site_labels
 [ ] CfiEssemble.generate
 
-Filter:
-
-[ ] CifEsemble.copy_files_by_elements(elements: list[str], from, to)
-[ ] CifEsemble.move_files_by_elements(elements: list[str], from, to)
-[ ] CifEsemble.copy_files_by_formula(structure)
-[ ] CifEsemble.copy_files_by_formula(structure)
-[ ] CifEsemble.copy_files_by_formula(structure)
-[ ] CifEsemble.copy_files_by_structure(structure)
-[ ] CifEsemble.copy_files_by_structure(structure)
-[ ] CifEsemble.copy_files_by_space_group(structure)
-[ ] CifEsemble.move_files_based_on_wrong_format( )
-[ ] CifEsemble.format_files_for_CIF_processing()
-
+Filter

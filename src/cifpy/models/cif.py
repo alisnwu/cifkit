@@ -6,8 +6,10 @@ from cifpy.utils.cif_parser import (
     get_unique_site_labels,
     get_unique_elements_from_loop,
     get_formula_structure_weight_s_group,
+    get_tag_from_third_line,
 )
 
+from cifpy.coordination.distance import get_shortest_distance
 from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
 from cifpy.preprocessors import environment
@@ -19,6 +21,7 @@ class Cif:
         """Initialize the Cif object with the file path."""
         self.file_path = file_path
         self.connections = None  # Private attribute to store connections
+        self._shortest_pair_distance = None
         self._load_data()
 
     def _load_data(self):
@@ -41,6 +44,7 @@ class Cif:
             self.space_group_number,
             self.space_group_name,
         ) = get_formula_structure_weight_s_group(self._block)
+        self.tag = get_tag_from_third_line(self.file_path)
 
     def _generate_supercell(self):
         """Generate supercell information based on the unit cell data."""
@@ -58,26 +62,20 @@ class Cif:
             is_CN_used,
             cutoff_radius=cutoff_radius,
         )
+        self._shortest_pair_distance = get_shortest_distance(self.connections)
+
+    @property
+    def shortest_pair_distance(self):
+        """Property that checks if connections are computed and computes them if not."""
+        if self.connections is None:
+            self.compute_connections()  # Use default parameters or modify as needed
+        return self._shortest_pair_distance
 
     def print_connected_points(self):
         prompt.log_conneted_points(self.connections)
 
+    # prompt.log_conneted_points(cif.connections)
 
-# Example usage
-file_paths = folder.get_file_path_list("tests/data/cif/folder")
-
-# for file_path in file_paths:
-#     cif = Cif(file_path)
-#     print(cif.unique_elements)
-#     print(cif.formula)
-#     print(cif.structure)
-#     print(cif.site_labels)
-#     print(cif.space_group_name)
-#     print(cif.space_group_number)
-#     cut_off_radius = 5
-#     cif.compute_connections(cut_off_radius)
-#     cif.draw_polyhedron()
-#     prompt.log_conneted_points(cif.connections)
 
 # TODO: Generate polyhedron .gif files
 # TODO: Generate shortest atomic site information (CBA)

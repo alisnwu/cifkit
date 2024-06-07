@@ -17,6 +17,7 @@ from cifpy.utils.cif_parser import (
     get_line_content_from_tag,
     get_formula_structure_weight_s_group,
     get_unique_formulas_structures_weights_s_groups,
+    get_tag_from_third_line,
 )
 
 
@@ -162,3 +163,11 @@ def test_get_unique_formulas_structure_weight(cif_folder_path_test):
     assert weights == {486.2, 487.4, 681.6}
     assert s_group_nums == {139}
     assert s_group_names == {"I4/mmm"}
+
+
+def test_get_tag_from_third_line():
+    file_path = "tests/data/cif/tag/1817275_rt.cif"
+    assert get_tag_from_third_line(file_path) == "rt"
+
+    file_path = "tests/data/cif/tag/1817275_rt_hex.cif"
+    assert get_tag_from_third_line(file_path) == "rt_hex"

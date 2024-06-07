@@ -1,6 +1,8 @@
 import os
 import glob
 from cifpy.utils.error_messages import FileError
+import os
+import shutil
 
 
 def get_file_path(dir_path: str, file_name: str) -> str:
@@ -58,3 +60,36 @@ def check_file_not_empty(file_path: str) -> bool:
             FileError.FILE_IS_EMPTY.value.format(file_path=file_path)
         )
     return True
+
+
+def move_files(to_directory: str, file_path_list: list[str]) -> None:
+    """
+    Move files to another folder, creating the folder if it doesn't exist.
+    """
+    # Ensure the destination directory exists
+    os.makedirs(to_directory, exist_ok=True)
+
+    # Move each file in the list
+    for file_path in file_path_list:
+        dest_file_path = os.path.join(
+            to_directory, os.path.basename(file_path)
+        )
+        # Move file to new directory
+        shutil.move(file_path, dest_file_path)
+
+
+def copy_files(to_directory: str, file_path_list: list[str]) -> None:
+    """
+    Copy files to another folder, creating the folder if it doesn't exist.
+    """
+    # Ensure the destination directory exists
+    os.makedirs(to_directory, exist_ok=True)
+
+    # Copy each file in the list
+    for file_path in file_path_list:
+        # Construct full destination path
+        dest_file_path = os.path.join(
+            to_directory, os.path.basename(file_path)
+        )
+        # Copy file to new directory
+        shutil.copy(file_path, dest_file_path)

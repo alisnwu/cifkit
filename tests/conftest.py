@@ -6,7 +6,8 @@ from cifpy.preprocessors import (
     environment,
     environment_util,
 )
-from cifpy.utils import cif_parser
+from cifpy.utils import cif_parser, folder
+from cifpy.models.cif import Cif
 
 
 # Folder
@@ -22,6 +23,11 @@ def parsed_formula_weight_structure_s_group_data(cif_folder_path_test):
         cif_folder_path_test
     )
     return results
+
+
+@pytest.fixture(scope="module")
+def file_paths_test(cif_folder_path_test):
+    return folder.get_file_path_list(cif_folder_path_test)
 
 
 """
@@ -111,3 +117,8 @@ def site_connections_URhIn(
 @pytest.fixture(scope="module")
 def flattened_connections_URhIn(site_connections_URhIn):
     return environment_util.flat_site_connections(site_connections_URhIn)
+
+
+@pytest.fixture(scope="module")
+def cif_URhIn(file_path_URhIn):
+    return Cif(file_path_URhIn)
