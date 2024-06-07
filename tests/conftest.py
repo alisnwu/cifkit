@@ -24,7 +24,11 @@ def parsed_formula_weight_structure_s_group_data(cif_folder_path_test):
     return results
 
 
-# Individual file of URhIn
+"""
+Individual file of URhIn
+"""
+
+
 @pytest.fixture(scope="module")
 def file_path_URhIn():
     return "tests/data/cif/URhIn.cif"
