@@ -23,7 +23,10 @@ def test_init():
         "Ce",
         "Mo",
     }
-    assert cif_ensemble.unique_space_group_names == {"I4/mmm", "Im-3m"}
+    assert cif_ensemble.unique_space_group_names == {
+        "I4/mmm",
+        "Im-3m",
+    }
     assert cif_ensemble.unique_space_group_numbers == {139, 229}
     assert cif_ensemble.unique_tags == {"hex", "rt", "rt_hex", ""}
 

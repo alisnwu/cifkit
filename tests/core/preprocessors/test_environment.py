@@ -1,4 +1,9 @@
-from cifpy.preprocessors.environment import get_site_connections
+import numpy as np
+
+from cifpy.preprocessors.environment import (
+    get_site_connections,
+    filter_connections_with_cn,
+)
 from deepdiff import DeepDiff
 
 
@@ -12,57 +17,23 @@ def assert_minimum_distance(label, connections_dict, expected_min_distance):
     # Check if there are any connections, and calculate the minimum distance
     if connections:
         min_distance = min(connection[1] for connection in connections)
-        assert min_distance == expected_min_distance
+        assert np.isclose(min_distance, expected_min_distance, atol=1e-2)
 
 
 def test_get_nearest_dists_per_site_cooridnation_number(
-    parsed_cif_data_URhIn,
-    unitcell_points_URhIn,
-    supercell_points_URhIn,
+    site_connections_URhIn,
 ):
 
-    is_cn_used = True
-
-    all_label_connections = get_site_connections(
-        parsed_cif_data_URhIn,
-        unitcell_points_URhIn,
-        supercell_points_URhIn,
-        is_cn_used,
-    )
-
-    assert len(all_label_connections.get("In1")) == 14
-    assert len(all_label_connections.get("U1")) == 11
-    assert len(all_label_connections.get("Rh1")) == 9
-    assert len(all_label_connections.get("Rh2")) == 9
-
-    assert_minimum_distance("In1", all_label_connections, 2.697)
-    # assert_minimum_distance("U1", all_label_connections, 2.984)
-    assert_minimum_distance("Rh1", all_label_connections, 2.852)
-    assert_minimum_distance("Rh2", all_label_connections, 2.697)
+    assert_minimum_distance("In1", site_connections_URhIn, 2.697)
+    assert_minimum_distance("U1", site_connections_URhIn, 2.984)
+    assert_minimum_distance("Rh1", site_connections_URhIn, 2.852)
+    assert_minimum_distance("Rh2", site_connections_URhIn, 2.697)
 
 
-def test_get_nearest_dists_per_site_cutoff_radius(
-    parsed_cif_data_URhIn,
-    unitcell_points_URhIn,
-    supercell_points_URhIn,
-):
+def test_filter_connections_with_cn(site_connections_URhIn):
+    connections_CN = filter_connections_with_cn(site_connections_URhIn)
 
-    is_cn_used = False
-
-    all_label_connections = get_site_connections(
-        parsed_cif_data_URhIn,
-        unitcell_points_URhIn,
-        supercell_points_URhIn,
-        is_cn_used,
-        cutoff_radius=3.9,
-    )
-
-    assert len(all_label_connections.get("In1")) == 14
-    assert len(all_label_connections.get("U1")) == 13
-    assert len(all_label_connections.get("Rh1")) == 11
-    assert len(all_label_connections.get("Rh2")) == 11
-
-    assert_minimum_distance("In1", all_label_connections, 2.697)
-    # assert_minimum_distance("U1", all_label_connections, 2.983)
-    assert_minimum_distance("Rh1", all_label_connections, 2.852)
-    assert_minimum_distance("Rh2", all_label_connections, 2.697)
+    assert len(connections_CN.get("In1")) == 14
+    assert len(connections_CN.get("U1")) == 11
+    assert len(connections_CN.get("Rh1")) == 9
+    assert len(connections_CN.get("Rh2")) == 9

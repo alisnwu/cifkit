@@ -1,14 +1,17 @@
 import numpy as np
 from cifpy.preprocessors import supercell
 from cifpy.utils import unit, distance, cif_parser
+from cifpy.preprocessors.environment_util import (
+    calculate_normalized_dist_diffs,
+    calculate_normalized_distances,
+)
 
 
 def get_site_connections(
     parsed_data: list[str],
     unitcell_points,
     supercell_points,
-    is_cn_used: bool,
-    cutoff_radius=10.0,
+    cutoff_radius: float,
 ):
     """
     Compute all pair distances per site label.
@@ -37,14 +40,6 @@ def get_site_connections(
         ) = get_most_connected_point_per_site(site_label, dist_dict, dist_set)
 
         all_labels_connections[label] = connections
-
-    # Determine coordination number
-    if is_cn_used:
-        all_labels_connections = filter_connections_with_cn(
-            all_labels_connections
-        )
-
-    all_labels_connections = add_diff_after(all_labels_connections, is_cn_used)
 
     return all_labels_connections
 
@@ -108,18 +103,7 @@ def get_nearest_dists_per_site(
     return dist_dict, dist_set
 
 
-def calculate_normalized_dist_diffs(normalized_distances):
-    """
-    Calculate differences between consecutive normalized distances.
-    """
-    normalized_dist_diffs = [
-        normalized_distances[k + 1] - normalized_distances[k]
-        for k in range(len(normalized_distances) - 1)
-    ]
-    return normalized_dist_diffs
-
-
-def add_diff_after(all_labels_connections, is_cn_used):
+def add_diff_after(all_labels_connections):
     """
     Add the diff_after value to each connection.
     """
@@ -133,11 +117,7 @@ def add_diff_after(all_labels_connections, is_cn_used):
             normalized_distances
         )
 
-        connection_len = 0
-        if is_cn_used:
-            connection_len = len(connections) - 1
-        else:
-            connection_len = len(connections)
+        connection_len = len(connections) - 1
 
         for idx, (conn_label, dist, coord_1, coord_2) in enumerate(
             connections
@@ -157,7 +137,7 @@ def add_diff_after(all_labels_connections, is_cn_used):
 
 def get_most_connected_point_per_site(label, dist_dict, dist_set):
     """
-    Identifies the reference point with the highest number of connections
+    Identify the reference point with the highest number of connections
     within the shortest distances from a set of distances.
     """
     sorted_unique_dists = sorted(dist_set)
@@ -225,15 +205,5 @@ def filter_connections_with_cn(
             max_gap_index = normalized_dist_diffs.index(max_gap) + 2
             filtered_connections[label] = limited_label_data[:max_gap_index]
 
+    filtered_connections = add_diff_after(filtered_connections)
     return filtered_connections
-
-
-def calculate_normalized_distances(connections):
-    """
-    Calculate normalized distances for each connection
-    """
-    min_dist = connections[0][1]
-    normalized_distances = [
-        np.round(dist / min_dist, 3) for _, dist, _, _ in connections
-    ]
-    return normalized_distances

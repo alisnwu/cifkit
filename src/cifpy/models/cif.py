@@ -12,8 +12,15 @@ from cifpy.utils.cif_parser import (
 from cifpy.coordination.distance import get_shortest_distance
 from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
-from cifpy.preprocessors import environment
+from cifpy.preprocessors.environment import (
+    get_site_connections,
+    filter_connections_with_cn,
+)
 from cifpy.utils import prompt, folder
+from cifpy.utils.bond_pair import (
+    get_heterogenous_element_pairs,
+    get_homogenous_element_pairs,
+)
 
 
 class Cif:
@@ -45,6 +52,13 @@ class Cif:
             self.space_group_name,
         ) = get_formula_structure_weight_s_group(self._block)
         self.tag = get_tag_from_third_line(self.file_path)
+        self.heterogeneous_bond_pairs = get_heterogenous_element_pairs(
+            self.formula
+        )
+        self.homogenous_bond_pairs = get_homogenous_element_pairs(self.formula)
+        self.all_bond_pairs = (self.heterogeneous_bond_pairs).union(
+            self.homogenous_bond_pairs
+        )
 
     def _generate_supercell(self):
         """Generate supercell information based on the unit cell data."""
@@ -53,16 +67,20 @@ class Cif:
         self.unitcell_atom_count = get_cell_atom_count(self.unitcell_points)
         self.supercell_atom_count = get_cell_atom_count(self.supercell_points)
 
-    def compute_connections(self, cutoff_radius=5.0, is_CN_used=False):
+    def compute_connections(self, cutoff_radius=10.0):
         """Compute nearest neighbor connections per site label."""
-        self.connections = environment.get_site_connections(
-            [self.site_labels, self.unitcell_lengths, self.unitcell_angles],
+        self.connections = get_site_connections(
+            [
+                self.site_labels,
+                self.unitcell_lengths,
+                self.unitcell_angles,
+            ],
             self.unitcell_points,
             self.supercell_points,
-            is_CN_used,
             cutoff_radius=cutoff_radius,
         )
         self._shortest_pair_distance = get_shortest_distance(self.connections)
+        self._connections_CN = filter_connections_with_cn(self.connections)
 
     @property
     def shortest_pair_distance(self):
@@ -71,13 +89,12 @@ class Cif:
             self.compute_connections()  # Use default parameters or modify as needed
         return self._shortest_pair_distance
 
+    @property
+    def connections_CN(self):
+        """Property that checks if connections are computed and computes them if not."""
+        if self.connections is None:
+            self.compute_connections()  # Use default parameters or modify as needed
+        return self._shortest_pair_distance
+
     def print_connected_points(self):
         prompt.log_conneted_points(self.connections)
-
-    # prompt.log_conneted_points(cif.connections)
-
-
-# TODO: Generate polyhedron .gif files
-# TODO: Generate shortest atomic site information (CBA)
-# TODO: Generate histograms
-# TODO: Generate coordination numbers

@@ -18,7 +18,9 @@ def cif_folder_path_test():
 
 # Multiple files
 @pytest.fixture(scope="module")
-def parsed_formula_weight_structure_s_group_data(cif_folder_path_test):
+def parsed_formula_weight_structure_s_group_data(
+    cif_folder_path_test,
+):
     results = cif_parser.get_unique_formulas_structures_weights_s_groups(
         cif_folder_path_test
     )
@@ -110,7 +112,7 @@ def site_connections_URhIn(
         parsed_cif_data_URhIn,
         unitcell_points_URhIn,
         supercell_points_URhIn,
-        False,
+        cutoff_radius=10.0,
     )
 
 
