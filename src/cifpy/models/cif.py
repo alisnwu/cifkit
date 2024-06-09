@@ -94,7 +94,7 @@ class Cif:
         """Property that checks if connections are computed and computes them if not."""
         if self.connections is None:
             self.compute_connections()  # Use default parameters or modify as needed
-        return self._shortest_pair_distance
+        return self._connections_CN
 
     def print_connected_points(self):
         prompt.log_conneted_points(self.connections)

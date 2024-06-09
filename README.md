@@ -13,7 +13,7 @@ CifPy provides two simple objects `Cif` and `CifEnsemble`.
 `Cif`
 
 - [ ] get site pairs with atomic mixing info
-- [ ] get the coordination number by d_min method
+- [x] get the coordination number by d_min method
 - [x] get homogeneous, heterogeneous, all possible bond pairs
 - [x] parse tagsfrom the thrid line if provided
 - [x] Comoute shortest distance
@@ -30,7 +30,6 @@ CifPy provides two simple objects `Cif` and `CifEnsemble`.
 - [ ] copy files based on tags, sgroup, sgname, supercell size, elements, structure, formula
 - [ ] preprocess format and move files based on error
 - [ ] generate histograms based on tags, sgroup, sgname, supercell size, elements, structure, formula
-- [ ] get all possible bonds in all .cif files
 - [ ] get all possible unique properties in all .cif files
 - [ ] get all unique elements in all .cif files
 - [ ] get the minimum distance from each .cif file

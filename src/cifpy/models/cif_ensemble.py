@@ -71,15 +71,53 @@ class CifEnsemble:
                 print(f"No valid {attribute} for {cif.file_path}")
         return collected_data
 
+    def _filter_cif_data(self, property_name: str, values: list):
+        collected_data = set()
+        for cif in self.cifs:
+            property_value = getattr(cif, property_name, None)
+            if not isinstance(property_value, set):
+                if property_value in values:
+                    print(property_name, property_value)
+                    collected_data.add(cif.file_path)
+            else:
+                # Handle the case where property_value is a set
+                if all(val in property_value for val in values):
+                    collected_data.add(cif.file_path)
+        return collected_data
+
     @property
     def minimum_distances(self) -> list[tuple[str, float]]:
-        """Get a list of tuples containing the file path and the shortest pair distance for each file."""
+        """
+        Get a list of tuples containing the file path and the shortest pair
+        istance for each file.
+        """
         return self._collect_cif_data("shortest_pair_distance")
 
     @property
     def supercell_atom_counts(self) -> list[tuple[str, int]]:
-        """Get a list of tuples containing the file path and supercell point counts for each file."""
+        """
+        Get a list of tuples containing the file path and supercell point counts
+        for each file.
+        """
         return self._collect_cif_data("supercell_points", len)
+
+    def filter_by_formulas(self, values: list[str]) -> set[str]:
+        return self._filter_cif_data("formula", values)
+
+    def filter_by_structures(self, values: list[str]) -> set[str]:
+        return self._filter_cif_data("structure", values)
+
+    def filter_by_elements(self, values: list[str]) -> set[str]:
+        return self._filter_cif_data("unique_elements", values)
+
+    def filter_by_tags(self, values: list[str]) -> set[str]:
+        return self._filter_cif_data("tag", values)
+
+    def filter_by_space_group_names(self, values: list[str]) -> set[str]:
+        return self._filter_cif_data("space_group_name", values)
+
+    def filter_by_space_group_numbers(self, values: list[str]) -> set[str]:
+        return self._filter_cif_data("space_group_number", values)
 
     # def _moves_cifs_by_attribute(self, attribute: str, value) -> list[str]:
     #     """Return a list of file paths with the matching attribute."""

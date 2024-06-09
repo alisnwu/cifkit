@@ -1,4 +1,4 @@
-def test_cif_properties(cif_URhIn):
+def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.unique_elements == {"U", "In", "Rh"}
     assert cif_URhIn.formula == "URhIn"
     assert cif_URhIn.structure == "ZrNiAl"
@@ -25,5 +25,24 @@ def test_cif_properties(cif_URhIn):
         ("In", "U"),
         ("Rh", "U"),
     }
+
+
+def test_cif_lazy_propertes_after_compute_connection(cif_URhIn):
     cif_URhIn.compute_connections()
     assert cif_URhIn.shortest_pair_distance == 2.697
+
+    connections_CN = cif_URhIn.connections_CN
+    assert len(connections_CN.get("In1")) == 14
+    assert len(connections_CN.get("U1")) == 11
+    assert len(connections_CN.get("Rh1")) == 9
+    assert len(connections_CN.get("Rh2")) == 9
+
+
+def test_cif_lazy_propertes(cif_URhIn):
+    assert cif_URhIn.shortest_pair_distance == 2.697
+
+    connections_CN = cif_URhIn.connections_CN
+    assert len(connections_CN.get("In1")) == 14
+    assert len(connections_CN.get("U1")) == 11
+    assert len(connections_CN.get("Rh1")) == 9
+    assert len(connections_CN.get("Rh2")) == 9
