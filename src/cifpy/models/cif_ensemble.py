@@ -1,7 +1,8 @@
 from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
 from cifpy.preprocessors import environment
-from cifpy.utils import prompt, folder
+from cifpy.utils import prompt
+from cifpy.utils.folder import move_files, copy_files, get_file_path_list
 from cifpy.models.cif import Cif
 import os
 import shutil
@@ -11,7 +12,7 @@ class CifEnsemble:
     def __init__(self, cif_folder_path: str) -> None:
         self.cif_folder_path = cif_folder_path
         self.cifs: list[Cif] = []
-        file_paths = folder.get_file_path_list(cif_folder_path)
+        file_paths = get_file_path_list(cif_folder_path)
         self.cifs = [Cif(file_path) for file_path in file_paths]
 
     def _get_unique_property_values(self, property_name: str):
@@ -72,18 +73,18 @@ class CifEnsemble:
         return collected_data
 
     def _filter_cif_data(self, property_name: str, values: list):
-        collected_data = set()
+        cif_file_paths = set()
         for cif in self.cifs:
             property_value = getattr(cif, property_name, None)
             if not isinstance(property_value, set):
                 if property_value in values:
                     print(property_name, property_value)
-                    collected_data.add(cif.file_path)
+                    cif_file_paths.add(cif.file_path)
             else:
                 # Handle the case where property_value is a set
                 if all(val in property_value for val in values):
-                    collected_data.add(cif.file_path)
-        return collected_data
+                    cif_file_paths.add(cif.file_path)
+        return cif_file_paths
 
     @property
     def minimum_distances(self) -> list[tuple[str, float]]:
@@ -96,8 +97,8 @@ class CifEnsemble:
     @property
     def supercell_atom_counts(self) -> list[tuple[str, int]]:
         """
-        Get a list of tuples containing the file path and supercell point counts
-        for each file.
+        Get a list of tuples containing the file path and supercell point
+        counts for each file.
         """
         return self._collect_cif_data("supercell_points", len)
 
@@ -119,35 +120,18 @@ class CifEnsemble:
     def filter_by_space_group_numbers(self, values: list[str]) -> set[str]:
         return self._filter_cif_data("space_group_number", values)
 
-    # def _moves_cifs_by_attribute(self, attribute: str, value) -> list[str]:
-    #     """Return a list of file paths with the matching attribute."""
-    #     matching_file_paths = [
-    #         cif.file_path
-    #         for cif in self.cifs
-    #         if getattr(cif, attribute, None) == value
-    #     ]
+    def move_cif_files(
+        self, file_paths: set[str], to_directory_path: str
+    ) -> None:
+        """
+        Move a set of CIF files to a specified destination directory.
+        """
+        move_files(to_directory_path, list(file_paths))
 
-    # def move_files_by_formula(self, formula: str) -> list[str]:
-    #     """Filter CIFs by formula."""
-    #     return self._moves_cifs_by_attribute("formula", formula)
-
-    # def move_files_by_structure(self, structure: str) -> list[str]:
-    #     """Filter CIFs by structure."""
-    #     return self._moves_cifs_by_attribute("structure", structure)
-
-    # def move_files_by_elements(self, elements: list[str]) -> list[str]:
-    #     """Filter CIFs by elements (assuming unique_elements is a set)."""
-    #     filtered_files = []
-    #     for cif in self.cifs:
-    #         unique_elements: set[str] = getattr(cif, "unique_elements", set())
-    #         if set(elements).issubset(unique_elements):
-    #             filtered_files.append(cif.file_path)
-    #     return filtered_files
-
-    # def move_files_by_space_group_name(self, name: str) -> list[str]:
-    #     """Filter CIFs by space group name."""
-    #     return self._moves_cifs_by_attribute("space_group_name", name)
-
-    # def move_files_by_space_group_number(self, number: int) -> list[str]:
-    #     """Filter CIFs by space group number."""
-    #     return self._moves_cifs_by_attribute("space_group_number", number)
+    def copy_cif_files(
+        self, file_paths: set[str], to_directory_path: str
+    ) -> None:
+        """
+        Copy a set of CIF files to a specified destination directory.
+        """
+        copy_files(to_directory_path, list(file_paths))

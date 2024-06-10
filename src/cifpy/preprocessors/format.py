@@ -31,7 +31,8 @@ def preprocess_cif_file_on_label_element(file_path):
         """
         Type 8.
         Ex) 1817279.cif
-        In1,Co3B Co 4 c 0.75 0.25 0.59339 0.07(3) ->
+        In1,Co3B Co 4 c 0.75 0.25 0.59339 0.07(3)
+        ->
         Co13B Co 4 c 0.75 0.25 0.59339 0.07(3)
         """
 
@@ -55,7 +56,8 @@ def preprocess_cif_file_on_label_element(file_path):
         """
         Type 9.
         Ex) 1200981
-        Snb Sn 4 c 0.0595 0.25 0.0952 1 ->
+        Snb Sn 4 c 0.0595 0.25 0.0952 1
+        ->
         SnB Sn 4 c 0.0595 0.25 0.0952 1
         """
 
@@ -81,7 +83,8 @@ def preprocess_cif_file_on_label_element(file_path):
             """
             Type 1.
             Ex) 250165.cif
-            M1 Th 4 a 0 0 0 0.99 ->
+            M1 Th 4 a 0 0 0 0.99
+            ->
             Th1 Th 4 a 0 0 0 0.99
             """
             if (
@@ -99,7 +102,8 @@ def preprocess_cif_file_on_label_element(file_path):
             """
             Type 2.
             Ex) 312084.cif
-            M1A Ge 8 h 0 0.06 0.163 0.500 ->
+            M1A Ge 8 h 0 0.06 0.163 0.500
+            ->
             Ge1A Ge 8 h 0 0.06 0.163 0.50
             """
 
@@ -118,7 +122,8 @@ def preprocess_cif_file_on_label_element(file_path):
             """
             Type 3.
             Ex) 1603834.cif
-            R Nd 2 a 0 0 0 1 ->
+            R Nd 2 a 0 0 0 1
+            ->
             Nd Nd 2 a 0 0 0 1
             """
 
@@ -132,7 +137,8 @@ def preprocess_cif_file_on_label_element(file_path):
             """
             Type 4.
             Ex) 1711694.cif
-            Ln Gd 2 a 0 0 0.0 1 ->
+            Ln Gd 2 a 0 0 0.0 1
+            ->
             Gd Gd 2 a 0 0 0.0 1
             """
             if (
@@ -152,7 +158,8 @@ def preprocess_cif_file_on_label_element(file_path):
             """
             Type 5.
             Ex) 1049941.cif
-            PR1 Pr 4 j 0.02076 0.5 0.30929 1 ->
+            PR1 Pr 4 j 0.02076 0.5 0.30929 1
+            ->
             Pr1 Pr 4 j 0.02076 0.5 0.30929 1
             """
 
@@ -177,7 +184,8 @@ def preprocess_cif_file_on_label_element(file_path):
             Type 6.
 
             Ex) 1049941.cif
-            NG1A Ni 4 j 0 0.172 0.5 0.88(1) ->
+            NG1A Ni 4 j 0 0.172 0.5 0.88(1)
+            ->
             Ni1A Ni 4 j 0 0.172 0.5 0.88(1)
             """
             if (
@@ -201,7 +209,8 @@ def preprocess_cif_file_on_label_element(file_path):
             """
             Type 7.
             Ex) 1817279.cif
-            Fe2 Pt 1 d 0.5 0.5 0.5 0.01(4) ->
+            Fe2 Pt 1 d 0.5 0.5 0.5 0.01(4)
+            ->
             Pt2 Pt 1 d 0.5 0.5 0.5 0.01(4)
             """
             if (

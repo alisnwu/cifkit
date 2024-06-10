@@ -8,6 +8,17 @@ from cifpy.preprocessors import (
 )
 from cifpy.utils import cif_parser, folder
 from cifpy.models.cif import Cif
+from cifpy.models.cif_ensemble import CifEnsemble
+
+
+"""
+CifEnsemble
+"""
+
+
+@pytest.fixture(scope="module")
+def cif_ensemble_test():
+    return CifEnsemble("tests/data/cif/ensemble_test")
 
 
 # Folder
@@ -33,7 +44,7 @@ def file_paths_test(cif_folder_path_test):
 
 
 """
-Individual file of URhIn
+CiF - URhIn
 """
 
 
