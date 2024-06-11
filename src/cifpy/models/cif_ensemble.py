@@ -135,3 +135,5 @@ class CifEnsemble:
         Copy a set of CIF files to a specified destination directory.
         """
         copy_files(to_directory_path, list(file_paths))
+
+    # Let's format all the cif objects

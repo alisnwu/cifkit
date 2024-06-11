@@ -124,7 +124,7 @@ def test_get_loop_value_dict(loop_values_URhIn):
 
 
 def test_get_start_end_line_indexes():
-    file_path = "tests/data/cif/author.cif"
+    file_path = "tests/data/cif/format_author/author.cif"
     keyword = "_publ_author_address"
     # Line 54-103 before space a provided
     assert get_start_end_line_indexes(file_path, keyword) == (

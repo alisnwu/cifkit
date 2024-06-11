@@ -3,7 +3,6 @@ from cifpy.models.cif_ensemble import CifEnsemble
 from cifpy.utils.folder import get_file_count, get_file_path_list
 
 
-@pytest.mark.fast
 def test_init(cif_ensemble_test):
     # Create an instance of CifEnsemble
     assert cif_ensemble_test.cif_folder_path == "tests/data/cif/ensemble_test"
@@ -49,7 +48,6 @@ def test_init(cif_ensemble_test):
     ]
 
 
-@pytest.mark.fast
 def test_filter_files(cif_ensemble_test):
     cif_ensemble_test = CifEnsemble("tests/data/cif/ensemble_test")
 
@@ -107,7 +105,6 @@ def test_filter_files(cif_ensemble_test):
     }
 
 
-@pytest.mark.fast
 def test_move_files(tmp_path, cif_ensemble_test):
     file_paths = {
         "tests/data/cif/ensemble_test/300169.cif",
@@ -126,7 +123,6 @@ def test_move_files(tmp_path, cif_ensemble_test):
     assert get_file_count(initial_dir_path) == initial_file_count
 
 
-@pytest.mark.fast
 def test_copy_files(tmp_path, cif_ensemble_test):
     file_paths = {
         "tests/data/cif/ensemble_test/300169.cif",

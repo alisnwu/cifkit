@@ -5,7 +5,7 @@ import os
 import filecmp
 
 from cifpy.preprocessors.format import (
-    preprocess_cif_file_on_label_element,
+    preprocess_label_element_loop_values,
 )
 from cifpy.utils import cif_parser, folder, string_parser
 
@@ -18,7 +18,7 @@ def run_preprocess_test_on_cif_files(cif_dir):
     cif_file_path_list = folder.get_file_path_list(temp_cif_dir)
 
     for temp_cif_file_path in cif_file_path_list:
-        preprocess_cif_file_on_label_element(temp_cif_file_path)
+        preprocess_label_element_loop_values(temp_cif_file_path)
         # Perform tests on the modified temporary file
         block = cif_parser.get_cif_block(temp_cif_file_path)
         loop_values = cif_parser.get_loop_values(block)
@@ -76,7 +76,6 @@ def test_preprocess_cif_file_on_label_element_type_8():
     run_preprocess_test_on_cif_files(cif_dir)
 
 
-@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_mixed():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_mixed"
 
@@ -87,7 +86,7 @@ def test_preprocess_cif_file_on_label_element_type_mixed():
     cif_file_path_list = folder.get_file_path_list(temp_cif_dir)
 
     for temp_cif_file_path in cif_file_path_list:
-        preprocess_cif_file_on_label_element(temp_cif_file_path)
+        preprocess_label_element_loop_values(temp_cif_file_path)
         lines = cif_parser.get_line_content_from_tag(
             temp_cif_file_path, "_atom_site_occupancy"
         )

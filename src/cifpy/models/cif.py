@@ -11,6 +11,8 @@ from cifpy.utils.cif_parser import (
     check_unique_atom_site_labels,
 )
 
+from cifpy.preprocessors.format import preprocess_label_element_loop_values
+from cifpy.utils.cif_editor import remove_author_loop
 from cifpy.coordination.distance import get_shortest_distance
 from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
@@ -36,6 +38,8 @@ class Cif:
     def _load_data(self):
         """Load data from the .cif file and process it."""
         check_unique_atom_site_labels(self.file_path)
+        remove_author_loop(self.file_path)
+        preprocess_label_element_loop_values(self.file_path)
         self._block = get_cif_block(self.file_path)
         self._parse_cif_data()
         self._generate_supercell()
@@ -90,14 +94,14 @@ class Cif:
     def shortest_pair_distance(self):
         """Property that checks if connections are computed and computes them if not."""
         if self.connections is None:
-            self.compute_connections()  # Use default parameters or modify as needed
+            self.compute_connections()
         return self._shortest_pair_distance
 
     @property
     def connections_CN(self):
         """Property that checks if connections are computed and computes them if not."""
         if self.connections is None:
-            self.compute_connections()  # Use default parameters or modify as needed
+            self.compute_connections()
         return self._connections_CN
 
     def print_connected_points(self):

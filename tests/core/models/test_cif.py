@@ -105,23 +105,9 @@ def test_init_error_duplicate_label():
     assert expected_error_message == str(e.value)
 
 
-@pytest.mark.fast
 def test_init_error_coord_missing():
     file_path = "tests/data/cif/error/missing_loop/452743.cif"
     with pytest.raises(ValueError) as e:
         Cif(file_path)
     expected_error_message = CifParserError.WRONG_LOOP_VALUE_COUNT.value
-    assert expected_error_message == str(e.value)
-
-
-def test_init_error_label():
-    """
-    A,C Fe 8 c 0.25 0.25 0.25 1
-    Fe Fe 4 b 0.5 0.5 0.5 1
-    Si Si 4 a 0 0 0 1
-    """
-    file_path = "tests/data/cif/error/error_label/1819643.cif"
-    with pytest.raises(ValueError) as e:
-        Cif(file_path)
-    expected_error_message = CifParserError.INVALID_PARSED_ELEMENT.value
     assert expected_error_message == str(e.value)
