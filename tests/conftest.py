@@ -10,6 +10,7 @@ from cifpy.utils import cif_parser, folder
 from cifpy.models.cif import Cif
 from cifpy.models.cif_ensemble import CifEnsemble
 from cifpy.preprocessors import environment
+from cifpy.coordination import composition
 
 """
 CifEnsemble - test folder
@@ -135,6 +136,11 @@ def connections_CN_URhIn(connections_URhIn):
 @pytest.fixture(scope="module")
 def flattened_connections_URhIn(connections_URhIn):
     return environment_util.flat_site_connections(connections_URhIn)
+
+
+@pytest.fixture(scope="module")
+def bond_counts_CN(formula_URhIn, connections_CN_URhIn):
+    return composition.get_bond_counts_CN(formula_URhIn, connections_CN_URhIn)
 
 
 @pytest.fixture(scope="module")

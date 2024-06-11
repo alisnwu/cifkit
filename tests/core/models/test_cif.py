@@ -105,6 +105,24 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
         for label in expected_shotest_pair_distance
     )
 
+    # Expected output based on input data
+    expected_fractions = {
+        ("In", "In"): 4 / 43,
+        ("In", "Rh"): 13 / 43,
+        ("In", "U"): 12 / 43,
+        ("Rh", "U"): 14 / 43,
+    }
+
+    # Testing each bond fraction to ensure they are within a small tolerance
+    for bond_type, expected_fraction in expected_fractions.items():
+        assert (
+            pytest.approx(cif_URhIn.bond_fraction_CN[bond_type], 0.001)
+            == expected_fraction
+        )
+
+    # Testing to ensure the fractions sum approximately to 1
+    assert pytest.approx(sum(cif_URhIn.bond_fraction_CN.values()), 0.001) == 1
+
 
 def test_cif_lazy_propertes(cif_URhIn):
     assert cif_URhIn.shortest_pair_distance == 2.697

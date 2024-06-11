@@ -23,7 +23,10 @@ from cifpy.preprocessors.environment import (
     get_site_connections,
     filter_connections_with_cn,
 )
-from cifpy.coordination.composition import get_bond_counts_in_CN
+from cifpy.coordination.composition import (
+    get_bond_counts_CN,
+    get_bond_fraction_CN,
+)
 from cifpy.utils import prompt
 from cifpy.utils.bond_pair import (
     get_heterogenous_element_pairs,
@@ -92,12 +95,13 @@ class Cif:
         )
         self._shortest_pair_distance = get_shortest_distance(self.connections)
         self._connections_CN = filter_connections_with_cn(self.connections)
-        self._bond_counts_CN = get_bond_counts_in_CN(
-            self.formula, self.connections_CN
-        )
         self._shortest_distance_per_label = get_shortest_distance_per_label(
             self.connections
         )
+        self._bond_counts_CN = get_bond_counts_CN(
+            self.formula, self.connections_CN
+        )
+        self._bond_fraction_CN = get_bond_fraction_CN(self.bond_counts_CN)
 
     @property
     def shortest_pair_distance(self):
@@ -117,13 +121,19 @@ class Cif:
         prompt.log_connected_points(self.connections)
 
     @property
+    def shortest_distance_per_label(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._shortest_distance_per_label
+
+    @property
     def bond_counts_CN(self):
         if self.connections is None:
             self.compute_connections()
         return self._bond_counts_CN
 
     @property
-    def shortest_distance_per_label(self):
+    def bond_fraction_CN(self):
         if self.connections is None:
             self.compute_connections()
-        return self._shortest_distance_per_label
+        return self._bond_fraction_CN
