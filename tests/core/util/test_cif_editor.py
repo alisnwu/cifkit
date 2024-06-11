@@ -7,7 +7,6 @@ import filecmp
 from cifpy.utils.cif_editor import (
     remove_author_loop,
 )
-from cifpy.utils import cif_parser, folder, string_parser
 
 
 @pytest.fixture

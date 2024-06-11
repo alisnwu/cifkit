@@ -4,20 +4,21 @@ from cifpy.preprocessors import environment
 from cifpy.utils import prompt
 from cifpy.utils.folder import move_files, copy_files, get_file_path_list
 from cifpy.models.cif import Cif
+from cifpy.figures.histogram import plot_histograms
 import os
 import shutil
 from collections import Counter
 
 
 class CifEnsemble:
-    def __init__(self, cif_folder_path: str) -> None:
-        self.cif_folder_path = cif_folder_path
+    def __init__(self, cif_dir_path: str) -> None:
+        self.dir_path = cif_dir_path
         self.cifs: list[Cif] = []
-        file_paths = get_file_path_list(cif_folder_path)
+        file_paths = get_file_path_list(cif_dir_path)
         self.cifs = [Cif(file_path) for file_path in file_paths]
 
     def _get_unique_property_values(self, property_name: str):
-        """Helper method to et unique values for a given property from cifs."""
+        """Return unique values for a given property from cifs."""
         return set(
             getattr(cif, property_name)
             for cif in self.cifs
@@ -70,6 +71,9 @@ class CifEnsemble:
             for cif in self.cifs
             if hasattr(cif, attribute_name)
         ]
+        # Flatten the list if the attribute is a set of elements
+        if isinstance(values[0], set):
+            values = [elem for sublist in values for elem in sublist]
         return dict(Counter(values))
 
     @property
@@ -91,6 +95,11 @@ class CifEnsemble:
     @property
     def space_group_name_stats(self) -> dict[str, int]:
         return self._attribute_stats("space_group_name")
+
+    @property
+    def unique_elements_stats(self) -> dict[str, int]:
+        """Sum the counts of each unique element"""
+        return self._attribute_stats("unique_elements")
 
     @property
     def supercell_size_stats(self) -> dict[int, int]:
@@ -117,21 +126,13 @@ class CifEnsemble:
 
     @property
     def minimum_distances(self) -> list[tuple[str, float]]:
-        """
-        Get a list of tuples containing the file path and the shortest pair
-        istance for each file.
-        """
         return self._collect_cif_data("shortest_pair_distance")
 
     @property
     def supercell_atom_counts(self) -> list[tuple[str, int]]:
-        """
-        Get a list of tuples containing the file path and supercell point
-        counts for each file.
-        """
         return self._collect_cif_data("supercell_atom_count")
 
-    def _filter_cif_data(self, property_name: str, values: list):
+    def _filter_by_value(self, property_name: str, values: list):
         cif_file_paths = set()
         for cif in self.cifs:
             property_value = getattr(cif, property_name, None)
@@ -146,22 +147,52 @@ class CifEnsemble:
         return cif_file_paths
 
     def filter_by_formulas(self, values: list[str]) -> set[str]:
-        return self._filter_cif_data("formula", values)
+        return self._filter_by_value("formula", values)
 
     def filter_by_structures(self, values: list[str]) -> set[str]:
-        return self._filter_cif_data("structure", values)
+        return self._filter_by_value("structure", values)
 
     def filter_by_elements(self, values: list[str]) -> set[str]:
-        return self._filter_cif_data("unique_elements", values)
+        return self._filter_by_value("unique_elements", values)
 
     def filter_by_tags(self, values: list[str]) -> set[str]:
-        return self._filter_cif_data("tag", values)
+        return self._filter_by_value("tag", values)
 
     def filter_by_space_group_names(self, values: list[str]) -> set[str]:
-        return self._filter_cif_data("space_group_name", values)
+        return self._filter_by_value("space_group_name", values)
 
     def filter_by_space_group_numbers(self, values: list[str]) -> set[str]:
-        return self._filter_cif_data("space_group_number", values)
+        return self._filter_by_value("space_group_number", values)
+
+    def _filter_by_range(
+        self, property: str, min: float | int, max: float | int
+    ) -> set[str]:
+
+        cif_file_paths = set()
+        for cif in self.cifs:
+            property_value = getattr(cif, property, None)
+            if property_value is None:
+                continue
+            if property_value < min or property_value > max:
+                continue
+            cif_file_paths.add(cif.file_path)
+        return cif_file_paths
+
+    def filter_by_min_distance(
+        self, min_distance: float, max_distance: float
+    ) -> set[str]:
+        return self._filter_by_range(
+            "shortest_pair_distance", min_distance, max_distance
+        )
+
+    def filter_by_supercell_count(
+        self, min_count: int, max_count: int
+    ) -> set[str]:
+        return self._filter_by_range(
+            "supercell_atom_count",
+            min_count,
+            max_count,
+        )
 
     def move_cif_files(
         self, file_paths: set[str], to_directory_path: str
@@ -175,4 +206,5 @@ class CifEnsemble:
         """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
 
-    # Let's format all the cif objects
+    def generate_stat_histograms(self, output_dir=None):
+        plot_histograms(self, output_dir)

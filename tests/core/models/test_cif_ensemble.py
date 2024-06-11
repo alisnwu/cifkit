@@ -5,7 +5,7 @@ from cifpy.utils.folder import get_file_count, get_file_path_list
 
 def test_init(cif_ensemble_test):
     # Create an instance of CifEnsemble
-    assert cif_ensemble_test.cif_folder_path == "tests/data/cif/ensemble_test"
+    assert cif_ensemble_test.dir_path == "tests/data/cif/ensemble_test"
     assert cif_ensemble_test.unique_formulas == {
         "EuIr2Ge2",
         "CeRu2Ge2",
@@ -48,7 +48,12 @@ def test_init(cif_ensemble_test):
     ]
 
 
-def test_filter_files(cif_ensemble_test):
+"""
+Test filter by value
+"""
+
+
+def test_filter_by_value(cif_ensemble_test):
     cif_ensemble_test = CifEnsemble("tests/data/cif/ensemble_test")
 
     # Test filter by specific formula
@@ -63,7 +68,6 @@ def test_filter_files(cif_ensemble_test):
         "tests/data/cif/ensemble_test/250709.cif",
     }
 
-    # Test filter by structure
     assert cif_ensemble_test.filter_by_structures(["W"]) == {
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250697.cif",
@@ -105,6 +109,39 @@ def test_filter_files(cif_ensemble_test):
     }
 
 
+"""
+Test filter by range
+"""
+
+
+def test_filter_by_supercell_count(cif_ensemble_test):
+    result = cif_ensemble_test.filter_by_supercell_count(200, 400)
+    expected = {
+        "tests/data/cif/ensemble_test/300169.cif",
+        "tests/data/cif/ensemble_test/300171.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+    }
+    assert result == expected
+
+    result = cif_ensemble_test.filter_by_supercell_count(50, 60)
+    expected = {
+        "tests/data/cif/ensemble_test/260171.cif",
+        "tests/data/cif/ensemble_test/250697.cif",
+        "tests/data/cif/ensemble_test/250709.cif",
+    }
+    assert result == expected
+
+
+def test_filter_by_min_distance(cif_ensemble_test):
+    result = cif_ensemble_test.filter_by_min_distance(2.0, 2.5)
+    expected = {
+        "tests/data/cif/ensemble_test/300171.cif",
+        "tests/data/cif/ensemble_test/300169.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+    }
+    assert result == expected
+
+
 def test_move_files(tmp_path, cif_ensemble_test):
     file_paths = {
         "tests/data/cif/ensemble_test/300169.cif",
@@ -133,6 +170,11 @@ def test_copy_files(tmp_path, cif_ensemble_test):
     # Move files to the destination directory
     cif_ensemble_test.copy_cif_files(file_paths, dest_dir)
     assert get_file_count(dest_dir) == len(file_paths)
+
+
+"""
+Test stats
+"""
 
 
 def test_structures_stats(cif_ensemble_test):
@@ -175,3 +217,36 @@ def test_min_distance_stats(cif_ensemble_test):
     result = cif_ensemble_test.min_distance_stats
     expected = {2.28: 1, 2.29: 1, 2.383: 1, 2.725: 2, 2.72: 1}
     assert result == expected
+
+
+def test_unique_elements_stats(cif_ensemble_test):
+    result = cif_ensemble_test.unique_elements_stats
+    expected = {"Ce": 1, "Eu": 1, "Ge": 3, "Ir": 1, "La": 1, "Mo": 3, "Ru": 2}
+    assert result == expected
+
+
+"""
+Test stat histograms
+"""
+
+
+def test_generate_histogram(cif_ensemble_test, tmp_path):
+    output_dir = tmp_path / "histograms"
+    cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
+
+    # List of expected files
+    expected_files = [
+        "structures.png",
+        "formula.png",
+        "tag.png",
+        "space_group_number.png",
+        "space_group_name.png",
+        "supercell_size.png",
+        "min_distance.png",
+        "unique_elements.png",
+    ]
+
+    # Check that all expected files are created
+    for file_name in expected_files:
+        file_path = output_dir / file_name
+        assert file_path.exists()

@@ -1,6 +1,5 @@
 # conftest.py
 import pytest
-import sys
 from cifpy.preprocessors import (
     supercell,
     environment,
