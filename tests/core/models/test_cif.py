@@ -72,7 +72,7 @@ def test_cif_static_properties(cif_URhIn):
     }
 
 
-def test_cif_lazy_propertes_after_compute_connection(cif_URhIn):
+def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
     cif_URhIn.compute_connections()
     assert cif_URhIn.shortest_pair_distance == 2.697
 
@@ -81,6 +81,29 @@ def test_cif_lazy_propertes_after_compute_connection(cif_URhIn):
     assert len(connections_CN.get("U1")) == 11
     assert len(connections_CN.get("Rh1")) == 9
     assert len(connections_CN.get("Rh2")) == 9
+
+    expected_bond_counts = {
+        "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
+        "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
+        "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
+        "U1": {("In", "U"): 6, ("Rh", "U"): 5},
+    }
+    assert cif_URhIn.bond_counts_CN == expected_bond_counts
+
+    expected_shotest_pair_distance = {
+        "In1": ("Rh2", 2.697),
+        "Rh1": ("In1", 2.852),
+        "Rh2": ("In1", 2.697),
+        "U1": ("Rh1", 2.984),
+    }
+    result = cif_URhIn.shortest_distance_per_label
+
+    assert all(
+        result[label][0] == expected_shotest_pair_distance[label][0]
+        and pytest.approx(result[label][1], 0.001)
+        == expected_shotest_pair_distance[label][1]
+        for label in expected_shotest_pair_distance
+    )
 
 
 def test_cif_lazy_propertes(cif_URhIn):

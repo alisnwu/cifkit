@@ -13,17 +13,22 @@ from cifpy.utils.cif_parser import (
 
 from cifpy.preprocessors.format import preprocess_label_element_loop_values
 from cifpy.utils.cif_editor import remove_author_loop
-from cifpy.coordination.distance import get_shortest_distance
+from cifpy.coordination.distance import (
+    get_shortest_distance,
+    get_shortest_distance_per_label,
+)
 from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
 from cifpy.preprocessors.environment import (
     get_site_connections,
     filter_connections_with_cn,
 )
+from cifpy.coordination.composition import get_bond_counts_in_CN
 from cifpy.utils import prompt
 from cifpy.utils.bond_pair import (
     get_heterogenous_element_pairs,
     get_homogenous_element_pairs,
+    get_all_bond_pairs,
 )
 
 
@@ -64,9 +69,7 @@ class Cif:
             self.formula
         )
         self.homogenous_bond_pairs = get_homogenous_element_pairs(self.formula)
-        self.all_bond_pairs = (self.heterogeneous_bond_pairs).union(
-            self.homogenous_bond_pairs
-        )
+        self.all_bond_pairs = get_all_bond_pairs(self.formula)
 
     def _generate_supercell(self):
         """Generate supercell information based on the unit cell data."""
@@ -89,6 +92,12 @@ class Cif:
         )
         self._shortest_pair_distance = get_shortest_distance(self.connections)
         self._connections_CN = filter_connections_with_cn(self.connections)
+        self._bond_counts_CN = get_bond_counts_in_CN(
+            self.formula, self.connections_CN
+        )
+        self._shortest_distance_per_label = get_shortest_distance_per_label(
+            self.connections
+        )
 
     @property
     def shortest_pair_distance(self):
@@ -106,3 +115,15 @@ class Cif:
 
     def print_connected_points(self):
         prompt.log_connected_points(self.connections)
+
+    @property
+    def bond_counts_CN(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._bond_counts_CN
+
+    @property
+    def shortest_distance_per_label(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._shortest_distance_per_label

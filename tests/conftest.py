@@ -9,7 +9,7 @@ from cifpy.preprocessors import (
 from cifpy.utils import cif_parser, folder
 from cifpy.models.cif import Cif
 from cifpy.models.cif_ensemble import CifEnsemble
-
+from cifpy.preprocessors import environment
 
 """
 CifEnsemble - test folder
@@ -113,7 +113,7 @@ def parsed_cif_data_URhIn(
 
 
 @pytest.fixture(scope="module")
-def site_connections_URhIn(
+def connections_URhIn(
     parsed_cif_data_URhIn,
     unitcell_points_URhIn,
     supercell_points_URhIn,
@@ -128,8 +128,13 @@ def site_connections_URhIn(
 
 
 @pytest.fixture(scope="module")
-def flattened_connections_URhIn(site_connections_URhIn):
-    return environment_util.flat_site_connections(site_connections_URhIn)
+def connections_CN_URhIn(connections_URhIn):
+    return environment.filter_connections_with_cn(connections_URhIn)
+
+
+@pytest.fixture(scope="module")
+def flattened_connections_URhIn(connections_URhIn):
+    return environment_util.flat_site_connections(connections_URhIn)
 
 
 @pytest.fixture(scope="module")

@@ -11,3 +11,22 @@ def get_shortest_distance(connections: dict) -> float:
 
     # Check if the found minimum distance is less than the threshold
     return min_dist
+
+
+def get_shortest_distance_per_label(
+    connections: dict,
+) -> dict[str, tuple[str, float]]:
+    """
+    Calculate the shortest distance for each label.
+    """
+    shortest_dist_info: dict[str, tuple[str, float]] = {}
+
+    for label, connections in connections.items():
+        # Extract only the distances from each tuple
+        shortest_dist = connections[0][0]
+        connection_label = connections[0][1]
+
+        # Find the shortest distance and add it to the result dictionary
+        shortest_dist_info[label] = (shortest_dist, connection_label)
+
+    return shortest_dist_info

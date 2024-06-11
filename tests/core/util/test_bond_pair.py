@@ -2,6 +2,7 @@ import pytest
 from cifpy.utils.bond_pair import (
     get_homogenous_element_pairs,
     get_heterogenous_element_pairs,
+    get_all_bond_pairs,
 )
 
 
@@ -45,4 +46,25 @@ def test_get_possible_homogenous_element_pairs(formula, expected):
 )
 def test_get_possible_homogenous_element_pairs(formula_str, expected):
     result = get_homogenous_element_pairs(formula_str)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "formula_str, expected",
+    [
+        (
+            "URh2In",
+            {
+                ("In", "Rh"),
+                ("In", "U"),
+                ("Rh", "U"),
+                ("U", "U"),
+                ("Rh", "Rh"),
+                ("In", "In"),
+            },
+        ),
+    ],
+)
+def test_get_all_bond_pairs(formula_str, expected):
+    result = get_all_bond_pairs(formula_str)
     assert result == expected

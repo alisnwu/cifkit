@@ -21,17 +21,17 @@ def assert_minimum_distance(label, connections_dict, expected_min_distance):
 
 
 def test_get_nearest_dists_per_site_cooridnation_number(
-    site_connections_URhIn,
+    connections_URhIn,
 ):
 
-    assert_minimum_distance("In1", site_connections_URhIn, 2.697)
-    assert_minimum_distance("U1", site_connections_URhIn, 2.984)
-    assert_minimum_distance("Rh1", site_connections_URhIn, 2.852)
-    assert_minimum_distance("Rh2", site_connections_URhIn, 2.697)
+    assert_minimum_distance("In1", connections_URhIn, 2.697)
+    assert_minimum_distance("U1", connections_URhIn, 2.984)
+    assert_minimum_distance("Rh1", connections_URhIn, 2.852)
+    assert_minimum_distance("Rh2", connections_URhIn, 2.697)
 
 
-def test_filter_connections_with_cn(site_connections_URhIn):
-    connections_CN = filter_connections_with_cn(site_connections_URhIn)
+def test_filter_connections_with_cn(connections_URhIn):
+    connections_CN = filter_connections_with_cn(connections_URhIn)
 
     assert len(connections_CN.get("In1")) == 14
     assert len(connections_CN.get("U1")) == 11

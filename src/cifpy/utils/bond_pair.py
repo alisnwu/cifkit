@@ -28,3 +28,9 @@ def get_homogenous_element_pairs(
     elements.sort()
     homogenous_pairs = [(element, element) for element in elements]
     return set(homogenous_pairs)
+
+
+def get_all_bond_pairs(formula_str: str) -> set[tuple[str, str]]:
+    heterogeneous_bond_pairs = get_heterogenous_element_pairs(formula_str)
+    homogenous_bond_pairs = get_homogenous_element_pairs(formula_str)
+    return heterogeneous_bond_pairs.union(homogenous_bond_pairs)

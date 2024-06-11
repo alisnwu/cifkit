@@ -1,8 +1,8 @@
 from cifpy.preprocessors.environment_util import flat_site_connections
 
 
-def test_flat_connections(site_connections_URhIn):
-    flattened_connections = flat_site_connections(site_connections_URhIn)
+def test_flat_connections(connections_URhIn):
+    flattened_connections = flat_site_connections(connections_URhIn)
 
     assert isinstance(flattened_connections, list)
 
