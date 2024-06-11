@@ -133,3 +133,45 @@ def test_copy_files(tmp_path, cif_ensemble_test):
     # Move files to the destination directory
     cif_ensemble_test.copy_cif_files(file_paths, dest_dir)
     assert get_file_count(dest_dir) == len(file_paths)
+
+
+def test_structures_stats(cif_ensemble_test):
+    result = cif_ensemble_test.structures_stats
+    expected = {"CeAl2Ga2": 3, "W": 3}
+    assert result == expected
+
+
+def test_formula_stats(cif_ensemble_test):
+    result = cif_ensemble_test.formula_stats
+    expected = {"CeRu2Ge2": 1, "EuIr2Ge2": 1, "LaRu2Ge2": 1, "Mo": 3}
+    assert result == expected
+
+
+def test_tag_stats(cif_ensemble_test):
+    result = cif_ensemble_test.tag_stats
+    expected = {"": 2, "hex": 1, "rt": 2, "rt_hex": 1}
+    assert result == expected
+
+
+def test_space_group_number_stats(cif_ensemble_test):
+    result = cif_ensemble_test.space_group_number_stats
+    expected = {139: 3, 229: 3}
+    assert result == expected
+
+
+def test_space_group_name_stats(cif_ensemble_test):
+    result = cif_ensemble_test.space_group_name_stats
+    expected = {"I4/mmm": 3, "Im-3m": 3}
+    assert result == expected
+
+
+def test_supercell_size_stats(cif_ensemble_test):
+    result = cif_ensemble_test.supercell_size_stats
+    expected = {54: 3, 360: 3}
+    assert result == expected
+
+
+def test_min_distance_stats(cif_ensemble_test):
+    result = cif_ensemble_test.min_distance_stats
+    expected = {2.28: 1, 2.29: 1, 2.383: 1, 2.725: 2, 2.72: 1}
+    assert result == expected

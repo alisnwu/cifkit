@@ -1,5 +1,6 @@
+import os, shutil
 import pytest
-from cifpy.utils.folder import get_file_path_list
+from cifpy.utils.folder import get_file_path_list, make_output_folder
 from cifpy.models.cif import Cif
 from cifpy.utils.error_messages import CifParserError
 
@@ -116,12 +117,39 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
     # Testing each bond fraction to ensure they are within a small tolerance
     for bond_type, expected_fraction in expected_fractions.items():
         assert (
-            pytest.approx(cif_URhIn.bond_fraction_CN[bond_type], 0.001)
+            pytest.approx(cif_URhIn.bond_fraction_CN[bond_type], 0.005)
             == expected_fraction
         )
 
     # Testing to ensure the fractions sum approximately to 1
-    assert pytest.approx(sum(cif_URhIn.bond_fraction_CN.values()), 0.001) == 1
+    assert pytest.approx(sum(cif_URhIn.bond_fraction_CN.values()), 0.005) == 1
+
+
+def test_get_polyhedron_labels_from_site(cif_URhIn):
+
+    expected_labels = [
+        "Rh2",
+        "Rh2",
+        "Rh1",
+        "Rh1",
+        "U1",
+        "U1",
+        "In1",
+        "In1",
+        "U1",
+        "U1",
+        "U1",
+        "U1",
+        "In1",
+        "In1",
+        "In1",
+    ]
+
+    polyhedron_points, labels = cif_URhIn.get_polyhedron_labels_from_site(
+        "In1"
+    )
+    assert len(polyhedron_points) == 15
+    assert labels == expected_labels
 
 
 def test_cif_lazy_propertes(cif_URhIn):
@@ -132,6 +160,43 @@ def test_cif_lazy_propertes(cif_URhIn):
     assert len(connections_CN.get("U1")) == 11
     assert len(connections_CN.get("Rh1")) == 9
     assert len(connections_CN.get("Rh2")) == 9
+
+
+"""Test polyhedron"""
+
+
+def test_plot_polyhedron_default_output_folder(cif_URhIn):
+    # Define the directory to store the output
+    expected_output_dir = "tests/data/cif/polyhedrons"
+    output_file_path = os.path.join(expected_output_dir, "URhIn_In1.png")
+
+    # Ensure the directory exists
+    if not os.path.exists(expected_output_dir):
+        os.makedirs(expected_output_dir)
+
+    # Define the output file path
+    cif_URhIn.plot_polyhedron("In1")
+
+    assert os.path.exists(output_file_path)
+    assert os.path.getsize(output_file_path) > 1024
+    shutil.rmtree(expected_output_dir)
+
+
+def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
+    # Define the directory to store the output
+    expected_output_dir = "tests/data/cif/polyhedrons_user"
+    output_file_path = os.path.join(expected_output_dir, "URhIn_In1.png")
+
+    # Ensure the directory exists
+    if not os.path.exists(expected_output_dir):
+        os.makedirs(expected_output_dir)
+
+    # Define the output file path
+    cif_URhIn.plot_polyhedron("In1", "tests/data/cif/polyhedrons_user")
+
+    assert os.path.exists(output_file_path)
+    assert os.path.getsize(output_file_path) > 1024
+    shutil.rmtree(expected_output_dir)
 
 
 """Test error during init"""

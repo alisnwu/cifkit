@@ -14,19 +14,14 @@ from cifpy.utils.folder import (
 from cifpy.utils.error_messages import FileError
 
 
-@pytest.fixture
-def cif_directory():
-    return "tests/data/cif/folder"
-
-
-def test_get_file_count(cif_directory):
-    count = get_file_count(cif_directory, ext=".cif")
+def test_get_file_count(cif_folder_path_test):
+    count = get_file_count(cif_folder_path_test, ext=".cif")
     assert count == 3
 
 
-def test_get_file_path_list(cif_directory):
+def test_get_file_path_list(cif_folder_path_test):
     expected_files = {"300169.cif", "300170.cif", "300171.cif"}
-    file_paths = get_file_path_list(cif_directory, ext=".cif")
+    file_paths = get_file_path_list(cif_folder_path_test, ext=".cif")
     found_files = {os.path.basename(path) for path in file_paths}
     assert expected_files == found_files
     assert len(file_paths) == 3

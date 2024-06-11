@@ -57,7 +57,7 @@ def get_bond_fraction_CN(bond_pair_data: dict) -> dict[tuple[str, str], float]:
 
     # Calculate fractions
     bond_fractions = {
-        bond_type: count / total_bonds
+        bond_type: round(count / total_bonds, 3)
         for bond_type, count in total_bond_counts.items()
     }
 

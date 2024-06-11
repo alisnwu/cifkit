@@ -1,53 +1,21 @@
-from cifpy.utils.cif_parser import (
-    get_cif_block,
-    get_loop_values,
-    get_unitcell_lengths,
-    get_unitcell_angles_rad,
-    get_unique_site_labels,
-    get_unique_elements_from_loop,
-    get_formula_structure_weight_s_group,
-    get_tag_from_third_line,
-    parse_atom_site_occupancy_info,
-    check_unique_atom_site_labels,
-)
-
-from cifpy.preprocessors.format import preprocess_label_element_loop_values
-from cifpy.utils.cif_editor import remove_author_loop
-from cifpy.coordination.distance import (
-    get_shortest_distance,
-    get_shortest_distance_per_label,
-)
-from cifpy.preprocessors.supercell import get_supercell_points
-from cifpy.preprocessors.supercell_util import get_cell_atom_count
-from cifpy.preprocessors.environment import (
-    get_site_connections,
-    filter_connections_with_cn,
-)
-from cifpy.coordination.composition import (
-    get_bond_counts_CN,
-    get_bond_fraction_CN,
-)
-from cifpy.utils import prompt
-from cifpy.utils.bond_pair import (
-    get_heterogenous_element_pairs,
-    get_homogenous_element_pairs,
-    get_all_bond_pairs,
-)
-
-
 class Cif:
     def __init__(self, file_path: str) -> None:
         """Initialize the Cif object with the file path."""
         self.file_path = file_path
         self.connections = None  # Private attribute to store connections
         self._shortest_pair_distance = None
+        self._preprocess()
         self._load_data()
 
-    def _load_data(self):
-        """Load data from the .cif file and process it."""
+    def _preprocess(self):
+        """Preprocess each .cif file and check any error."""
         check_unique_atom_site_labels(self.file_path)
         remove_author_loop(self.file_path)
         preprocess_label_element_loop_values(self.file_path)
+
+    def _load_data(self):
+        """Load data from the .cif file and process it."""
+
         self._block = get_cif_block(self.file_path)
         self._parse_cif_data()
         self._generate_supercell()
@@ -103,6 +71,21 @@ class Cif:
         )
         self._bond_fraction_CN = get_bond_fraction_CN(self.bond_counts_CN)
 
+    def get_polyhedron_labels_from_site(
+        self, label: str
+    ) -> tuple[list[list[float]], list[str]]:
+        if self.compute_connections is None:
+            self.compute_connections()
+        return get_polyhedron_coordinates_labels(self.connections_CN, label)
+
+    def plot_polyhedron(self, site_label, output_dir=None):
+        if self.connections is None:
+            self.compute_connections()
+        coords, labels = get_polyhedron_coordinates_labels(
+            self.connections_CN, site_label
+        )
+        polyhedron.plot(coords, labels, self.file_path, output_dir)
+
     @property
     def shortest_pair_distance(self):
         """Property that checks if connections are computed and computes them if not."""
@@ -137,3 +120,55 @@ class Cif:
         if self.connections is None:
             self.compute_connections()
         return self._bond_fraction_CN
+
+
+"""
+Import statements placed bottom to avoid cluttering.
+"""
+
+# Polyhedron
+from cifpy.figures import polyhedron
+
+
+# Parser .cif file
+from cifpy.utils.cif_parser import (
+    get_cif_block,
+    get_loop_values,
+    get_unitcell_lengths,
+    get_unitcell_angles_rad,
+    get_unique_site_labels,
+    get_unique_elements_from_loop,
+    get_formula_structure_weight_s_group,
+    get_tag_from_third_line,
+    parse_atom_site_occupancy_info,
+    check_unique_atom_site_labels,
+)
+
+# Edit .cif file
+from cifpy.preprocessors.format import preprocess_label_element_loop_values
+from cifpy.utils.cif_editor import remove_author_loop
+
+
+from cifpy.coordination.distance import (
+    get_shortest_distance,
+    get_shortest_distance_per_label,
+)
+from cifpy.coordination.composition import (
+    get_bond_counts_CN,
+    get_bond_fraction_CN,
+)
+from cifpy.coordination.coordinate import get_polyhedron_coordinates_labels
+from cifpy.preprocessors.supercell import get_supercell_points
+
+from cifpy.preprocessors.supercell_util import get_cell_atom_count
+from cifpy.preprocessors.environment import (
+    get_site_connections,
+    filter_connections_with_cn,
+)
+
+from cifpy.utils import prompt
+from cifpy.utils.bond_pair import (
+    get_heterogenous_element_pairs,
+    get_homogenous_element_pairs,
+    get_all_bond_pairs,
+)

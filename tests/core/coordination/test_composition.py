@@ -31,7 +31,7 @@ def test_get_bond_fraction_in_CN(bond_counts_CN):
 
     # Testing each bond fraction to ensure they are within a small tolerance
     for bond_type, expected_fraction in expected_fractions.items():
-        assert pytest.approx(result[bond_type], 0.001) == expected_fraction
+        assert pytest.approx(result[bond_type], 0.005) == expected_fraction
 
     # Testing to ensure the fractions sum approximately to 1
-    assert pytest.approx(sum(result.values()), 0.001) == 1
+    assert pytest.approx(sum(result.values()), 0.005) == 1

@@ -6,6 +6,7 @@ from cifpy.utils.folder import move_files, copy_files, get_file_path_list
 from cifpy.models.cif import Cif
 import os
 import shutil
+from collections import Counter
 
 
 class CifEnsemble:
@@ -53,9 +54,51 @@ class CifEnsemble:
         """Get unique elements from all .cif files in the folder."""
         all_elements = set()
         for cif in self.cifs:
-            if hasattr(cif, "unique_elements"):
-                all_elements.update(cif.unique_elements)
+            all_elements.update(cif.unique_elements)
         return all_elements
+
+    def _attribute_stats(self, attribute_name, transform=None):
+        """
+        Helper method to compute the count of each unique value of a given attribute across all Cif objects.
+        """
+        values = [
+            (
+                transform(getattr(cif, attribute_name))
+                if transform
+                else getattr(cif, attribute_name)
+            )
+            for cif in self.cifs
+            if hasattr(cif, attribute_name)
+        ]
+        return dict(Counter(values))
+
+    @property
+    def structures_stats(self) -> dict[str, int]:
+        return self._attribute_stats("structure")
+
+    @property
+    def formula_stats(self) -> dict[str, int]:
+        return self._attribute_stats("formula")
+
+    @property
+    def tag_stats(self) -> dict[str, int]:
+        return self._attribute_stats("tag")
+
+    @property
+    def space_group_number_stats(self) -> dict[str, int]:
+        return self._attribute_stats("space_group_number")
+
+    @property
+    def space_group_name_stats(self) -> dict[str, int]:
+        return self._attribute_stats("space_group_name")
+
+    @property
+    def supercell_size_stats(self) -> dict[int, int]:
+        return self._attribute_stats("supercell_points", len)
+
+    @property
+    def min_distance_stats(self) -> dict[float, int]:
+        return self._attribute_stats("shortest_pair_distance")
 
     def _collect_cif_data(self, attribute, transform=None):
         """Generic method to collect data from CIF files based on an attribute."""
@@ -72,20 +115,6 @@ class CifEnsemble:
                 print(f"No valid {attribute} for {cif.file_path}")
         return collected_data
 
-    def _filter_cif_data(self, property_name: str, values: list):
-        cif_file_paths = set()
-        for cif in self.cifs:
-            property_value = getattr(cif, property_name, None)
-            if not isinstance(property_value, set):
-                if property_value in values:
-                    print(property_name, property_value)
-                    cif_file_paths.add(cif.file_path)
-            else:
-                # Handle the case where property_value is a set
-                if all(val in property_value for val in values):
-                    cif_file_paths.add(cif.file_path)
-        return cif_file_paths
-
     @property
     def minimum_distances(self) -> list[tuple[str, float]]:
         """
@@ -100,7 +129,21 @@ class CifEnsemble:
         Get a list of tuples containing the file path and supercell point
         counts for each file.
         """
-        return self._collect_cif_data("supercell_points", len)
+        return self._collect_cif_data("supercell_atom_count")
+
+    def _filter_cif_data(self, property_name: str, values: list):
+        cif_file_paths = set()
+        for cif in self.cifs:
+            property_value = getattr(cif, property_name, None)
+            if not isinstance(property_value, set):
+                if property_value in values:
+                    print(property_name, property_value)
+                    cif_file_paths.add(cif.file_path)
+            else:
+                # Handle the case where property_value is a set
+                if all(val in property_value for val in values):
+                    cif_file_paths.add(cif.file_path)
+        return cif_file_paths
 
     def filter_by_formulas(self, values: list[str]) -> set[str]:
         return self._filter_cif_data("formula", values)
@@ -123,17 +166,13 @@ class CifEnsemble:
     def move_cif_files(
         self, file_paths: set[str], to_directory_path: str
     ) -> None:
-        """
-        Move a set of CIF files to a specified destination directory.
-        """
+        """Move a set of CIF files to a destination directory."""
         move_files(to_directory_path, list(file_paths))
 
     def copy_cif_files(
         self, file_paths: set[str], to_directory_path: str
     ) -> None:
-        """
-        Copy a set of CIF files to a specified destination directory.
-        """
+        """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
 
     # Let's format all the cif objects
