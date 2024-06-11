@@ -25,29 +25,3 @@
 - Get all unique elements in all `.cif` files.
 
 
-    assert cif_ensemble_test.cif_folder_path == "tests/data/cif/ensemble_test"
-    assert cif_ensemble_test.unique_formulas == {
-        "EuIr2Ge2",
-        "CeRu2Ge2",
-        "LaRu2Ge2",
-        "Mo",
-    }
-    assert cif_ensemble_test.unique_structures == {"CeAl2Ga2", "W"}
-    assert cif_ensemble_test.unique_elements == {
-        "La",
-        "Ru",
-        "Ge",
-        "Ir",
-        "Eu",
-        "Ce",
-        "Mo",
-    }
-    cif_ensemble_test.unique_space_group_names
-    # { "I4/mmm", "Im-3m"}
-    
-    cif_ensemble_test.unique_space_group_numbers
-    # {139, 229}
-    cif_ensemble_test.unique_tags
-    # {"hex", "rt", "rt_hex", ""}
-
-    assert cif_ensemble_test.minimum_distances

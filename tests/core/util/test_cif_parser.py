@@ -18,6 +18,8 @@ from cifpy.utils.cif_parser import (
     get_formula_structure_weight_s_group,
     get_unique_formulas_structures_weights_s_groups,
     get_tag_from_third_line,
+    parse_atom_site_occupancy_info,
+    check_unique_atom_site_labels,
 )
 
 
@@ -67,7 +69,7 @@ def test_get_loop_values_wrong_loop_number():
     file_path = "tests/data/cif/URhIn_bad_loop_format.cif"
     with pytest.raises(ValueError) as e:
         get_cif_block(file_path)
-    assert CifParserError.WRONG_LOOP_VALUE.value in str(e.value)
+    assert CifParserError.WRONG_LOOP_VALUE_COUNT.value in str(e.value)
 
 
 def test_get_num_of_atom_unique_labels(loop_values_URhIn):
@@ -171,3 +173,57 @@ def test_get_tag_from_third_line():
 
     file_path = "tests/data/cif/tag/1817275_rt_hex.cif"
     assert get_tag_from_third_line(file_path) == "rt_hex"
+
+
+def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
+
+    atom_site_info = parse_atom_site_occupancy_info(file_path_URhIn)
+    expected = {
+        "In1": {
+            "element": "In",
+            "site_occupancy": 1.0,
+            "x_frac_coord": 0.2505,
+            "y_frac_coord": 0.0,
+            "z_frac_coord": 0.5,
+            "symmetry_multiplicity": 3,
+            "wyckoff_symbol": "g",
+        },
+        "U1": {
+            "element": "U",
+            "site_occupancy": 1.0,
+            "x_frac_coord": 0.5925,
+            "y_frac_coord": 0.0,
+            "z_frac_coord": 0.0,
+            "symmetry_multiplicity": 3,
+            "wyckoff_symbol": "f",
+        },
+        "Rh1": {
+            "element": "Rh",
+            "site_occupancy": 1.0,
+            "x_frac_coord": 0.333333,
+            "y_frac_coord": 0.666667,
+            "z_frac_coord": 0.5,
+            "symmetry_multiplicity": 2,
+            "wyckoff_symbol": "d",
+        },
+        "Rh2": {
+            "element": "Rh",
+            "site_occupancy": 1.0,
+            "x_frac_coord": 0.0,
+            "y_frac_coord": 0.0,
+            "z_frac_coord": 0.0,
+            "symmetry_multiplicity": 1,
+            "wyckoff_symbol": "a",
+        },
+    }
+
+    assert atom_site_info == expected
+
+
+def test_check_unique_atom_site_labels(file_path_URhIn):
+
+    check_unique_atom_site_labels(file_path_URhIn)
+    file_path = "tests/data/cif/error/duplicate_labels/457848.cif"
+    with pytest.raises(ValueError) as e:
+        check_unique_atom_site_labels(file_path)
+    assert CifParserError.DUPLICATE_LABELS.value in str(e.value)

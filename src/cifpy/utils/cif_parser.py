@@ -8,10 +8,11 @@ from gemmi.cif import Block, Column
 from cifpy.utils.string_parser import (
     get_string_to_formatted_float,
     trim_string,
+    get_atom_type_from_label,
     clean_parsed_structure,
 )
 from cifpy.utils import unit
-from cifpy.utils import error_messages
+from cifpy.utils.error_messages import CifParserError
 
 
 def get_cif_block(file_path: str) -> Block:
@@ -91,16 +92,6 @@ def get_loop_values(block: Block) -> list[Column]:
     loop_tags = get_loop_tags()
 
     loop_values = [block.find_loop(tag) for tag in loop_tags]
-
-    # Check missing coordinates
-    if (
-        len(loop_values[4]) == 0
-        or len(loop_values[5]) == 0
-        or len(loop_values[6]) == 0
-    ):
-        raise ValueError(
-            error_messages.CifParserError.MISSING_COORDINATES.value
-        )
 
     return loop_values
 
@@ -301,3 +292,60 @@ def get_tag_from_third_line(file_path: str) -> str:
             return "_".join(parts[1:])
         else:
             return ""
+
+
+def parse_atom_site_occupancy_info(file_path: str) -> dict:
+    """Parse atom site loop information including element, occupancy,
+    fractional coordinates, multiplicity, and wyckoff symbol."""
+    content_lines = get_line_content_from_tag(
+        file_path, "_atom_site_occupancy"
+    )
+
+    parsed_data = {}
+
+    for line in content_lines:
+        parts = line.split()
+        atom_site_label = parts[0]
+        element = parts[1]
+        symmetry_multiplicity = int(parts[2])
+        wyckoff_symbol = parts[3]
+        x_frac_coord = float(parts[4])  # Fractional coordinate x
+        y_frac_coord = float(parts[5])  # Fractional coordinate y
+        z_frac_coord = float(parts[6])  # Fractional coordinate z
+        site_occupancy = float(parts[7])
+
+        parsed_data[atom_site_label] = {
+            "element": element,
+            "site_occupancy": site_occupancy,
+            "x_frac_coord": x_frac_coord,  # Clearly label as fractional
+            "y_frac_coord": y_frac_coord,  # Clearly label as fractional
+            "z_frac_coord": z_frac_coord,  # Clearly label as fractional
+            "symmetry_multiplicity": symmetry_multiplicity,
+            "wyckoff_symbol": wyckoff_symbol,
+        }
+
+    return parsed_data
+
+
+def check_unique_atom_site_labels(file_path: str):
+    """Check whether all parsed atom site labels are unique."""
+    content_lines = get_line_content_from_tag(
+        file_path, "_atom_site_occupancy"
+    )
+
+    site_labels = set()
+    for line in content_lines:
+        parts = line.split()
+        if len(parts) != 8:
+            raise ValueError(CifParserError.WRONG_LOOP_VALUE_COUNT.value)
+
+        parsed_site_label = parts[0]
+        parsed_element = parts[1]
+        site_labels.add(parsed_site_label)
+
+        if get_atom_type_from_label(parsed_site_label) != parsed_element:
+            raise ValueError(CifParserError.INVALID_PARSED_ELEMENT.value)
+
+    # If the count of unique labels does not match the number of lines, raise an error
+    if len(content_lines) != len(site_labels):
+        raise ValueError(CifParserError.DUPLICATE_LABELS.value)

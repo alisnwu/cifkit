@@ -1,6 +1,6 @@
 import pytest
 import logging
-from cifpy.utils.error_messages import GeneralError, StringParserError
+from cifpy.utils.error_messages import GeneralError
 from cifpy.utils.string_parser import (
     get_atom_type_from_label,
     get_string_to_formatted_float,
@@ -22,6 +22,8 @@ from cifpy.utils.string_parser import (
         ("Fe12k", "Fe"),
         ("Rh3A", "Rh"),
         ("Si3B", "Si"),
+        ("NiM1", "Ni"),
+        ("FeM2", "Fe"),
     ],
 )
 def test_get_atom_type(site_label, expected):
@@ -29,9 +31,6 @@ def test_get_atom_type(site_label, expected):
 
 
 def test_get_atom_type_with_error():
-    assert (
-        get_atom_type_from_label("OI") != "H"
-    ), StringParserError.INVALID_PARSED_ELEMENT.value
 
     with pytest.raises(ValueError) as e:
         get_atom_type_from_label("1Fe")

@@ -14,18 +14,15 @@ class GeneralError(Enum):
     INVALID_CIF_BLOCK = "The CIF block should not be None."
 
 
-class StringParserError(Enum):
-    INVALID_PARSED_ELEMENT = (
-        "The element was not correctly parsed from the site label."
-    )
-
-
 class CifParserError(Enum):
     INVALID_LOOP_TAGS = (
         "The returned loop tags do not match the expected tags."
     )
-    WRONG_LOOP_VALUE = "Wrong number of values in loop _atom_site_*"
-    MISSING_COORDINATES = "Missing fractional coordinates in the loop values."
+    WRONG_LOOP_VALUE_COUNT = "Wrong number of values in loop _atom_site_*"
+    DUPLICATE_LABELS = "The file contains duplicate atom site labels."
+    INVALID_PARSED_ELEMENT = (
+        "The element was not correctly parsed from the site label."
+    )
 
 
 class FileError(Enum):

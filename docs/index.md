@@ -118,7 +118,3 @@ cif_ensemble_test.filter_by_space_group_numbers([139])
 pip install cifpy
 pip install -e .
 ```
-
-## Questions
-
-Please feel free to ask any questions via bobleesj@gmail.com

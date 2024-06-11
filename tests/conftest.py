@@ -12,7 +12,7 @@ from cifpy.models.cif_ensemble import CifEnsemble
 
 
 """
-CifEnsemble
+CifEnsemble - test folder
 """
 
 
@@ -44,7 +44,7 @@ def file_paths_test(cif_folder_path_test):
 
 
 """
-CiF - URhIn
+Cif - URhIn
 """
 
 

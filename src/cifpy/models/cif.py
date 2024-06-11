@@ -7,6 +7,8 @@ from cifpy.utils.cif_parser import (
     get_unique_elements_from_loop,
     get_formula_structure_weight_s_group,
     get_tag_from_third_line,
+    parse_atom_site_occupancy_info,
+    check_unique_atom_site_labels,
 )
 
 from cifpy.coordination.distance import get_shortest_distance
@@ -16,7 +18,7 @@ from cifpy.preprocessors.environment import (
     get_site_connections,
     filter_connections_with_cn,
 )
-from cifpy.utils import prompt, folder
+from cifpy.utils import prompt
 from cifpy.utils.bond_pair import (
     get_heterogenous_element_pairs,
     get_homogenous_element_pairs,
@@ -33,6 +35,7 @@ class Cif:
 
     def _load_data(self):
         """Load data from the .cif file and process it."""
+        check_unique_atom_site_labels(self.file_path)
         self._block = get_cif_block(self.file_path)
         self._parse_cif_data()
         self._generate_supercell()
@@ -52,6 +55,7 @@ class Cif:
             self.space_group_name,
         ) = get_formula_structure_weight_s_group(self._block)
         self.tag = get_tag_from_third_line(self.file_path)
+        self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
         self.heterogeneous_bond_pairs = get_heterogenous_element_pairs(
             self.formula
         )
@@ -97,4 +101,4 @@ class Cif:
         return self._connections_CN
 
     def print_connected_points(self):
-        prompt.log_conneted_points(self.connections)
+        prompt.log_connected_points(self.connections)

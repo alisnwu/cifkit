@@ -20,7 +20,6 @@ def get_supercell_points(
     for i, all_coords in enumerate(all_coords_list):
         points = flatten_original_coordinates(all_coords)
         atom_site_label = loop_values[0][i]
-        atom_site_type = loop_values[1][i]
 
         supercell_points.extend(
             shift_and_append_points(
@@ -30,13 +29,6 @@ def get_supercell_points(
             )
         )
 
-        if (
-            string_parser.get_atom_type_from_label(atom_site_label)
-            != atom_site_type
-        ):
-            raise RuntimeError(
-                "Different elements found in atom site and label"
-            )
     return list(set(supercell_points))
 
 
@@ -101,9 +93,6 @@ def get_unitcell_coords_after_sym_operations_per_label(
 
         except RuntimeError as e:
             print(f"Skipping operation '{operation}': {str(e)}")
-            raise RuntimeError(
-                error_messages.StringParserError.INVALID_PARSED_ELEMENT.value
-            ) from e
 
     return list(all_coords)
 

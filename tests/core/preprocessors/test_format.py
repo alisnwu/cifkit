@@ -76,6 +76,7 @@ def test_preprocess_cif_file_on_label_element_type_8():
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_mixed():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_mixed"
 
@@ -92,6 +93,17 @@ def test_preprocess_cif_file_on_label_element_type_mixed():
         )
 
         filename = os.path.basename(temp_cif_file_path)
+
+        # Type 1
+        if filename == "457848.cif":
+            assert len(lines) == 6
+            assert lines[4].strip() == "NiM1 Ni 3 b 0 0 0.5 0.5"
+            assert lines[5].strip() == "TaM2 Ta 3 b 0 0 0.5 0.5"
+
+        if filename == "250805.cif":
+            assert len(lines) == 3
+            assert lines[1].strip() == "PrM1 Pr 8 b 0.375 0.375 0.375 0.75"
+            assert lines[2].strip() == "PtM2 Pt 8 b 0.375 0.375 0.375 0.25"
         if filename == "1020250.cif":
             assert len(lines) == 3
             assert lines[1].strip() == "Co Co 8 c 0.25 0.25 0.25 1"

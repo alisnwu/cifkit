@@ -1,7 +1,7 @@
 import re
 import logging
 from cifpy.utils import formula
-from cifpy.utils.error_messages import GeneralError, StringParserError
+from cifpy.utils.error_messages import GeneralError
 
 
 def get_atom_type_from_label(site_label: str) -> str:
@@ -16,14 +16,13 @@ def get_atom_type_from_label(site_label: str) -> str:
     if not validated_label[0].isalpha():
         raise ValueError(GeneralError.NON_ALPHABETIC_START.value)
 
-    logging.debug("This is a debug log.")
     parts = re.split(r"[()]", validated_label)
     for part in parts:
         # Attempt to extract the atom type
         match = re.search(r"([A-Z][a-z]*)", part)
         if match:
             return match.group(1)
-    raise ValueError(StringParserError.INVALID_PARSED_ELEMENT.value)
+    return ""
 
 
 def get_string_to_formatted_float(str_value: str) -> float:

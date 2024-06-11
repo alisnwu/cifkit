@@ -55,7 +55,7 @@ def preprocess_cif_file_on_label_element(file_path):
 
         """
         Type 9.
-        Ex) 1200981
+        Ex) 1200981.cif
         Snb Sn 4 c 0.0595 0.25 0.0952 1
         ->
         SnB Sn 4 c 0.0595 0.25 0.0952 1
@@ -85,17 +85,20 @@ def preprocess_cif_file_on_label_element(file_path):
             Ex) 250165.cif
             M1 Th 4 a 0 0 0 0.99
             ->
-            Th1 Th 4 a 0 0 0 0.99
+            ThM1 Th 4 a 0 0 0 0.99
             """
             if (
                 len(site_label) == 2
                 and site_label[-1].isdigit()
                 and site_label[-2].isalpha()
             ):
+                print("This is Type 1")
                 # Get the new label Ex) M1 -> Ge1
                 new_label = site_label.replace(
-                    atom_type_from_label, atom_type_symbol
+                    atom_type_from_label,
+                    (atom_type_symbol + site_label[-2]),
                 )
+                print("new_label", new_label)
                 line = line.replace(site_label, new_label)  # Modify the line
                 is_cif_file_updated = True
 
