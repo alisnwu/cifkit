@@ -1,21 +1,15 @@
-from cifpy.preprocessors.supercell import get_supercell_points
-from cifpy.preprocessors.supercell_util import get_cell_atom_count
-from cifpy.preprocessors import environment
-from cifpy.utils import prompt
-from cifpy.utils.folder import move_files, copy_files, get_file_path_list
 from cifpy.models.cif import Cif
+from cifpy.utils.folder import move_files, copy_files, get_file_path_list
 from cifpy.figures.histogram import plot_histograms
-import os
-import shutil
 from collections import Counter
 
 
 class CifEnsemble:
     def __init__(self, cif_dir_path: str) -> None:
         self.dir_path = cif_dir_path
-        self.cifs: list[Cif] = []
-        file_paths = get_file_path_list(cif_dir_path)
-        self.cifs = [Cif(file_path) for file_path in file_paths]
+        self.file_paths = get_file_path_list(cif_dir_path)
+        self.file_count = len(self.file_paths)
+        self.cifs = [Cif(file_path) for file_path in self.file_paths]
 
     def _get_unique_property_values(self, property_name: str):
         """Return unique values for a given property from cifs."""
@@ -51,16 +45,32 @@ class CifEnsemble:
         return self._get_unique_property_values("space_group_number")
 
     @property
+    def unique_site_mixing_types(self) -> set[int]:
+        """Get unique site mixing types from all .cif files in the folder."""
+        return self._get_unique_property_values("site_mixing_type")
+
+    def _get_unique_property_values_from_set(self, property_name: str):
+        unique_values = set()
+        for cif in self.cifs:
+            unique_values.update(getattr(cif, property_name))
+        return unique_values
+
+    @property
     def unique_elements(self) -> set[str]:
         """Get unique elements from all .cif files in the folder."""
-        all_elements = set()
-        for cif in self.cifs:
-            all_elements.update(cif.unique_elements)
-        return all_elements
+        return self._get_unique_property_values_from_set("unique_elements")
+
+    @property
+    def unique_coordination_numbers(self) -> set[str]:
+        """Get unique elements from all .cif files in the folder."""
+        return self._get_unique_property_values_from_set(
+            "unique_coordination_numbers"
+        )
 
     def _attribute_stats(self, attribute_name, transform=None):
         """
-        Helper method to compute the count of each unique value of a given attribute across all Cif objects.
+        Helper method to compute the count of each unique value of a given
+        attribute across all Cif objects.
         """
         values = [
             (
@@ -109,6 +119,10 @@ class CifEnsemble:
     def min_distance_stats(self) -> dict[float, int]:
         return self._attribute_stats("shortest_pair_distance")
 
+    @property
+    def unique_coordination_numbers_stats(self) -> dict[float, int]:
+        return self._attribute_stats("unique_coordination_numbers")
+
     def _collect_cif_data(self, attribute, transform=None):
         """Generic method to collect data from CIF files based on an attribute."""
         collected_data = []
@@ -138,7 +152,6 @@ class CifEnsemble:
             property_value = getattr(cif, property_name, None)
             if not isinstance(property_value, set):
                 if property_value in values:
-                    print(property_name, property_value)
                     cif_file_paths.add(cif.file_path)
             else:
                 # Handle the case where property_value is a set
@@ -161,8 +174,14 @@ class CifEnsemble:
     def filter_by_space_group_names(self, values: list[str]) -> set[str]:
         return self._filter_by_value("space_group_name", values)
 
-    def filter_by_space_group_numbers(self, values: list[str]) -> set[str]:
+    def filter_by_space_group_numbers(self, values: list[int]) -> set[str]:
         return self._filter_by_value("space_group_number", values)
+
+    def filter_by_site_mixing_types(self, values: list[str]) -> set[str]:
+        return self._filter_by_value("site_mixing_type", values)
+
+    def filter_by_coordination_numbers(self, values: list[int]) -> set[str]:
+        return self._filter_by_value("unique_coordination_numbers", values)
 
     def _filter_by_range(
         self, property: str, min: float | int, max: float | int
@@ -205,6 +224,8 @@ class CifEnsemble:
     ) -> None:
         """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
+
+    """Plot histograms"""
 
     def generate_stat_histograms(self, output_dir=None):
         plot_histograms(self, output_dir)

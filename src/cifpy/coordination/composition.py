@@ -1,8 +1,9 @@
+import numpy as np
 from cifpy.utils.string_parser import get_atom_type_from_label
 from cifpy.utils import bond_pair
 
 
-def get_bond_counts_CN(formula: str, connections: dict[str, list]) -> dict:
+def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
     """
     Return a dictionary containing bond pairs and counts per label site.
     """
@@ -39,7 +40,7 @@ def get_bond_counts_CN(formula: str, connections: dict[str, list]) -> dict:
     return bond_pair_data
 
 
-def get_bond_fraction_CN(bond_pair_data: dict) -> dict[tuple[str, str], float]:
+def get_bond_fraction(bond_pair_data: dict) -> dict[tuple[str, str], float]:
     """
     Calculate the fraction of each bond type across all labels.
     """
@@ -62,3 +63,28 @@ def get_bond_fraction_CN(bond_pair_data: dict) -> dict[tuple[str, str], float]:
     }
 
     return bond_fractions
+
+
+def get_coordination_numbers(connections: dict[str, list]) -> dict:
+    """
+    Calculate the coordination number for each atom site.
+    """
+    neighbor_count = {}
+    for label, connection_data in connections.items():
+        neighbor_count[label] = len(connection_data)
+
+    return neighbor_count
+
+
+def get_avg_coordination_number(coordination_numbers: dict[str, int]) -> float:
+    total = 0
+    for _, number in coordination_numbers.items():
+        total += number
+    return np.round(total / len(coordination_numbers), 3)
+
+
+def get_unique_coordination_number(
+    coordination_numbers: dict[str, int]
+) -> set:
+    unique_numbers = set(coordination_numbers.values())
+    return unique_numbers

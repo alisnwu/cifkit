@@ -28,3 +28,9 @@ class CifParserError(Enum):
 class FileError(Enum):
     FILE_NOT_FOUND = "The file at {file_path} was not found."
     FILE_IS_EMPTY = "The file at {file_path} is empty."
+
+
+class OccupancyError(Enum):
+    INVALID_MIXING_TYPE = (
+        "The file cannot be categorized into one of the 4 mixing types."
+    )

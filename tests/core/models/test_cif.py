@@ -1,6 +1,6 @@
-import os, shutil
+import os
+import shutil
 import pytest
-from cifpy.utils.folder import get_file_path_list, make_output_folder
 from cifpy.models.cif import Cif
 from cifpy.utils.error_messages import CifParserError
 
@@ -72,6 +72,8 @@ def test_cif_static_properties(cif_URhIn):
         },
     }
 
+    assert cif_URhIn.site_mixing_type == "full_occupancy"
+
 
 def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
     cif_URhIn.compute_connections()
@@ -125,7 +127,25 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
     assert pytest.approx(sum(cif_URhIn.bond_fraction_CN.values()), 0.005) == 1
 
 
-def test_get_polyhedron_labels_from_site(cif_URhIn):
+"""
+Test coordination numbers
+"""
+
+
+def test_coordination_numbers(cif_URhIn):
+    expected = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
+    assert cif_URhIn.coordination_numbers == expected
+
+
+def test_avg_coordination_numbers(cif_URhIn):
+    assert cif_URhIn.avg_coordination_numbers == 10.75
+
+
+def test_unique_coordination_numbers(cif_URhIn):
+    assert cif_URhIn.unique_coordination_numbers == {14, 9, 11}
+
+
+def test_polyhedron_labels_from_site(cif_URhIn):
 
     expected_labels = [
         "Rh2",
@@ -199,7 +219,9 @@ def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
     shutil.rmtree(expected_output_dir)
 
 
-"""Test error during init"""
+"""
+Test error during init
+"""
 
 
 def test_init_error_duplicate_label():

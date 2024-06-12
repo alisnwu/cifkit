@@ -1,4 +1,4 @@
-from cifpy.postprocessors.bond import (
+from cifpy.coordination.bond import (
     get_minimum_dist_per_element_pair,
 )
 

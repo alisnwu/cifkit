@@ -10,7 +10,6 @@ def get_min_distance_pair(
     """
     sorted_tuples = get_min_distance_pair_per_site_label(connections)
     min_dist_tuple = sorted_tuples[0]
-    print(min_dist_tuple)
     return min_dist_tuple
 
 

@@ -1,3 +1,63 @@
+"""
+Import statements placed bottom to avoid cluttering.
+"""
+
+# Polyhedron
+from cifpy.figures import polyhedron
+
+
+# Parser .cif file
+from cifpy.utils.cif_parser import (
+    get_cif_block,
+    get_loop_values,
+    get_unitcell_lengths,
+    get_unitcell_angles_rad,
+    get_unique_site_labels,
+    get_unique_elements_from_loop,
+    get_formula_structure_weight_s_group,
+    get_tag_from_third_line,
+    parse_atom_site_occupancy_info,
+    check_unique_atom_site_labels,
+)
+
+# Edit .cif file
+from cifpy.preprocessors.format import preprocess_label_element_loop_values
+from cifpy.utils.cif_editor import remove_author_loop
+
+# Supercell generation
+from cifpy.preprocessors.supercell import get_supercell_points
+from cifpy.preprocessors.supercell_util import get_cell_atom_count
+from cifpy.preprocessors.environment import (
+    get_site_connections,
+    filter_connections_with_cn,
+)
+
+
+# Coordination number
+from cifpy.coordination.composition import (
+    get_bond_counts,
+    get_bond_fraction,
+    get_coordination_numbers,
+    get_avg_coordination_number,
+    get_unique_coordination_number,
+)
+
+from cifpy.coordination.distance import (
+    get_shortest_distance,
+    get_shortest_distance_per_label,
+)
+from cifpy.coordination.coordinate import get_polyhedron_coordinates_labels
+
+from cifpy.utils import prompt
+from cifpy.utils.bond_pair import (
+    get_heterogenous_element_pairs,
+    get_homogenous_element_pairs,
+    get_all_bond_pairs,
+)
+
+from cifpy.occupacny.mixing import get_site_mixing_type
+
+
 class Cif:
     def __init__(self, file_path: str) -> None:
         """Initialize the Cif object with the file path."""
@@ -41,6 +101,7 @@ class Cif:
         )
         self.homogenous_bond_pairs = get_homogenous_element_pairs(self.formula)
         self.all_bond_pairs = get_all_bond_pairs(self.formula)
+        self.site_mixing_type = get_site_mixing_type(self._loop_values)
 
     def _generate_supercell(self):
         """Generate supercell information based on the unit cell data."""
@@ -66,10 +127,20 @@ class Cif:
         self._shortest_distance_per_label = get_shortest_distance_per_label(
             self.connections
         )
-        self._bond_counts_CN = get_bond_counts_CN(
+        self._bond_counts_CN = get_bond_counts(
             self.formula, self.connections_CN
         )
-        self._bond_fraction_CN = get_bond_fraction_CN(self.bond_counts_CN)
+        self._bond_fraction_CN = get_bond_fraction(self.bond_counts_CN)
+        self._coordination_numbers = get_coordination_numbers(
+            self._connections_CN
+        )
+        self._avg_coordination_numbers = get_avg_coordination_number(
+            self._coordination_numbers
+        )
+
+        self._unique_coordination_numbers = get_unique_coordination_number(
+            self._coordination_numbers
+        )
 
     def get_polyhedron_labels_from_site(
         self, label: str
@@ -121,54 +192,20 @@ class Cif:
             self.compute_connections()
         return self._bond_fraction_CN
 
+    @property
+    def coordination_numbers(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._coordination_numbers
 
-"""
-Import statements placed bottom to avoid cluttering.
-"""
+    @property
+    def avg_coordination_numbers(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._avg_coordination_numbers
 
-# Polyhedron
-from cifpy.figures import polyhedron
-
-
-# Parser .cif file
-from cifpy.utils.cif_parser import (
-    get_cif_block,
-    get_loop_values,
-    get_unitcell_lengths,
-    get_unitcell_angles_rad,
-    get_unique_site_labels,
-    get_unique_elements_from_loop,
-    get_formula_structure_weight_s_group,
-    get_tag_from_third_line,
-    parse_atom_site_occupancy_info,
-    check_unique_atom_site_labels,
-)
-
-# Edit .cif file
-from cifpy.preprocessors.format import preprocess_label_element_loop_values
-from cifpy.utils.cif_editor import remove_author_loop
-
-
-from cifpy.coordination.distance import (
-    get_shortest_distance,
-    get_shortest_distance_per_label,
-)
-from cifpy.coordination.composition import (
-    get_bond_counts_CN,
-    get_bond_fraction_CN,
-)
-from cifpy.coordination.coordinate import get_polyhedron_coordinates_labels
-from cifpy.preprocessors.supercell import get_supercell_points
-
-from cifpy.preprocessors.supercell_util import get_cell_atom_count
-from cifpy.preprocessors.environment import (
-    get_site_connections,
-    filter_connections_with_cn,
-)
-
-from cifpy.utils import prompt
-from cifpy.utils.bond_pair import (
-    get_heterogenous_element_pairs,
-    get_homogenous_element_pairs,
-    get_all_bond_pairs,
-)
+    @property
+    def unique_coordination_numbers(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._unique_coordination_numbers

@@ -122,7 +122,7 @@ loop_
  _atom_site_occupancy
  Ge1 Ge 4 e 0 0 0.387 1
  Ir1 Ir 4 d 0 0.5 0.25 1
- Eu1 Eu 2 a 0 0 0 1
+ Eu1 Eu 2 a 0 0 0 0.9
 
 
 _exptl_crystal_colour                    ?

@@ -60,6 +60,14 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
             },
         },
         {
+            "data": cif_ensemble.unique_coordination_numbers_stats,
+            "settings": {
+                "file_name": "coordination_numbers.png",
+                "title": "Coordination Numbers Distribution",
+                "xlabel": "Coordination Number",
+            },
+        },
+        {
             "data": cif_ensemble.min_distance_stats,
             "settings": {
                 "file_name": "min_distance.png",
@@ -70,7 +78,7 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
         {
             "data": cif_ensemble.unique_elements_stats,
             "settings": {
-                "file_name": "unique_elements.png",
+                "file_name": "elements.png",
                 "title": "Unique Elements Distribution",
                 "xlabel": "Element",
             },

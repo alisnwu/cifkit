@@ -4,8 +4,11 @@ from cifpy.utils.folder import get_file_count, get_file_path_list
 
 
 def test_init(cif_ensemble_test):
-    # Create an instance of CifEnsemble
     assert cif_ensemble_test.dir_path == "tests/data/cif/ensemble_test"
+    assert cif_ensemble_test.file_count == 6
+
+
+def test_unique_values(cif_ensemble_test):
     assert cif_ensemble_test.unique_formulas == {
         "EuIr2Ge2",
         "CeRu2Ge2",
@@ -13,6 +16,20 @@ def test_init(cif_ensemble_test):
         "Mo",
     }
     assert cif_ensemble_test.unique_structures == {"CeAl2Ga2", "W"}
+    assert cif_ensemble_test.unique_space_group_names == {
+        "I4/mmm",
+        "Im-3m",
+    }
+    assert cif_ensemble_test.unique_space_group_numbers == {139, 229}
+    assert cif_ensemble_test.unique_tags == {"hex", "rt", "rt_hex", ""}
+
+    assert cif_ensemble_test.unique_site_mixing_types == {
+        "deficiency_no_atomic_mixing",
+        "full_occupancy",
+    }
+
+    # Test from a set
+    assert cif_ensemble_test.unique_coordination_numbers == {5, 9, 12, 14, 16}
     assert cif_ensemble_test.unique_elements == {
         "La",
         "Ru",
@@ -22,13 +39,9 @@ def test_init(cif_ensemble_test):
         "Ce",
         "Mo",
     }
-    assert cif_ensemble_test.unique_space_group_names == {
-        "I4/mmm",
-        "Im-3m",
-    }
-    assert cif_ensemble_test.unique_space_group_numbers == {139, 229}
-    assert cif_ensemble_test.unique_tags == {"hex", "rt", "rt_hex", ""}
 
+
+def test_distances_supercell_size(cif_ensemble_test):
     assert cif_ensemble_test.minimum_distances == [
         ("tests/data/cif/ensemble_test/300169.cif", 2.29),
         ("tests/data/cif/ensemble_test/260171.cif", 2.72),
@@ -106,6 +119,50 @@ def test_filter_by_value(cif_ensemble_test):
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/300171.cif",
         "tests/data/cif/ensemble_test/300170.cif",
+    }
+
+    # Site mixing types
+    assert cif_ensemble_test.filter_by_site_mixing_types(
+        ["full_occupancy"]
+    ) == {
+        "tests/data/cif/ensemble_test/300169.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/260171.cif",
+        "tests/data/cif/ensemble_test/250697.cif",
+        "tests/data/cif/ensemble_test/250709.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_site_mixing_types(
+        ["deficiency_no_atomic_mixing"]
+    ) == {
+        "tests/data/cif/ensemble_test/300171.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_site_mixing_types(
+        ["deficiency_no_atomic_mixing"]
+    ) == {
+        "tests/data/cif/ensemble_test/300171.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_site_mixing_types(
+        ["full_occupancy", "deficiency_no_atomic_mixing"]
+    ) == {
+        "tests/data/cif/ensemble_test/300169.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/260171.cif",
+        "tests/data/cif/ensemble_test/250697.cif",
+        "tests/data/cif/ensemble_test/250709.cif",
+        "tests/data/cif/ensemble_test/300171.cif",
+    }
+
+    # By coordination numbers
+    assert cif_ensemble_test.filter_by_coordination_numbers([5]) == {
+        "tests/data/cif/ensemble_test/300169.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_coordination_numbers([9, 12]) == {
+        "tests/data/cif/ensemble_test/300171.cif",
     }
 
 
@@ -213,6 +270,12 @@ def test_supercell_size_stats(cif_ensemble_test):
     assert result == expected
 
 
+def test_unique_coordination_numbers_stats(cif_ensemble_test):
+    result = cif_ensemble_test.unique_coordination_numbers_stats
+    expected = {16: 3, 12: 3, 5: 2, 14: 3, 9: 1}
+    assert result == expected
+
+
 def test_min_distance_stats(cif_ensemble_test):
     result = cif_ensemble_test.min_distance_stats
     expected = {2.28: 1, 2.29: 1, 2.383: 1, 2.725: 2, 2.72: 1}
@@ -243,7 +306,8 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
         "space_group_name.png",
         "supercell_size.png",
         "min_distance.png",
-        "unique_elements.png",
+        "elements.png",
+        "coordination_numbers.png",
     ]
 
     # Check that all expected files are created

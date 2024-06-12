@@ -1,4 +1,4 @@
-from cifpy.postprocessors.site import (
+from cifpy.coordination.site import (
     get_min_distance_pair,
 )
 
