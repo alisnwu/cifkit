@@ -17,7 +17,7 @@ CifEnsemble - test folder
 
 
 @pytest.fixture(scope="module")
-def cif_ensemble_test():
+def cif_ensemble_test() -> CifEnsemble:
     return CifEnsemble("tests/data/cif/ensemble_test")
 
 

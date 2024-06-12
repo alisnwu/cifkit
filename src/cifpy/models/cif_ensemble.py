@@ -40,14 +40,19 @@ class CifEnsemble:
         return self._get_unique_property_values("space_group_name")
 
     @property
-    def unique_space_group_numbers(self) -> set[int]:
-        """Get unique space group numbers from all .cif files in the folder."""
+    def unique_space_group_numbers(self) -> set[str]:
+        """Get unique space groups from all .cif files in the folder."""
         return self._get_unique_property_values("space_group_number")
 
     @property
     def unique_site_mixing_types(self) -> set[int]:
         """Get unique site mixing types from all .cif files in the folder."""
         return self._get_unique_property_values("site_mixing_type")
+
+    @property
+    def unique_composition_types(self) -> set[int]:
+        """Get unique composition types from all .cif files in the folder."""
+        return self._get_unique_property_values("composition_type")
 
     def _get_unique_property_values_from_set(self, property_name: str):
         unique_values = set()
@@ -87,7 +92,7 @@ class CifEnsemble:
         return dict(Counter(values))
 
     @property
-    def structures_stats(self) -> dict[str, int]:
+    def structure_stats(self) -> dict[str, int]:
         return self._attribute_stats("structure")
 
     @property
@@ -107,8 +112,11 @@ class CifEnsemble:
         return self._attribute_stats("space_group_name")
 
     @property
+    def composition_type_stats(self) -> dict[str, int]:
+        return self._attribute_stats("composition_type")
+
+    @property
     def unique_elements_stats(self) -> dict[str, int]:
-        """Sum the counts of each unique element"""
         return self._attribute_stats("unique_elements")
 
     @property
@@ -146,42 +154,73 @@ class CifEnsemble:
     def supercell_atom_counts(self) -> list[tuple[str, int]]:
         return self._collect_cif_data("supercell_atom_count")
 
-    def _filter_by_value(self, property_name: str, values: list):
+    def _filter_by_single_value(self, property_name: str, values: list):
         cif_file_paths = set()
         for cif in self.cifs:
             property_value = getattr(cif, property_name, None)
-            if not isinstance(property_value, set):
-                if property_value in values:
-                    cif_file_paths.add(cif.file_path)
-            else:
-                # Handle the case where property_value is a set
-                if all(val in property_value for val in values):
-                    cif_file_paths.add(cif.file_path)
+            if property_value in values:
+                cif_file_paths.add(cif.file_path)
+
+        return cif_file_paths
+
+    # With sets
+    def _filter_contains_any(
+        self, property_name: str, values: list
+    ) -> set[str]:
+        cif_file_paths = set()
+        for cif in self.cifs:
+            property_value: str = getattr(cif, property_name)
+            if any(val in property_value for val in values):
+                cif_file_paths.add(cif.file_path)
+        return cif_file_paths
+
+    def _filter_exact_match(
+        self, property_name: str, values: list
+    ) -> set[str]:
+        cif_file_paths = set()
+        for cif in self.cifs:
+            property_value: str = getattr(cif, property_name)
+            if property_value == set(values):
+                cif_file_paths.add(cif.file_path)
         return cif_file_paths
 
     def filter_by_formulas(self, values: list[str]) -> set[str]:
-        return self._filter_by_value("formula", values)
+        return self._filter_by_single_value("formula", values)
 
     def filter_by_structures(self, values: list[str]) -> set[str]:
-        return self._filter_by_value("structure", values)
-
-    def filter_by_elements(self, values: list[str]) -> set[str]:
-        return self._filter_by_value("unique_elements", values)
-
-    def filter_by_tags(self, values: list[str]) -> set[str]:
-        return self._filter_by_value("tag", values)
+        return self._filter_by_single_value("structure", values)
 
     def filter_by_space_group_names(self, values: list[str]) -> set[str]:
-        return self._filter_by_value("space_group_name", values)
+        return self._filter_by_single_value("space_group_name", values)
 
     def filter_by_space_group_numbers(self, values: list[int]) -> set[str]:
-        return self._filter_by_value("space_group_number", values)
+        return self._filter_by_single_value("space_group_number", values)
 
     def filter_by_site_mixing_types(self, values: list[str]) -> set[str]:
-        return self._filter_by_value("site_mixing_type", values)
+        return self._filter_by_single_value("site_mixing_type", values)
 
-    def filter_by_coordination_numbers(self, values: list[int]) -> set[str]:
-        return self._filter_by_value("unique_coordination_numbers", values)
+    def filter_by_tags(self, values: list[str]) -> set[str]:
+        return self._filter_by_single_value("tag", values)
+
+    def filter_by_composition_types(self, values: list[str]) -> set[str]:
+        return self._filter_by_single_value("composition_type", values)
+
+    # Filter with sets
+    def filter_by_elements_containing(self, values: list[str]) -> set[str]:
+        return self._filter_contains_any("unique_elements", values)
+
+    def filter_by_coordination_numbers_containing(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_contains_any("unique_coordination_numbers", values)
+
+    def filter_by_elements_exact_matching(self, values: list[str]) -> set[str]:
+        return self._filter_exact_match("unique_elements", values)
+
+    def filter_by_coordination_exact_matching(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_exact_match("unique_coordination_numbers", values)
 
     def _filter_by_range(
         self, property: str, min: float | int, max: float | int

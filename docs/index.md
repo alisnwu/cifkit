@@ -95,10 +95,6 @@ cif_ensemble_test.filter_by_formulas(["LaRu2Ge2", "Mo"])
 cif_ensemble_test.filter_by_structures(["W"]) 
 cif_ensemble_test.filter_by_structures("CeAl2Ga2") 
 
-# By elements
-cif_ensemble_test.filter_by_elements(["La"])
-cif_ensemble_test.filter_by_elements(["Ge", "Ru"])
-
 # By space group
 cif_ensemble_test.filter_by_space_group_names("Im-3m")
 

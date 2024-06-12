@@ -7,11 +7,14 @@ from cifpy.utils.error_messages import CifParserError
 
 def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.unique_elements == {"U", "In", "Rh"}
+    assert cif_URhIn.composition_type == 3
     assert cif_URhIn.formula == "URhIn"
     assert cif_URhIn.structure == "ZrNiAl"
+    assert cif_URhIn.weight == 455.8
     assert cif_URhIn.site_labels == ["In1", "U1", "Rh1", "Rh2"]
     assert cif_URhIn.space_group_name == "P-62m"
     assert cif_URhIn.space_group_number == 189
+
     assert cif_URhIn.tag == "rt"
     assert cif_URhIn.heterogeneous_bond_pairs == {
         ("In", "Rh"),

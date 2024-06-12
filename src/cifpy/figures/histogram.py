@@ -12,7 +12,7 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
 
     histograms = [
         {
-            "data": cif_ensemble.structures_stats,
+            "data": cif_ensemble.structure_stats,
             "settings": {
                 "file_name": "structures.png",
                 "title": "Structures Distribution",
@@ -81,6 +81,14 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
                 "file_name": "elements.png",
                 "title": "Unique Elements Distribution",
                 "xlabel": "Element",
+            },
+        },
+        {
+            "data": cif_ensemble.composition_type_stats,
+            "settings": {
+                "file_name": "composition_type.png",
+                "title": "Unique Composition Types Distribution",
+                "xlabel": "Compositions",
             },
         },
     ]

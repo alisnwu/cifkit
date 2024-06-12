@@ -21,6 +21,7 @@ def test_unique_values(cif_ensemble_test):
         "Im-3m",
     }
     assert cif_ensemble_test.unique_space_group_numbers == {139, 229}
+    assert cif_ensemble_test.unique_composition_types == {1, 3}
     assert cif_ensemble_test.unique_tags == {"hex", "rt", "rt_hex", ""}
 
     assert cif_ensemble_test.unique_site_mixing_types == {
@@ -93,21 +94,6 @@ def test_filter_by_value(cif_ensemble_test):
         "tests/data/cif/ensemble_test/300170.cif",
     }
 
-    assert cif_ensemble_test.filter_by_elements(["La"]) == {
-        "tests/data/cif/ensemble_test/300169.cif",
-    }
-
-    assert cif_ensemble_test.filter_by_elements(["Ge"]) == {
-        "tests/data/cif/ensemble_test/300169.cif",
-        "tests/data/cif/ensemble_test/300171.cif",
-        "tests/data/cif/ensemble_test/300170.cif",
-    }
-
-    assert cif_ensemble_test.filter_by_elements(["Ge", "Ru"]) == {
-        "tests/data/cif/ensemble_test/300169.cif",
-        "tests/data/cif/ensemble_test/300170.cif",
-    }
-
     # Test filter by space group
     assert cif_ensemble_test.filter_by_space_group_names("Im-3m") == {
         "tests/data/cif/ensemble_test/260171.cif",
@@ -155,14 +141,70 @@ def test_filter_by_value(cif_ensemble_test):
         "tests/data/cif/ensemble_test/300171.cif",
     }
 
-    # By coordination numbers
-    assert cif_ensemble_test.filter_by_coordination_numbers([5]) == {
+    assert cif_ensemble_test.filter_by_composition_types([3]) == {
+        "tests/data/cif/ensemble_test/300171.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/300169.cif",
+    }
+
+
+"""
+Test filter by value
+"""
+
+
+"""
+tests/data/cif/ensemble_test/300169.cif
+{'Ge1': 5, 'Ru1': 12, 'La1': 16}
+tests/data/cif/ensemble_test/260171.cif
+{'Mo': 14}
+tests/data/cif/ensemble_test/250697.cif
+{'Mo': 14}
+tests/data/cif/ensemble_test/250709.cif
+{'Mo': 14}
+tests/data/cif/ensemble_test/300171.cif
+{'Ge1': 9, 'Ir1': 12, 'Eu1': 16}
+tests/data/cif/ensemble_test/300170.cif
+{'Ge1': 5, 'Ru1': 12, 'Ce1': 16}
+"""
+
+
+@pytest.mark.fast
+def test_filter_by_coordination_numbers(cif_ensemble_test):
+    assert cif_ensemble_test.filter_by_coordination_numbers_containing(
+        [5]
+    ) == {
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/300170.cif",
     }
 
-    assert cif_ensemble_test.filter_by_coordination_numbers([9, 12]) == {
+    assert cif_ensemble_test.filter_by_coordination_numbers_containing(
+        [16]
+    ) == {
+        "tests/data/cif/ensemble_test/300169.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
         "tests/data/cif/ensemble_test/300171.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_coordination_exact_matching(
+        [9, 12, 16]
+    ) == {
+        "tests/data/cif/ensemble_test/300171.cif",
+    }
+
+
+@pytest.mark.fast
+def test_filter_by_elements(cif_ensemble_test):
+    assert cif_ensemble_test.filter_by_elements_containing(["Ge"]) == {
+        "tests/data/cif/ensemble_test/300171.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/300169.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_elements_exact_matching(
+        ["Ge", "Ru", "La"]
+    ) == {
+        "tests/data/cif/ensemble_test/300169.cif",
     }
 
 
@@ -234,8 +276,8 @@ Test stats
 """
 
 
-def test_structures_stats(cif_ensemble_test):
-    result = cif_ensemble_test.structures_stats
+def test_structure_stats(cif_ensemble_test):
+    result = cif_ensemble_test.structure_stats
     expected = {"CeAl2Ga2": 3, "W": 3}
     assert result == expected
 
@@ -255,6 +297,12 @@ def test_tag_stats(cif_ensemble_test):
 def test_space_group_number_stats(cif_ensemble_test):
     result = cif_ensemble_test.space_group_number_stats
     expected = {139: 3, 229: 3}
+    assert result == expected
+
+
+def test_composition_type_stats(cif_ensemble_test):
+    result = cif_ensemble_test.composition_type_stats
+    expected = {1: 3, 3: 3}
     assert result == expected
 
 
@@ -308,6 +356,7 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
         "min_distance.png",
         "elements.png",
         "coordination_numbers.png",
+        "composition_type.png",
     ]
 
     # Check that all expected files are created

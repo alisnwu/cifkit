@@ -94,6 +94,7 @@ class Cif:
             self.space_group_number,
             self.space_group_name,
         ) = get_formula_structure_weight_s_group(self._block)
+        self.composition_type = len(self.unique_elements)
         self.tag = get_tag_from_third_line(self.file_path)
         self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
         self.heterogeneous_bond_pairs = get_heterogenous_element_pairs(
