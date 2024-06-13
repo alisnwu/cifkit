@@ -76,6 +76,14 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
             },
         },
         {
+            "data": cif_ensemble.site_mixing_type_stats,
+            "settings": {
+                "file_name": "site_mixing_type.png",
+                "title": "Site Mixing Distribution",
+                "xlabel": "Site Mixing Type",
+            },
+        },
+        {
             "data": cif_ensemble.unique_elements_stats,
             "settings": {
                 "file_name": "elements.png",
@@ -88,7 +96,8 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
             "settings": {
                 "file_name": "composition_type.png",
                 "title": "Unique Composition Types Distribution",
-                "xlabel": "Compositions",
+                "xlabel": "Compositions (1: unary, 2: binary, 3: ternary, etc.)",
+                "key_data_type": "string",
             },
         },
     ]
@@ -110,8 +119,17 @@ def generate_histogram(data: dict, settings: dict, output_dir: str) -> None:
     Generate a histogram from a dictionary of data and save
     it to a specified directory.
     """
+
+    if settings.get("key_data_type") == "string":
+        # Assuming all keys can be converted to integers for sorting purposes
+        # Sorting is needed for for composition types, order from 1, 2, 3, etc.
+        data = {str(key): data[key] for key in sorted(data.keys(), key=int)}
+
     keys = list(data.keys())
-    values = [int(value) for value in data.values()]
+    values = [
+        data[key] for key in keys
+    ]  # Align values with keys after potential conversion
+
     plt.figure(figsize=(10, 6))
     plt.bar(
         keys,

@@ -343,6 +343,7 @@ Test stat histograms
 
 def test_generate_histogram(cif_ensemble_test, tmp_path):
     output_dir = tmp_path / "histograms"
+    # output_dir = "tests/data/cif/ensemble_test/histograms"
     cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
 
     # List of expected files
@@ -357,6 +358,7 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
         "elements.png",
         "coordination_numbers.png",
         "composition_type.png",
+        "site_mixing_type.png",
     ]
 
     # Check that all expected files are created

@@ -120,6 +120,10 @@ class CifEnsemble:
         return self._attribute_stats("unique_elements")
 
     @property
+    def site_mixing_type_stats(self) -> dict[str, int]:
+        return self._attribute_stats("site_mixing_type")
+
+    @property
     def supercell_size_stats(self) -> dict[int, int]:
         return self._attribute_stats("supercell_points", len)
 
@@ -263,8 +267,6 @@ class CifEnsemble:
     ) -> None:
         """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
-
-    """Plot histograms"""
 
     def generate_stat_histograms(self, output_dir=None):
         plot_histograms(self, output_dir)
