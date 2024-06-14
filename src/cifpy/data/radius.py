@@ -1,8 +1,8 @@
-def get_radius_data():
+def get_radius_data() -> dict:
     """
     Return a dictionary of element radii data.
     """
-    data = {
+    rad_data = {
         "Si": [1.176, 1.316],
         "Sc": [1.641, 1.620],
         "Fe": [1.242, 1.260],
@@ -42,9 +42,9 @@ def get_radius_data():
         "Ta": [1.430, 1.457],
     }
 
-    radii_data = {
+    data: dict = {
         k: {"CIF_radius": v[0], "Pauling_radius_CN12": v[1]}
-        for k, v in data.items()
+        for k, v in rad_data.items()
     }
 
-    return radii_data
+    return data

@@ -2,10 +2,9 @@ import numpy as np
 from functools import partial
 from scipy.optimize import minimize
 from cifpy.data.radius import get_radius_data
-from cifpy.utils.formula import get_unique_elements
 
 
-def generate_adjacent_pairs(atom_labels):
+def generate_adjacent_pairs(elements: list[str]) -> list[tuple[str, str]]:
     """
     Generate a list of tuples, where each tuple is
     a pair of adjacent atom labels.
@@ -14,13 +13,12 @@ def generate_adjacent_pairs(atom_labels):
     # Binary -> [('In', 'Rh')]
     # Ternary -> [('In', 'Rh'), ('Rh', 'U')]
     label_to_pair = [
-        (atom_labels[i], atom_labels[i + 1])
-        for i in range(len(atom_labels) - 1)
+        (elements[i], elements[i + 1]) for i in range(len(elements) - 1)
     ]
     return label_to_pair
 
 
-def objective(params, original_radii):
+def objective(params, original_radii: list[float]) -> list[float]:
     """
     Calculate the objective function value,which is the sum of
     squared percent differences between original and refined radii.
@@ -29,7 +27,7 @@ def objective(params, original_radii):
     return np.sum(((original_radii - params) / original_radii) ** 2)
 
 
-def constraint(params, index_pair, shortest_distance):
+def constraint(params, index_pair: tuple[int, int], shortest_distance: dict):
     """
     Enforce that the sum of the radii of the pair does not
     exceed the shortest allowed distance between them.
@@ -39,16 +37,18 @@ def constraint(params, index_pair, shortest_distance):
     return shortest_distance - (params[i] + params[j])
 
 
-def optimize_CIF_radii(atom_labels, shortest_distances):
+def get_refined_CIF_radii(
+    elements: list[str], shortest_distances: dict
+) -> dict[str, float]:
     """
     Optimize CIF radii given atom labels and their
     shortest pair distance constraints.
     """
     radii_data = get_radius_data()
     original_radii = np.array(
-        [radii_data[label]["CIF_radius"] for label in atom_labels]
+        [radii_data[label]["CIF_radius"] for label in elements]
     )
-    label_to_pair = generate_adjacent_pairs(atom_labels)
+    label_to_pair = generate_adjacent_pairs(elements)
 
     # Constraints setup
     constraints = []
@@ -57,7 +57,7 @@ def optimize_CIF_radii(atom_labels, shortest_distances):
         print(
             f"Setting constraint for {pair[0]}-{pair[1]} with distance {dist}"
         )
-        i, j = atom_labels.index(pair[0]), atom_labels.index(pair[1])
+        i, j = elements.index(pair[0]), elements.index(pair[1])
         constraints.append(
             {
                 "type": "eq",
@@ -80,4 +80,4 @@ def optimize_CIF_radii(atom_labels, shortest_distances):
     else:
         print("Optimization failed:", result.message)
 
-    return dict(zip(atom_labels, result.x)), result.fun
+    return dict(zip(elements, result.x))

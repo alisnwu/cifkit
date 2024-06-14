@@ -123,6 +123,27 @@ def parsed_cif_data_URhIn(
     return (unique_site_labels_URhIn, lenghts_URhIn, angles_rad_URhIn)
 
 
+@pytest.fixture(scope="module")
+def radii_data_URhIn() -> dict:
+    return {
+        "In": {
+            "CIF_radius": 1.624,
+            "CIF_radius_refined": 1.3283,
+            "Pauling_radius_CN12": 1.66,
+        },
+        "Rh": {
+            "CIF_radius": 1.345,
+            "CIF_radius_refined": 1.3687,
+            "Pauling_radius_CN12": 1.342,
+        },
+        "U": {
+            "CIF_radius": 1.377,
+            "CIF_radius_refined": 1.6143,
+            "Pauling_radius_CN12": 1.51,
+        },
+    }
+
+
 # Init
 @pytest.fixture(scope="module")
 def cif_URhIn(file_path_URhIn):
