@@ -37,18 +37,19 @@ def constraint(params, index_pair: tuple[int, int], shortest_distance: dict):
     return shortest_distance - (params[i] + params[j])
 
 
-def get_refined_CIF_radii(
+def get_refined_CIF_radius(
     elements: list[str], shortest_distances: dict
 ) -> dict[str, float]:
     """
     Optimize CIF radii given atom labels and their
     shortest pair distance constraints.
     """
+    sorted_elements = sorted(elements)
     radii_data = get_radius_data()
     original_radii = np.array(
-        [radii_data[label]["CIF_radius"] for label in elements]
+        [radii_data[label]["CIF_radius"] for label in sorted_elements]
     )
-    label_to_pair = generate_adjacent_pairs(elements)
+    label_to_pair = generate_adjacent_pairs(sorted_elements)
 
     # Constraints setup
     constraints = []
@@ -57,7 +58,7 @@ def get_refined_CIF_radii(
         print(
             f"Setting constraint for {pair[0]}-{pair[1]} with distance {dist}"
         )
-        i, j = elements.index(pair[0]), elements.index(pair[1])
+        i, j = sorted_elements.index(pair[0]), sorted_elements.index(pair[1])
         constraints.append(
             {
                 "type": "eq",
@@ -80,4 +81,4 @@ def get_refined_CIF_radii(
     else:
         print("Optimization failed:", result.message)
 
-    return dict(zip(elements, result.x))
+    return dict(zip(sorted_elements, result.x))

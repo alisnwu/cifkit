@@ -4,9 +4,11 @@ from cifpy.utils.unit import (
     get_radians_from_degrees,
     round_float,
     fractional_to_cartesian,
+    round_dict_values,
 )
 
 
+@pytest.mark.fast
 def test_get_radians_from_degrees():
     # Define the input and expected output
     angles_in_degrees = [0, 45, 90, 180, 360]
@@ -17,6 +19,7 @@ def test_get_radians_from_degrees():
     assert result == expected_radians
 
 
+@pytest.mark.fast
 def test_rounded_distance():
     # Define the input and expected output
     distance = 123.456789
@@ -34,6 +37,7 @@ def test_rounded_distance():
     assert result == expected_rounded
 
 
+@pytest.mark.fast
 def test_fractional_to_cartesian():
     frac_pts = [0.2505, 0, 0.5]
     lengths = [7.476, 7.476, 3.881]
@@ -48,3 +52,26 @@ def test_fractional_to_cartesian():
     assert np.allclose(
         cart_1, expected_cart, atol=1e-4
     ), f"Expected {expected_cart}, but got {cart_1}"
+
+
+@pytest.mark.fast
+def test_round_dict_values():
+    input_dict = {
+        "float1": 3.14159265,
+        "float2": 2.71828,
+        "int": 1,
+        "string": "test",
+        "nested_dict": {
+            "float": 9.8765
+        },  # Note: Nested dictionaries are not processed.
+    }
+    expected_dict = {
+        "float1": 3.142,
+        "float2": 2.718,
+        "int": 1,
+        "string": "test",
+        "nested_dict": {"float": 9.8765},
+    }
+    assert (
+        round_dict_values(input_dict) == expected_dict
+    ), "The dictionary values were not rounded correctly."

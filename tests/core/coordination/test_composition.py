@@ -2,10 +2,10 @@ import pytest
 
 from cifpy.coordination.composition import (
     get_bond_counts,
-    get_bond_fraction,
-    get_coordination_numbers,
-    get_avg_coordination_number,
-    get_unique_coordination_number,
+    get_bond_fractions,
+    get_CN_values,
+    get_avg_CN,
+    get_unique_CN_values,
 )
 
 
@@ -30,7 +30,7 @@ def test_get_bond_fraction(bond_counts_CN):
     }
 
     # Testing the actual function output
-    result = get_bond_fraction(bond_counts_CN)
+    result = get_bond_fractions(bond_counts_CN)
 
     # Testing each bond fraction to ensure they are within a small tolerance
     for bond_type, expected_fraction in expected_fractions.items():
@@ -42,14 +42,14 @@ def test_get_bond_fraction(bond_counts_CN):
 
 def test_get_coordination_numbers(connections_CN_URhIn):
     expected = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert get_coordination_numbers(connections_CN_URhIn) == expected
+    assert get_CN_values(connections_CN_URhIn) == expected
 
 
 def test_get_average_coordination_number():
     coordination_numbers = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert get_avg_coordination_number(coordination_numbers) == 10.75
+    assert get_avg_CN(coordination_numbers) == 10.75
 
 
 def test_get_unique_coordination_number():
     coordination_numbers = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert get_unique_coordination_number(coordination_numbers) == {9, 11, 14}
+    assert get_unique_CN_values(coordination_numbers) == {9, 11, 14}

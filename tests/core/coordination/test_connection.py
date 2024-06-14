@@ -1,5 +1,5 @@
 import numpy as np
-from cifpy.coordination.coordinate import get_polyhedron_coordinates_labels
+from cifpy.coordination.geometry import get_polyhedron_coordinates_labels
 
 
 def test_get_polyhedron_coordinates_label(connections_CN_URhIn):

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 from cifpy.data.radius_optimization import (
-    get_refined_CIF_radii,
+    get_refined_CIF_radius,
 )
 
 
@@ -19,7 +19,7 @@ def test_optimization(cif_URhIn):
         ("Rh", "U"): 2.983,  # MX
         ("U", "U"): 3.881,
     }
-    optimized_radii = get_refined_CIF_radii(
+    optimized_radii = get_refined_CIF_radius(
         elements_sorted, cif_URhIn.shortest_dist_per_bond_pair
     )
     expected_radii = {"U": 1.6143, "Rh": 1.3687, "In": 1.3283}

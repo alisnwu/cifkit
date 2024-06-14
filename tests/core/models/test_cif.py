@@ -3,6 +3,7 @@ import shutil
 import pytest
 from cifpy.models.cif import Cif
 from cifpy.utils.error_messages import CifParserError
+import pytest
 
 
 def test_cif_static_properties(cif_URhIn):
@@ -78,19 +79,18 @@ def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.site_mixing_type == "full_occupancy"
 
 
-import pytest
-
-
 @pytest.mark.fast
-def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
+def test_cif_lazy_propertes_after_compute_connection(cif_URhIn):
     cif_URhIn.compute_connections()
     assert cif_URhIn.shortest_pair_distance == 2.697
 
-    connections_CN = cif_URhIn.connections_CN
-    assert len(connections_CN.get("In1")) == 14
-    assert len(connections_CN.get("U1")) == 11
-    assert len(connections_CN.get("Rh1")) == 9
-    assert len(connections_CN.get("Rh2")) == 9
+    CN_connections_by_min_dist_method = (
+        cif_URhIn.CN_connections_by_min_dist_method
+    )
+    assert len(CN_connections_by_min_dist_method.get("In1")) == 14
+    assert len(CN_connections_by_min_dist_method.get("U1")) == 11
+    assert len(CN_connections_by_min_dist_method.get("Rh1")) == 9
+    assert len(CN_connections_by_min_dist_method.get("Rh2")) == 9
 
     expected_bond_counts = {
         "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
@@ -98,8 +98,15 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
         "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
         "U1": {("In", "U"): 6, ("Rh", "U"): 5},
     }
-    assert cif_URhIn.bond_counts_CN == expected_bond_counts
 
+    result = cif_URhIn.get_connections_bond_counts(
+        CN_connections_by_min_dist_method
+    )
+    assert result == expected_bond_counts
+
+
+@pytest.mark.fast
+def test_cif_lazy_propertes_shortest_pair_distances(cif_URhIn):
     expected_shotest_pair_distance = {
         "In1": ("Rh2", 2.697),
         "Rh1": ("In1", 2.852),
@@ -123,15 +130,18 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
         ("Rh", "U"): 14 / 43,
     }
 
+    bond_fractions = cif_URhIn.get_connections_bond_fractions(
+        cif_URhIn.CN_connections_by_min_dist_method
+    )
     # Testing each bond fraction to ensure they are within a small tolerance
     for bond_type, expected_fraction in expected_fractions.items():
         assert (
-            pytest.approx(cif_URhIn.bond_fraction_CN[bond_type], 0.005)
+            pytest.approx(bond_fractions[bond_type], 0.005)
             == expected_fraction
         )
 
     # Testing to ensure the fractions sum approximately to 1
-    assert pytest.approx(sum(cif_URhIn.bond_fraction_CN.values()), 0.005) == 1
+    assert pytest.approx(sum(bond_fractions.values()), 0.005) == 1
 
     # Test flattened conncetions
     assert cif_URhIn.connections_flattened[0] == (("In", "Rh"), 2.697)
@@ -146,6 +156,52 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
         ("Rh", "U"): 2.983,
         ("U", "U"): 3.881,
     }
+
+
+@pytest.mark.fast
+def test_CN_max_gap_per_site(cif_URhIn):
+    assert cif_URhIn.CN_max_gap_per_site == {
+        "In1": {
+            "dist_by_shortest_dist": {"max_gap": 0.306, "CN": 14},
+            "dist_by_CIF_radius_sum": {"max_gap": 0.39, "CN": 14},
+            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.341, "CN": 12},
+            "dist_by_Pauling_radius_sum": {"max_gap": 0.398, "CN": 14},
+        },
+        "U1": {
+            "dist_by_shortest_dist": {"max_gap": 0.197, "CN": 11},
+            "dist_by_CIF_radius_sum": {"max_gap": 0.312, "CN": 11},
+            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.27, "CN": 17},
+            "dist_by_Pauling_radius_sum": {"max_gap": 0.254, "CN": 17},
+        },
+        "Rh1": {
+            "dist_by_shortest_dist": {"max_gap": 0.315, "CN": 9},
+            "dist_by_CIF_radius_sum": {"max_gap": 0.347, "CN": 9},
+            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.418, "CN": 9},
+            "dist_by_Pauling_radius_sum": {"max_gap": 0.4, "CN": 9},
+        },
+        "Rh2": {
+            "dist_by_shortest_dist": {"max_gap": 0.31, "CN": 9},
+            "dist_by_CIF_radius_sum": {"max_gap": 0.324, "CN": 9},
+            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.397, "CN": 9},
+            "dist_by_Pauling_radius_sum": {"max_gap": 0.378, "CN": 9},
+        },
+    }
+
+
+@pytest.mark.fast
+def test_best_polyhedron(cif_URhIn):
+    assert cif_URhIn.best_CN_method["In1"]["number_of_vertices"] == 14
+    assert cif_URhIn.best_CN_method["U1"]["number_of_vertices"] == 17
+    assert cif_URhIn.best_CN_method["Rh1"]["number_of_vertices"] == 9
+    assert cif_URhIn.best_CN_method["Rh2"]["number_of_vertices"] == 9
+
+
+@pytest.mark.fast
+def test_CN_connections_by_best_method(cif_URhIn):
+    assert len(cif_URhIn.CN_connections_by_best_method["In1"]) == 14
+    assert len(cif_URhIn.CN_connections_by_best_method["U1"]) == 17
+    assert len(cif_URhIn.CN_connections_by_best_method["Rh1"]) == 9
+    assert len(cif_URhIn.CN_connections_by_best_method["Rh2"]) == 9
 
 
 """
@@ -196,11 +252,13 @@ def test_polyhedron_labels_from_site(cif_URhIn):
 def test_cif_lazy_propertes(cif_URhIn):
     assert cif_URhIn.shortest_pair_distance == 2.697
 
-    connections_CN = cif_URhIn.connections_CN
-    assert len(connections_CN.get("In1")) == 14
-    assert len(connections_CN.get("U1")) == 11
-    assert len(connections_CN.get("Rh1")) == 9
-    assert len(connections_CN.get("Rh2")) == 9
+    connections_by_min_dist_method = (
+        cif_URhIn.CN_connections_by_min_dist_method
+    )
+    assert len(connections_by_min_dist_method.get("In1")) == 14
+    assert len(connections_by_min_dist_method.get("U1")) == 11
+    assert len(connections_by_min_dist_method.get("Rh1")) == 9
+    assert len(connections_by_min_dist_method.get("Rh2")) == 9
 
 
 """Test polyhedron"""

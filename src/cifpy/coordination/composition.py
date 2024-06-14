@@ -10,12 +10,12 @@ def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
     all_bond_pairs = bond_pair.get_all_bond_pairs(formula)
 
     # Initialize the dictionary to hold bond pair counts for each label
-    bond_pair_data: dict = {}
+    bond_counts: dict = {}
 
     # Iterate over each label and its connections
     for label, label_connections in connections.items():
         # Initialize the bond count for the current label
-        bond_pair_data[label] = {}
+        bond_counts[label] = {}
 
         # Get the atom type for the reference label
         ref_element = get_atom_type_from_label(label)
@@ -32,15 +32,17 @@ def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
 
             # Check if the bond pair is one of the valid pairs
             if sorted_bond_pair in all_bond_pairs:
-                if sorted_bond_pair in bond_pair_data[label]:
-                    bond_pair_data[label][sorted_bond_pair] += 1
+                if sorted_bond_pair in bond_counts[label]:
+                    bond_counts[label][sorted_bond_pair] += 1
                 else:
-                    bond_pair_data[label][sorted_bond_pair] = 1
+                    bond_counts[label][sorted_bond_pair] = 1
 
-    return bond_pair_data
+    return bond_counts
 
 
-def get_bond_fraction(bond_pair_data: dict) -> dict[tuple[str, str], float]:
+def get_bond_fractions(
+    bond_pair_data: dict,
+) -> dict[tuple[str, str], float]:
     """
     Calculate the fraction of each bond type across all labels.
     """
@@ -65,7 +67,7 @@ def get_bond_fraction(bond_pair_data: dict) -> dict[tuple[str, str], float]:
     return bond_fractions
 
 
-def get_coordination_numbers(connections: dict[str, list]) -> dict:
+def get_CN_values(connections: dict[str, list]) -> dict:
     """
     Calculate the coordination number for each atom site.
     """
@@ -76,15 +78,13 @@ def get_coordination_numbers(connections: dict[str, list]) -> dict:
     return neighbor_count
 
 
-def get_avg_coordination_number(coordination_numbers: dict[str, int]) -> float:
+def get_avg_CN(coordination_numbers: dict[str, int]) -> float:
     total = 0
     for _, number in coordination_numbers.items():
         total += number
     return np.round(total / len(coordination_numbers), 3)
 
 
-def get_unique_coordination_number(
-    coordination_numbers: dict[str, int]
-) -> set:
+def get_unique_CN_values(coordination_numbers: dict[str, int]) -> set:
     unique_numbers = set(coordination_numbers.values())
     return unique_numbers

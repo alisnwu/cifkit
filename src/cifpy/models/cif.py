@@ -29,20 +29,30 @@ from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
 from cifpy.preprocessors.environment import (
     get_site_connections,
-    filter_connections_with_cn,
+    get_CN_connections_by_min_dist_method,
 )
 
 
-from cifpy.preprocessors.environment_util import flat_site_connections
-
+# Radius
+from cifpy.data.radius_handler import (
+    get_is_radius_data_available,
+    get_radius_values_per_element,
+    compute_radius_sum,
+)
 
 # Coordination number
+from cifpy.preprocessors.environment_util import flat_site_connections
 from cifpy.coordination.composition import (
     get_bond_counts,
-    get_bond_fraction,
-    get_coordination_numbers,
-    get_avg_coordination_number,
-    get_unique_coordination_number,
+    get_bond_fractions,
+    get_CN_values,
+    get_avg_CN,
+    get_unique_CN_values,
+)
+from cifpy.coordination.method import compute_CN_max_gap_per_site
+from cifpy.coordination.filter import (
+    find_best_polyhedron,
+    get_CN_connections_by_best_method,
 )
 
 # Bond pair
@@ -55,7 +65,7 @@ from cifpy.coordination.site_distance import (
     get_shortest_distance,
     get_shortest_distance_per_site,
 )
-from cifpy.coordination.coordinate import get_polyhedron_coordinates_labels
+from cifpy.coordination.geometry import get_polyhedron_coordinates_labels
 
 from cifpy.utils import prompt
 from cifpy.utils.bond_pair import (
@@ -112,6 +122,9 @@ class Cif:
         self.homogenous_bond_pairs = get_homogenous_element_pairs(self.formula)
         self.all_bond_pairs = get_all_bond_pairs(self.formula)
         self.site_mixing_type = get_site_mixing_type(self._loop_values)
+        self.is_radius_data_available = get_is_radius_data_available(
+            self.unique_elements
+        )
 
     def _generate_supercell(self):
         """Generate supercell information based on the unit cell data."""
@@ -132,29 +145,43 @@ class Cif:
             self.supercell_points,
             cutoff_radius=cutoff_radius,
         )
+
+        # Get flattened connections
+        self._connections_flattened = flat_site_connections(self.connections)
+
+        # Get shortest distance, per bond pair, per site
         self._shortest_pair_distance = get_shortest_distance(self.connections)
-        self._connections_CN = filter_connections_with_cn(self.connections)
+        self._shortest_distance_per_bond_pair = (
+            get_shortest_distance_per_bond_pair(self.connections_flattened)
+        )
         self._shortest_distance_per_site = get_shortest_distance_per_site(
             self.connections
         )
-        self._bond_counts_CN = get_bond_counts(
-            self.formula, self.connections_CN
+
+        self._radius_values_per_element = get_radius_values_per_element(
+            self.unique_elements, self.shortest_dist_per_bond_pair
         )
-        self._bond_fraction_CN = get_bond_fraction(self.bond_counts_CN)
-        self._coordination_numbers = get_coordination_numbers(
-            self._connections_CN
+        self._radius_sum_per_bond = compute_radius_sum(self.radius_values)
+
+        # Get coordination numbers using the min dist method
+        self._CN_connections_by_min_dist_method = (
+            get_CN_connections_by_min_dist_method(self.connections)
         )
-        self._avg_coordination_numbers = get_avg_coordination_number(
-            self._coordination_numbers
+        # Get max gaps per label
+        self._CN_max_gap_per_site = compute_CN_max_gap_per_site(
+            self._radius_sum_per_bond, self.connections, self.site_mixing_type
         )
 
-        self._unique_coordination_numbers = get_unique_coordination_number(
-            self._coordination_numbers
+        # Determine the best polyhedron
+        self._best_CN_polyhedrons = find_best_polyhedron(
+            self._CN_max_gap_per_site, self.connections
         )
 
-        self._connections_flattened = flat_site_connections(self.connections)
-        self._shortest_distance_per_bond_pair = (
-            get_shortest_distance_per_bond_pair(self.connections_flattened)
+        # Determine the best CN connections
+        self._CN_connections_by_best_method = (
+            get_CN_connections_by_best_method(
+                self._best_CN_polyhedrons, self.connections
+            )
         )
 
     def get_polyhedron_labels_from_site(
@@ -162,32 +189,57 @@ class Cif:
     ) -> tuple[list[list[float]], list[str]]:
         if self.compute_connections is None:
             self.compute_connections()
-        return get_polyhedron_coordinates_labels(self.connections_CN, label)
+        return get_polyhedron_coordinates_labels(
+            self.CN_connections_by_min_dist_method, label
+        )
+
+    # Connections
+    def get_connections_bond_counts(self, connections):
+        if self.connections is None:
+            self.compute_connections()
+        return get_bond_counts(self.formula, connections)
+
+    def get_connections_bond_fractions(self, connections):
+        if self.connections is None:
+            self.compute_connections()
+        bond_counts = get_bond_counts(self.formula, connections)
+        return get_bond_fractions(bond_counts)
+
+    def get_connections_coordination_numbers(self, connections):
+        if self.connections is None:
+            self.compute_connections()
+        return get_CN_values(connections)
+
+    def get_connections_average_coordination_number(self, connections):
+        if self.connections is None:
+            self.compute_connections()
+        return get_avg_CN(connections)
+
+    def get_connections_unique_coordination_numbers(self, connections):
+        if self.connections is None:
+            self.compute_connections()
+        return get_unique_CN_values(connections)
 
     def plot_polyhedron(self, site_label, output_dir=None):
         if self.connections is None:
             self.compute_connections()
         coords, labels = get_polyhedron_coordinates_labels(
-            self.connections_CN, site_label
+            self.CN_connections_by_min_dist_method, site_label
         )
         polyhedron.plot(coords, labels, self.file_path, output_dir)
 
     @property
     def shortest_pair_distance(self):
-        """Property that checks if connections are computed and computes them if not."""
+        """Property that checks if connections are computed and computes."""
         if self.connections is None:
             self.compute_connections()
         return self._shortest_pair_distance
 
     @property
-    def connections_CN(self):
-        """Property that checks if connections are computed and computes them if not."""
+    def shortest_dist_per_bond_pair(self):
         if self.connections is None:
             self.compute_connections()
-        return self._connections_CN
-
-    def print_connected_points(self):
-        prompt.log_connected_points(self.connections)
+        return self._shortest_distance_per_bond_pair
 
     @property
     def shortest_distance_per_site(self):
@@ -196,43 +248,43 @@ class Cif:
         return self._shortest_distance_per_site
 
     @property
-    def bond_counts_CN(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._bond_counts_CN
-
-    @property
-    def bond_fraction_CN(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._bond_fraction_CN
-
-    @property
-    def coordination_numbers(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._coordination_numbers
-
-    @property
-    def avg_coordination_numbers(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._avg_coordination_numbers
-
-    @property
-    def unique_coordination_numbers(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._unique_coordination_numbers
-
-    @property
     def connections_flattened(self):
         if self.connections is None:
             self.compute_connections()
         return self._connections_flattened
 
     @property
-    def shortest_dist_per_bond_pair(self):
+    def radius_values(self):
         if self.connections is None:
             self.compute_connections()
-        return self._shortest_distance_per_bond_pair
+        return self._radius_values_per_element
+
+    @property
+    def radius_sum_data(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._radius_sum_per_bond
+
+    @property
+    def CN_max_gap_per_site(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_max_gap_per_site
+
+    @property
+    def best_CN_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._best_CN_polyhedrons
+
+    @property
+    def CN_connections_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_connections_by_min_dist_method
+
+    @property
+    def CN_connections_by_best_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_connections_by_best_method

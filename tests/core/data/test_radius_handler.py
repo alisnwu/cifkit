@@ -1,8 +1,9 @@
 import pytest
 from cifpy.data.radius_handler import (
-    get_CIF_pauling_radii,
-    merge_refined_CIF_radii,
-    compute_pair_distances,
+    get_CIF_pauling_radius,
+    get_radius_values_per_element,
+    compute_radius_sum,
+    get_is_radius_data_available,
 )
 
 
@@ -13,7 +14,7 @@ def test_get_CIF_pauling_radii():
         "Fe": {"CIF": 1.242, "Pauling": 1.26},
         "Si": {"CIF": 1.176, "Pauling": 1.316},
     }
-    assert get_CIF_pauling_radii(test_elements) == expected
+    assert get_CIF_pauling_radius(test_elements) == expected
 
     test_elements = ["In", "Rh", "U"]
     expected = {
@@ -21,11 +22,11 @@ def test_get_CIF_pauling_radii():
         "Rh": {"CIF": 1.345, "Pauling": 1.342},
         "U": {"CIF": 1.377, "Pauling": 1.51},
     }
-    assert get_CIF_pauling_radii(test_elements) == expected
+    assert get_CIF_pauling_radius(test_elements) == expected
 
 
 @pytest.mark.fast
-def test_get_CIF_pauling_radii(radii_data_URhIn):
+def test_get_CIF_pauling_radii(radius_data_URhIn):
     test_elements = ["In", "Rh", "U"]
     shorest_distance_per_bond = {
         ("In", "In"): 3.244,
@@ -35,26 +36,10 @@ def test_get_CIF_pauling_radii(radii_data_URhIn):
         ("Rh", "U"): 2.983,  # MX
         ("U", "U"): 3.881,
     }
-    combined_radii = merge_refined_CIF_radii(
+    combined_radii = get_radius_values_per_element(
         test_elements, shorest_distance_per_bond
     )
-    expected = {
-        "In": {
-            "CIF_radius": 1.624,
-            "CIF_radius_refined": 1.3283,
-            "Pauling_radius_CN12": 1.66,
-        },
-        "Rh": {
-            "CIF_radius": 1.345,
-            "CIF_radius_refined": 1.3687,
-            "Pauling_radius_CN12": 1.342,
-        },
-        "U": {
-            "CIF_radius": 1.377,
-            "CIF_radius_refined": 1.6143,
-            "Pauling_radius_CN12": 1.51,
-        },
-    }
+    expected = radius_data_URhIn
 
     # Assert each element and sub-element individually
     for element, radii in expected.items():
@@ -65,34 +50,22 @@ def test_get_CIF_pauling_radii(radii_data_URhIn):
 
 
 @pytest.mark.fast
-def test_compute_pair_distances(radii_data_URhIn):
-    result = compute_pair_distances(radii_data_URhIn)
-    print(result)
-    expected = {
-        "CIF_radius_sum": {
-            "In-In": 3.248,
-            "In-Rh": 2.969,
-            "In-U": 3.001,
-            "Rh-Rh": 2.69,
-            "Rh-U": 2.722,
-            "U-U": 2.754,
-        },
-        "CIF_radius_refined_sum": {
-            "In-In": 2.657,
-            "In-Rh": 2.697,
-            "In-U": 2.943,
-            "Rh-Rh": 2.737,
-            "Rh-U": 2.983,
-            "U-U": 3.229,
-        },
-        "Pauling_radius_sum": {
-            "In-In": 3.32,
-            "In-Rh": 3.002,
-            "In-U": 3.17,
-            "Rh-Rh": 2.684,
-            "Rh-U": 2.852,
-            "U-U": 3.02,
-        },
-    }
-
+def test_compute_radius_sum(radius_data_URhIn, radius_sum_data_URhIn):
+    result = compute_radius_sum(radius_data_URhIn)
+    expected = radius_sum_data_URhIn
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "elements,expected",
+    [
+        (["H", "Li"], False),
+        (["H", "He"], False),
+        (["Be"], False),
+        (["U", "Rh", "In"], True),
+        (["Er", "Co", "In"], True),
+    ],
+)
+@pytest.mark.fast
+def test_check_radius_data_available(elements, expected):
+    assert get_is_radius_data_available(elements) == expected

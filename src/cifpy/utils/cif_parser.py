@@ -103,16 +103,16 @@ def get_unique_label_count(loop_values: list) -> int:
     return len(loop_values[0])
 
 
-def get_unique_elements_from_loop(loop_values: list) -> set[str]:
+def get_unique_elements_from_loop(loop_values: list) -> list[str]:
     """
-    Return a list of unique elements from loop values.
+    Return a list of alphabetically sorted unique elements from loop values.
     """
     num_atom_labels = get_unique_label_count(loop_values)
-    element_list = []
+    element_list = set()
     for i in range(num_atom_labels):
         element = loop_values[1][i]
-        element_list.append(str(element))
-    return set(element_list)
+        element_list.add(str(element))
+    return sorted(element_list)
 
 
 def get_unique_site_labels(loop_values: list) -> list[str]:

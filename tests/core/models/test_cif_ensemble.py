@@ -169,7 +169,6 @@ tests/data/cif/ensemble_test/300170.cif
 """
 
 
-@pytest.mark.fast
 def test_filter_by_coordination_numbers(cif_ensemble_test):
     assert cif_ensemble_test.filter_by_coordination_numbers_containing(
         [5]
@@ -193,7 +192,6 @@ def test_filter_by_coordination_numbers(cif_ensemble_test):
     }
 
 
-@pytest.mark.fast
 def test_filter_by_elements(cif_ensemble_test):
     assert cif_ensemble_test.filter_by_elements_containing(["Ge"]) == {
         "tests/data/cif/ensemble_test/300171.cif",

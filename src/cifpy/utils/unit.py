@@ -64,3 +64,10 @@ def fractional_to_cartesian(
     cartesian_coords = np.dot(matrix, fractional_coords).flatten()
 
     return cartesian_coords
+
+
+def round_dict_values(dict, precision=3):
+    rounded_dict = {
+        k: round(v, 3) if isinstance(v, float) else v for k, v in dict.items()
+    }
+    return rounded_dict

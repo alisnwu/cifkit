@@ -175,7 +175,7 @@ def get_most_connected_point_per_site(label, dist_dict, dist_set):
         ]
 
 
-def filter_connections_with_cn(
+def get_CN_connections_by_min_dist_method(
     labels_connections, nearest_neighbor_max_count=20
 ):
     """
