@@ -33,6 +33,9 @@ from cifpy.preprocessors.environment import (
 )
 
 
+from cifpy.preprocessors.environment_util import flat_site_connections
+
+
 # Coordination number
 from cifpy.coordination.composition import (
     get_bond_counts,
@@ -42,9 +45,15 @@ from cifpy.coordination.composition import (
     get_unique_coordination_number,
 )
 
-from cifpy.coordination.distance import (
+# Bond pair
+from cifpy.coordination.bond_distance import (
+    get_shortest_distance_per_bond_pair,
+)
+
+# Site info
+from cifpy.coordination.site_distance import (
     get_shortest_distance,
-    get_shortest_distance_per_label,
+    get_shortest_distance_per_site,
 )
 from cifpy.coordination.coordinate import get_polyhedron_coordinates_labels
 
@@ -125,7 +134,7 @@ class Cif:
         )
         self._shortest_pair_distance = get_shortest_distance(self.connections)
         self._connections_CN = filter_connections_with_cn(self.connections)
-        self._shortest_distance_per_label = get_shortest_distance_per_label(
+        self._shortest_distance_per_site = get_shortest_distance_per_site(
             self.connections
         )
         self._bond_counts_CN = get_bond_counts(
@@ -141,6 +150,11 @@ class Cif:
 
         self._unique_coordination_numbers = get_unique_coordination_number(
             self._coordination_numbers
+        )
+
+        self._connections_flattened = flat_site_connections(self.connections)
+        self._shortest_distance_per_bond_pair = (
+            get_shortest_distance_per_bond_pair(self.connections_flattened)
         )
 
     def get_polyhedron_labels_from_site(
@@ -176,10 +190,10 @@ class Cif:
         prompt.log_connected_points(self.connections)
 
     @property
-    def shortest_distance_per_label(self):
+    def shortest_distance_per_site(self):
         if self.connections is None:
             self.compute_connections()
-        return self._shortest_distance_per_label
+        return self._shortest_distance_per_site
 
     @property
     def bond_counts_CN(self):
@@ -210,3 +224,15 @@ class Cif:
         if self.connections is None:
             self.compute_connections()
         return self._unique_coordination_numbers
+
+    @property
+    def connections_flattened(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._connections_flattened
+
+    @property
+    def shortest_dist_per_bond_pair(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._shortest_distance_per_bond_pair

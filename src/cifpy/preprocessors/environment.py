@@ -138,11 +138,11 @@ def add_diff_after(all_labels_connections):
 def get_most_connected_point_per_site(label, dist_dict, dist_set):
     """
     Identify the reference point with the highest number of connections
-    within the shortest distances from a set of distances.
+    within the 50 shortest distances from a set of distances.
     """
     sorted_unique_dists = sorted(dist_set)
-    # Get the 5 shortest distances
-    shortest_dists = sorted_unique_dists[:5]
+    # Get the 30 shortest distances
+    shortest_dists = sorted_unique_dists[:50]
 
     # Variables to track the reference point with the highest count
     max_count = 0

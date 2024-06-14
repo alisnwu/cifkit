@@ -7,7 +7,7 @@ def flat_site_connections(
 ):
     """
     Transform site connections into a sorted list of tuples,
-    each containing a pair of alphabetically sorted elements and the distance.
+    each containing a pair of alphabetically distance.
     """
     flattened_points = []
     for site_label, connections in site_connections.items():
@@ -17,10 +17,11 @@ def flat_site_connections(
             site_element = get_atom_type_from_label(site_label)
             other_site_element = get_atom_type_from_label(other_site_label)
             # Sort the site label and other site label alphabetically
-            element_pair = tuple(sorted((site_element, other_site_element)))
-            flattened_points.append((element_pair, distance))
+            bond_pair = tuple(sorted((site_element, other_site_element)))
+            flattened_points.append((bond_pair, distance))
 
-    flattened_points.sort(key=lambda x: x[0])
+    # Sort primarily by distance, secondarily by element pair
+    flattened_points.sort(key=lambda x: (x[1], x[0]))
     return flattened_points
 
 

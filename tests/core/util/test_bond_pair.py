@@ -68,3 +68,41 @@ def test_get_possible_homogenous_element_pairs(formula_str, expected):
 def test_get_all_bond_pairs(formula_str, expected):
     result = get_all_bond_pairs(formula_str)
     assert result == expected
+
+
+@pytest.mark.parametrize(
+    "formula_str, expected",
+    [
+        (
+            "URh2In",
+            {
+                ("In", "Rh"),
+                ("In", "U"),
+                ("Rh", "U"),
+                ("U", "U"),
+                ("Rh", "Rh"),
+                ("In", "In"),
+            },
+        ),
+        (
+            "ErCoInRh",
+            {
+                ("Er", "In"),
+                ("Er", "Rh"),
+                ("Er", "Er"),
+                ("Co", "In"),
+                ("Co", "Er"),
+                ("Co", "Rh"),
+                ("Co", "Co"),
+                ("In", "Rh"),
+                ("In", "In"),
+                ("Rh", "Rh"),
+            },
+        ),
+    ],
+)
+@pytest.mark.fast
+def test_get_all_bond_pairs(formula_str, expected):
+    result = get_all_bond_pairs(formula_str)
+    print(result)
+    assert result == expected

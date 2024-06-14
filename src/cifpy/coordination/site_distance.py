@@ -13,7 +13,7 @@ def get_shortest_distance(connections: dict) -> float:
     return min_dist
 
 
-def get_shortest_distance_per_label(
+def get_shortest_distance_per_site(
     connections: dict,
 ) -> dict[str, tuple[str, float]]:
     """

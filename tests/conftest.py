@@ -11,6 +11,17 @@ from cifpy.models.cif_ensemble import CifEnsemble
 from cifpy.preprocessors import environment
 from cifpy.coordination import composition
 
+
+"""
+CifEnsemble - histogram test
+"""
+
+
+@pytest.fixture(scope="module")
+def cif_ensemble_histogram_test() -> CifEnsemble:
+    return CifEnsemble("tests/data/cif/histogram")
+
+
 """
 CifEnsemble - test folder
 """

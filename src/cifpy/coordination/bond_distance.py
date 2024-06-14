@@ -1,4 +1,4 @@
-def get_minimum_dist_per_element_pair(
+def get_shortest_distance_per_bond_pair(
     flattened_connections: list[tuple[tuple[str, str], float]]
 ) -> dict[tuple[str, str], float]:
     """

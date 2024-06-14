@@ -73,6 +73,7 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
                 "file_name": "min_distance.png",
                 "title": "Minimum Distances Distribution",
                 "xlabel": "Minimum Distance",
+                "key_data_type": "float",
             },
         },
         {
@@ -124,6 +125,9 @@ def generate_histogram(data: dict, settings: dict, output_dir: str) -> None:
         # Assuming all keys can be converted to integers for sorting purposes
         # Sorting is needed for for composition types, order from 1, 2, 3, etc.
         data = {str(key): data[key] for key in sorted(data.keys(), key=int)}
+
+    if not settings.get("key_data_type") == "float":
+        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
 
     keys = list(data.keys())
     values = [

@@ -78,6 +78,10 @@ def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.site_mixing_type == "full_occupancy"
 
 
+import pytest
+
+
+@pytest.mark.fast
 def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
     cif_URhIn.compute_connections()
     assert cif_URhIn.shortest_pair_distance == 2.697
@@ -102,7 +106,7 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
         "Rh2": ("In1", 2.697),
         "U1": ("Rh1", 2.984),
     }
-    result = cif_URhIn.shortest_distance_per_label
+    result = cif_URhIn.shortest_distance_per_site
 
     assert all(
         result[label][0] == expected_shotest_pair_distance[label][0]
@@ -128,6 +132,20 @@ def test_cif_lazy_propertes_after_compute_connection(formula_URhIn, cif_URhIn):
 
     # Testing to ensure the fractions sum approximately to 1
     assert pytest.approx(sum(cif_URhIn.bond_fraction_CN.values()), 0.005) == 1
+
+    # Test flattened conncetions
+    assert cif_URhIn.connections_flattened[0] == (("In", "Rh"), 2.697)
+    assert len(cif_URhIn.connections_flattened) == 621
+
+    # Test shortest distance per bond pair
+    assert cif_URhIn.shortest_dist_per_bond_pair == {
+        ("In", "In"): 3.244,
+        ("In", "Rh"): 2.697,
+        ("In", "U"): 3.21,
+        ("Rh", "Rh"): 3.881,
+        ("Rh", "U"): 2.983,
+        ("U", "U"): 3.881,
+    }
 
 
 """

@@ -1,7 +1,10 @@
 from cifpy.preprocessors.environment_util import flat_site_connections
 
+import pytest
 
-def test_flat_connections(connections_URhIn):
+
+@pytest.mark.fast
+def test_flat_site_connections(connections_URhIn):
     flattened_connections = flat_site_connections(connections_URhIn)
 
     assert isinstance(flattened_connections, list)
@@ -19,3 +22,6 @@ def test_flat_connections(connections_URhIn):
         assert all(
             isinstance(label, str) for label in connection[0]
         ), "Both elements in the label tuple should be strings."
+
+    assert flattened_connections[0] == (("In", "Rh"), 2.697)
+    assert flattened_connections[1] == (("In", "Rh"), 2.697)
