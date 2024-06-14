@@ -123,6 +123,12 @@ def parsed_cif_data_URhIn(
     return (unique_site_labels_URhIn, lenghts_URhIn, angles_rad_URhIn)
 
 
+# Init
+@pytest.fixture(scope="module")
+def cif_URhIn(file_path_URhIn):
+    return Cif(file_path_URhIn)
+
+
 @pytest.fixture(scope="module")
 def connections_URhIn(
     parsed_cif_data_URhIn,
@@ -151,8 +157,3 @@ def flattened_connections_URhIn(connections_URhIn):
 @pytest.fixture(scope="module")
 def bond_counts_CN(formula_URhIn, connections_CN_URhIn):
     return composition.get_bond_counts(formula_URhIn, connections_CN_URhIn)
-
-
-@pytest.fixture(scope="module")
-def cif_URhIn(file_path_URhIn):
-    return Cif(file_path_URhIn)
