@@ -3,7 +3,7 @@ from scipy.spatial import ConvexHull
 from cifpy.coordination.geometry import compute_polyhedron_metrics
 
 
-def find_best_polyhedron(max_gaps_per_label, all_labels_connections):
+def find_best_polyhedron(max_gaps_per_label, connections):
     """
     Find the best polyhedron for each label based on the minimum
     distance between the reference atom to the avg. position of
@@ -19,7 +19,7 @@ def find_best_polyhedron(max_gaps_per_label, all_labels_connections):
 
         # Loop through each method
         for method, CN_data in CN_data_per_method.items():
-            connection_data = all_labels_connections[label][: CN_data["CN"]]
+            connection_data = connections[label][: CN_data["CN"]]
             polyhedron_points = []
 
             # Extract the necessary data from connections
@@ -65,17 +65,18 @@ def find_best_polyhedron(max_gaps_per_label, all_labels_connections):
     return best_polyhedrons
 
 
-def get_CN_connections_by_best_method(best_polyhedrons, connections):
-    """
-    Retrieves connections limited by the number of vertices (CN_value) for each label.
-    """
-    CN_connections = {}
+def get_CN_connections_by_min_dist_method(max_gaps_per_label, connections):
+    CN_by_shortest_dist = {}
+    for label, methods_info in max_gaps_per_label.items():
+        # Access the 'dist_by_shortest_dist' method and get the 'CN' value
+        CN_by_shortest_dist[label] = methods_info["dist_by_shortest_dist"][
+            "CN"
+        ]
 
-    for label, data in best_polyhedrons.items():
-        CN_value = data[
-            "number_of_vertices"
-        ]  # Extract the limit for the number of vertices
-        # Limit the connections for this label using CN_value
-        CN_connections[label] = connections[label][:CN_value]
+    CN_connections: dict = {}
+    # Iterate through each label and number of connections
+    for label, CN_value in CN_by_shortest_dist.items():
+        if label in connections:
+            CN_connections[label] = connections[label][:CN_value]
 
     return CN_connections

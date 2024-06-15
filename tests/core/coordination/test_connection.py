@@ -2,7 +2,7 @@ import numpy as np
 from cifpy.coordination.geometry import get_polyhedron_coordinates_labels
 
 
-def test_get_polyhedron_coordinates_label(connections_CN_URhIn):
+def test_get_polyhedron_coordinates_label(CN_connections_by_min_dist_URhIn):
     expected_labels = [
         "Rh2",
         "Rh2",
@@ -22,7 +22,7 @@ def test_get_polyhedron_coordinates_label(connections_CN_URhIn):
     ]
 
     polyhedron_points, labels = get_polyhedron_coordinates_labels(
-        connections_CN_URhIn, "In1"
+        CN_connections_by_min_dist_URhIn, "In1"
     )
     assert len(polyhedron_points) == 15
     assert labels == expected_labels

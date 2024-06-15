@@ -1,5 +1,8 @@
 import pytest
-from cifpy.coordination.filter import find_best_polyhedron
+from cifpy.coordination.filter import (
+    find_best_polyhedron,
+    get_CN_connections_by_min_dist_method,
+)
 
 
 @pytest.mark.fast
@@ -39,3 +42,16 @@ def test_find_best_polyhedron(max_gaps_per_label_URhIn, connections_URhIn):
             result[key]["distance_from_avg_point_to_center"]
             == expected["distance_from_avg_point_to_center"]
         )
+
+
+@pytest.mark.fast
+def test_get_CN_connections_by_dist_min_method(
+    max_gaps_per_label_URhIn, connections_URhIn
+):
+    CN_connections = get_CN_connections_by_min_dist_method(
+        max_gaps_per_label_URhIn, connections_URhIn
+    )
+    assert len(CN_connections["In1"]) == 14
+    assert len(CN_connections["Rh1"]) == 9
+    assert len(CN_connections["Rh2"]) == 9
+    assert len(CN_connections["U1"]) == 11

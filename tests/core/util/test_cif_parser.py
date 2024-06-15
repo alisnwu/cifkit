@@ -77,11 +77,11 @@ def test_get_num_of_atom_unique_labels(loop_values_URhIn):
 
 
 def test_get_unique_elements(loop_values_URhIn):
-    assert get_unique_elements_from_loop(loop_values_URhIn) == {
+    assert get_unique_elements_from_loop(loop_values_URhIn) == [
         "In",
         "Rh",
         "U",
-    }
+    ]
 
 
 def test_get_atom_labels(loop_values_URhIn):

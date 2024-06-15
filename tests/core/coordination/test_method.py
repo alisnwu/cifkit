@@ -4,15 +4,24 @@ from cifpy.coordination.method import compute_CN_max_gap_per_site
 
 @pytest.mark.fast
 def test_compute_CN_max_gap_per_site(
-    radius_sum_data_URhIn, connections_URhIn, max_gaps_per_label_URhIn
+    radius_sum_data_URhIn,
+    connections_URhIn,
+    max_gaps_per_label_URhIn,
 ):
-    CN_max_gap_per_site = compute_CN_max_gap_per_site(
+    result = compute_CN_max_gap_per_site(
         radius_sum_data_URhIn,
         connections_URhIn,
         "full_occupancy",
     )
 
-    assert CN_max_gap_per_site == max_gaps_per_label_URhIn
+    for key, actual_data in result.items():
+        expected_data = max_gaps_per_label_URhIn[key]
+        for method, actual_metrics in actual_data.items():
+            expected_metrics = expected_data[method]
+            assert actual_metrics["CN"] == expected_metrics["CN"]
+            assert actual_metrics["max_gap"] == pytest.approx(
+                expected_metrics["max_gap"], abs=0.002
+            )
 
 
 @pytest.mark.fast

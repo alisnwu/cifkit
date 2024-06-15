@@ -3,20 +3,23 @@ import pytest
 from cifpy.coordination.composition import (
     get_bond_counts,
     get_bond_fractions,
-    get_CN_values,
-    get_avg_CN,
+    count_connections_per_site,
+    compute_avg_CN,
     get_unique_CN_values,
 )
 
 
-def test_get_bond_counts(formula_URhIn, connections_CN_URhIn):
+def test_get_bond_counts(formula_URhIn, CN_connections_by_min_dist_URhIn):
     expected = {
         "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
         "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
         "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
         "U1": {("In", "U"): 6, ("Rh", "U"): 5},
     }
-    assert get_bond_counts(formula_URhIn, connections_CN_URhIn) == expected
+    assert (
+        get_bond_counts(formula_URhIn, CN_connections_by_min_dist_URhIn)
+        == expected
+    )
 
 
 def test_get_bond_fraction(bond_counts_CN):
@@ -40,16 +43,21 @@ def test_get_bond_fraction(bond_counts_CN):
     assert pytest.approx(sum(result.values()), 0.005) == 1
 
 
-def test_get_coordination_numbers(connections_CN_URhIn):
+def test_get_coordination_numbers(CN_connections_by_min_dist_URhIn):
     expected = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert get_CN_values(connections_CN_URhIn) == expected
+    assert (
+        count_connections_per_site(CN_connections_by_min_dist_URhIn)
+        == expected
+    )
 
 
-def test_get_average_coordination_number():
-    coordination_numbers = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert get_avg_CN(coordination_numbers) == 10.75
+def test_get_average_coordination_number(CN_connections_by_min_dist_URhIn):
+    assert compute_avg_CN(CN_connections_by_min_dist_URhIn) == 10.75
 
 
-def test_get_unique_coordination_number():
-    coordination_numbers = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert get_unique_CN_values(coordination_numbers) == {9, 11, 14}
+def test_get_unique_coordination_number(CN_connections_by_min_dist_URhIn):
+    assert get_unique_CN_values(CN_connections_by_min_dist_URhIn) == {
+        9,
+        11,
+        14,
+    }

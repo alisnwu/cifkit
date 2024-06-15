@@ -3,11 +3,10 @@ import shutil
 import pytest
 from cifpy.models.cif import Cif
 from cifpy.utils.error_messages import CifParserError
-import pytest
 
 
 def test_cif_static_properties(cif_URhIn):
-    assert cif_URhIn.unique_elements == {"U", "In", "Rh"}
+    assert cif_URhIn.unique_elements == ["In", "Rh", "U"]
     assert cif_URhIn.composition_type == 3
     assert cif_URhIn.formula == "URhIn"
     assert cif_URhIn.structure == "ZrNiAl"
@@ -80,75 +79,20 @@ def test_cif_static_properties(cif_URhIn):
 
 
 @pytest.mark.fast
-def test_cif_lazy_propertes_after_compute_connection(cif_URhIn):
-    cif_URhIn.compute_connections()
-    assert cif_URhIn.shortest_pair_distance == 2.697
-
-    CN_connections_by_min_dist_method = (
-        cif_URhIn.CN_connections_by_min_dist_method
-    )
-    assert len(CN_connections_by_min_dist_method.get("In1")) == 14
-    assert len(CN_connections_by_min_dist_method.get("U1")) == 11
-    assert len(CN_connections_by_min_dist_method.get("Rh1")) == 9
-    assert len(CN_connections_by_min_dist_method.get("Rh2")) == 9
-
-    expected_bond_counts = {
-        "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
-        "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
-        "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
-        "U1": {("In", "U"): 6, ("Rh", "U"): 5},
-    }
-
-    result = cif_URhIn.get_connections_bond_counts(
-        CN_connections_by_min_dist_method
-    )
-    assert result == expected_bond_counts
+def test_shortest_distance(cif_URhIn):
+    print("Print shortest distance")
+    assert cif_URhIn.shortest_distance == 2.697
 
 
 @pytest.mark.fast
-def test_cif_lazy_propertes_shortest_pair_distances(cif_URhIn):
-    expected_shotest_pair_distance = {
-        "In1": ("Rh2", 2.697),
-        "Rh1": ("In1", 2.852),
-        "Rh2": ("In1", 2.697),
-        "U1": ("Rh1", 2.984),
-    }
-    result = cif_URhIn.shortest_distance_per_site
-
-    assert all(
-        result[label][0] == expected_shotest_pair_distance[label][0]
-        and pytest.approx(result[label][1], 0.001)
-        == expected_shotest_pair_distance[label][1]
-        for label in expected_shotest_pair_distance
-    )
-
-    # Expected output based on input data
-    expected_fractions = {
-        ("In", "In"): 4 / 43,
-        ("In", "Rh"): 13 / 43,
-        ("In", "U"): 12 / 43,
-        ("Rh", "U"): 14 / 43,
-    }
-
-    bond_fractions = cif_URhIn.get_connections_bond_fractions(
-        cif_URhIn.CN_connections_by_min_dist_method
-    )
-    # Testing each bond fraction to ensure they are within a small tolerance
-    for bond_type, expected_fraction in expected_fractions.items():
-        assert (
-            pytest.approx(bond_fractions[bond_type], 0.005)
-            == expected_fraction
-        )
-
-    # Testing to ensure the fractions sum approximately to 1
-    assert pytest.approx(sum(bond_fractions.values()), 0.005) == 1
-
-    # Test flattened conncetions
+def test_connections_flattened(cif_URhIn):
     assert cif_URhIn.connections_flattened[0] == (("In", "Rh"), 2.697)
     assert len(cif_URhIn.connections_flattened) == 621
 
-    # Test shortest distance per bond pair
-    assert cif_URhIn.shortest_dist_per_bond_pair == {
+
+@pytest.mark.fast
+def test_shortest_bond_pair_distance(cif_URhIn):
+    assert cif_URhIn.shortest_bond_pair_distance == {
         ("In", "In"): 3.244,
         ("In", "Rh"): 2.697,
         ("In", "U"): 3.21,
@@ -159,67 +103,191 @@ def test_cif_lazy_propertes_shortest_pair_distances(cif_URhIn):
 
 
 @pytest.mark.fast
-def test_CN_max_gap_per_site(cif_URhIn):
-    assert cif_URhIn.CN_max_gap_per_site == {
-        "In1": {
-            "dist_by_shortest_dist": {"max_gap": 0.306, "CN": 14},
-            "dist_by_CIF_radius_sum": {"max_gap": 0.39, "CN": 14},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.341, "CN": 12},
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.398, "CN": 14},
+def test_shortest_distance_per_site(cif_URhIn):
+    expected = {
+        "In1": ("Rh2", 2.697),
+        "Rh1": ("In1", 2.852),
+        "Rh2": ("In1", 2.697),
+        "U1": ("Rh1", 2.984),
+    }
+    result = cif_URhIn.shortest_site_pair_distance
+
+    assert all(
+        result[label][0] == expected[label][0]
+        and pytest.approx(result[label][1], 0.001) == expected[label][1]
+        for label in result
+    )
+
+
+# Radius
+@pytest.mark.fast
+def test_radius_values(cif_URhIn):
+    assert cif_URhIn.radius_values == {
+        "In": {
+            "CIF_radius": 1.624,
+            "CIF_radius_refined": 1.3283481582381291,
+            "Pauling_radius_CN12": 1.66,
         },
-        "U1": {
-            "dist_by_shortest_dist": {"max_gap": 0.197, "CN": 11},
-            "dist_by_CIF_radius_sum": {"max_gap": 0.312, "CN": 11},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.27, "CN": 17},
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.254, "CN": 17},
+        "Rh": {
+            "CIF_radius": 1.345,
+            "CIF_radius_refined": 1.368651841761871,
+            "Pauling_radius_CN12": 1.342,
         },
-        "Rh1": {
-            "dist_by_shortest_dist": {"max_gap": 0.315, "CN": 9},
-            "dist_by_CIF_radius_sum": {"max_gap": 0.347, "CN": 9},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.418, "CN": 9},
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.4, "CN": 9},
-        },
-        "Rh2": {
-            "dist_by_shortest_dist": {"max_gap": 0.31, "CN": 9},
-            "dist_by_CIF_radius_sum": {"max_gap": 0.324, "CN": 9},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.397, "CN": 9},
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.378, "CN": 9},
+        "U": {
+            "CIF_radius": 1.377,
+            "CIF_radius_refined": 1.6143481582381292,
+            "Pauling_radius_CN12": 1.51,
         },
     }
 
 
 @pytest.mark.fast
-def test_best_polyhedron(cif_URhIn):
-    assert cif_URhIn.best_CN_method["In1"]["number_of_vertices"] == 14
-    assert cif_URhIn.best_CN_method["U1"]["number_of_vertices"] == 17
-    assert cif_URhIn.best_CN_method["Rh1"]["number_of_vertices"] == 9
-    assert cif_URhIn.best_CN_method["Rh2"]["number_of_vertices"] == 9
+def test_radius_sum_data(cif_URhIn, radius_sum_data_URhIn):
+    result = cif_URhIn.radius_sum
+    assert result == radius_sum_data_URhIn
 
 
 @pytest.mark.fast
-def test_CN_connections_by_best_method(cif_URhIn):
-    assert len(cif_URhIn.CN_connections_by_best_method["In1"]) == 14
-    assert len(cif_URhIn.CN_connections_by_best_method["U1"]) == 17
-    assert len(cif_URhIn.CN_connections_by_best_method["Rh1"]) == 9
-    assert len(cif_URhIn.CN_connections_by_best_method["Rh2"]) == 9
+def test_CN_max_gap_per_site(cif_URhIn, max_gaps_per_label_URhIn):
+    result = cif_URhIn.CN_max_gap_per_site
+    assert result == max_gaps_per_label_URhIn
+
+
+@pytest.mark.fast
+def test_CN_best_methods(cif_URhIn):
+    result = cif_URhIn.CN_best_methods
+    assert result["In1"]["number_of_vertices"] == 14
+    assert result["U1"]["number_of_vertices"] == 17
+    assert result["Rh1"]["number_of_vertices"] == 9
+    assert result["Rh2"]["number_of_vertices"] == 9
+
+
+@pytest.mark.fast
+def test_CN_connetions_by_best_method(cif_URhIn):
+    result = cif_URhIn.CN_connections_by_best_methods
+    assert len(result["In1"]) == 14
+    assert len(result["U1"]) == 17
+    assert len(result["Rh1"]) == 9
+    assert len(result["Rh2"]) == 9
+
+
+@pytest.mark.fast
+def test_CN_connetions_by_dist_min_method(cif_URhIn):
+    result = cif_URhIn.CN_connections_by_min_dist_method
+    assert len(result["In1"]) == 14
+    assert len(result["U1"]) == 11
+    assert len(result["Rh1"]) == 9
+    assert len(result["Rh2"]) == 9
 
 
 """
-Test coordination numbers
+Test bond fractions, counts, avg, min, max, unique CN
+for best and min_dist method
 """
 
 
-def test_coordination_numbers(cif_URhIn):
-    expected = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
-    assert cif_URhIn.coordination_numbers == expected
+@pytest.mark.fast
+def test_CN_bond_counts_by_min_dist_method(cif_URhIn):
+    result = cif_URhIn.CN_bond_count_by_min_dist_method
+    assert result == {
+        "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
+        "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
+        "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
+        "U1": {("In", "U"): 6, ("Rh", "U"): 5},
+    }
 
 
-def test_avg_coordination_numbers(cif_URhIn):
-    assert cif_URhIn.avg_coordination_numbers == 10.75
+@pytest.mark.fast
+def test_CN_bond_counts_by_best_methods(cif_URhIn):
+    result = cif_URhIn.CN_bond_count_by_best_methods
+    assert result == {
+        "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
+        "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
+        "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
+        "U1": {
+            ("In", "U"): 6,
+            ("Rh", "U"): 5,
+            ("U", "U"): 6,
+        },
+    }
 
 
-def test_unique_coordination_numbers(cif_URhIn):
-    assert cif_URhIn.unique_coordination_numbers == {14, 9, 11}
+@pytest.mark.fast
+def test_CN_bond_fractions_by_min_dist_method(cif_URhIn):
+    result = cif_URhIn.CN_bond_fractions_by_min_dist_method
+
+    # Define the expected values directly as fractions where possible
+    expected_fractions = {
+        ("In", "In"): 4 / 43,
+        ("In", "Rh"): 13 / 43,
+        ("In", "U"): 12 / 43,
+        ("Rh", "U"): 14 / 43,
+    }
+
+    for key, expected_value in expected_fractions.items():
+        assert result[key] == pytest.approx(expected_value, abs=1e-3)
+
+
+@pytest.mark.fast
+def test_CN_bond_fractions_by_best_methods(cif_URhIn):
+    result = cif_URhIn.CN_bond_fractions_by_best_methods
+
+    # Define the expected values directly as fractions where possible
+    expected_fractions = {
+        ("In", "In"): 4 / 49,
+        ("In", "Rh"): 13 / 49,
+        ("In", "U"): 12 / 49,
+        ("Rh", "U"): 14 / 49,
+        ("U", "U"): 6 / 49,
+    }
+
+    for key, expected_value in expected_fractions.items():
+        assert result[key] == pytest.approx(expected_value, abs=1e-3)
+
+
+@pytest.mark.fast
+def test_CN_unique_values_by_min_dist_method(cif_URhIn):
+    expected = {14, 9, 11}
+    result = cif_URhIn.CN_unique_values_by_min_dist_method
+    assert result == expected
+
+
+@pytest.mark.fast
+def test_CN_unique_values_by_best_methods(cif_URhIn):
+    expected = {14, 9, 17}
+    result = cif_URhIn.CN_unique_values_by_best_methods
+    assert result == expected
+
+
+@pytest.mark.fast
+def test_CN_avg_by_min_dist_method(cif_URhIn):
+    result = cif_URhIn.CN_avg_by_min_dist_method
+    assert result == 10.75
+
+
+def test_CN_avg_by_best_methods(cif_URhIn):
+    result = cif_URhIn.CN_avg_by_best_methods
+    assert result == 12.25
+
+
+@pytest.mark.fast
+def test_CN_max_by_dist_method(cif_URhIn):
+    assert cif_URhIn.CN_max_by_min_dist_method == 14
+
+
+@pytest.mark.fast
+def test_CN_max_by_best_methods(cif_URhIn):
+    assert cif_URhIn.CN_max_by_best_methods == 17
+
+
+@pytest.mark.fast
+def test_CN_min_by_dist_method(cif_URhIn):
+    assert cif_URhIn.CN_min_by_min_dist_method == 9
+
+
+@pytest.mark.fast
+def test_CN_min_by_best_methods(cif_URhIn):
+    assert cif_URhIn.CN_min_by_best_methods == 9
 
 
 def test_polyhedron_labels_from_site(cif_URhIn):
@@ -247,18 +315,6 @@ def test_polyhedron_labels_from_site(cif_URhIn):
     )
     assert len(polyhedron_points) == 15
     assert labels == expected_labels
-
-
-def test_cif_lazy_propertes(cif_URhIn):
-    assert cif_URhIn.shortest_pair_distance == 2.697
-
-    connections_by_min_dist_method = (
-        cif_URhIn.CN_connections_by_min_dist_method
-    )
-    assert len(connections_by_min_dist_method.get("In1")) == 14
-    assert len(connections_by_min_dist_method.get("U1")) == 11
-    assert len(connections_by_min_dist_method.get("Rh1")) == 9
-    assert len(connections_by_min_dist_method.get("Rh2")) == 9
 
 
 """Test polyhedron"""

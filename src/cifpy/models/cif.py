@@ -4,7 +4,7 @@ Import statements placed bottom to avoid cluttering.
 
 # Polyhedron
 from cifpy.figures import polyhedron
-
+from cifpy.utils.unit import round_dict_values
 
 # Parser .cif file
 from cifpy.utils.cif_parser import (
@@ -29,7 +29,6 @@ from cifpy.preprocessors.supercell import get_supercell_points
 from cifpy.preprocessors.supercell_util import get_cell_atom_count
 from cifpy.preprocessors.environment import (
     get_site_connections,
-    get_CN_connections_by_min_dist_method,
 )
 
 
@@ -45,15 +44,17 @@ from cifpy.preprocessors.environment_util import flat_site_connections
 from cifpy.coordination.composition import (
     get_bond_counts,
     get_bond_fractions,
-    get_CN_values,
-    get_avg_CN,
+    count_connections_per_site,
+    compute_avg_CN,
     get_unique_CN_values,
 )
 from cifpy.coordination.method import compute_CN_max_gap_per_site
 from cifpy.coordination.filter import (
     find_best_polyhedron,
-    get_CN_connections_by_best_method,
+    get_CN_connections_by_min_dist_method,
 )
+
+from cifpy.coordination.connection import get_CN_connections_by_best_methods
 
 # Bond pair
 from cifpy.coordination.bond_distance import (
@@ -133,6 +134,10 @@ class Cif:
         self.unitcell_atom_count = get_cell_atom_count(self.unitcell_points)
         self.supercell_atom_count = get_cell_atom_count(self.supercell_points)
 
+    """
+    Coordination number util
+    """
+
     def compute_connections(self, cutoff_radius=10.0):
         """Compute nearest neighbor connections per site label."""
         self.connections = get_site_connections(
@@ -146,43 +151,239 @@ class Cif:
             cutoff_radius=cutoff_radius,
         )
 
-        # Get flattened connections
+        # Flattened coordinations
         self._connections_flattened = flat_site_connections(self.connections)
 
-        # Get shortest distance, per bond pair, per site
-        self._shortest_pair_distance = get_shortest_distance(self.connections)
-        self._shortest_distance_per_bond_pair = (
+        # Shortest distance
+        self._shortest_distance = get_shortest_distance(self.connections)
+
+        # Shortest distance per bond pair
+        self._shortest_bond_pair_distance = (
             get_shortest_distance_per_bond_pair(self.connections_flattened)
         )
-        self._shortest_distance_per_site = get_shortest_distance_per_site(
+
+        # Shortest distance per site
+        self._shortest_site_pair_distance = get_shortest_distance_per_site(
             self.connections
         )
 
-        self._radius_values_per_element = get_radius_values_per_element(
-            self.unique_elements, self.shortest_dist_per_bond_pair
-        )
-        self._radius_sum_per_bond = compute_radius_sum(self.radius_values)
-
-        # Get coordination numbers using the min dist method
-        self._CN_connections_by_min_dist_method = (
-            get_CN_connections_by_min_dist_method(self.connections)
-        )
-        # Get max gaps per label
-        self._CN_max_gap_per_site = compute_CN_max_gap_per_site(
-            self._radius_sum_per_bond, self.connections, self.site_mixing_type
-        )
-
-        # Determine the best polyhedron
-        self._best_CN_polyhedrons = find_best_polyhedron(
-            self._CN_max_gap_per_site, self.connections
-        )
-
-        # Determine the best CN connections
-        self._CN_connections_by_best_method = (
-            get_CN_connections_by_best_method(
-                self._best_CN_polyhedrons, self.connections
+        # Parse individual radii per element
+        self._radius_values = round_dict_values(
+            get_radius_values_per_element(
+                self.unique_elements, self.shortest_bond_pair_distance
             )
         )
+        self._radius_sum = compute_radius_sum(self.radius_values)
+
+        # CN max gap per site
+        self._CN_max_gap_per_site = compute_CN_max_gap_per_site(
+            self.radius_sum, self.connections, self.site_mixing_type
+        )
+
+        # Find the best methods
+        self._CN_best_methods = find_best_polyhedron(
+            self.CN_max_gap_per_site, self.connections
+        )
+
+        # Get CN connections by the best methods
+        self._CN_connections_by_best_methods = (
+            get_CN_connections_by_best_methods(
+                self.CN_best_methods, self.connections
+            )
+        )
+
+        # Get CN connections by the best methods
+        self._CN_connections_by_min_dist_method = (
+            get_CN_connections_by_min_dist_method(
+                self.CN_max_gap_per_site, self.connections
+            )
+        )
+        # Bond counts
+        self._CN_bond_count_by_min_dist_method = get_bond_counts(
+            self.formula, self.CN_connections_by_min_dist_method
+        )
+        self._CN_bond_count_by_best_methods = get_bond_counts(
+            self.formula, self.CN_connections_by_best_methods
+        )
+        # Bond fractions
+        self._CN_bond_fractions_by_min_dist_method = get_bond_fractions(
+            self.CN_bond_count_by_min_dist_method
+        )
+        self._CN_bond_fractions_by_best_methods = get_bond_fractions(
+            self.CN_bond_count_by_best_methods
+        )
+        # Unique CN
+        self._CN_unique_values_by_min_dist_method = get_unique_CN_values(
+            self.CN_connections_by_min_dist_method
+        )
+        self._CN_unique_values_by_best_methods = get_unique_CN_values(
+            self.CN_connections_by_best_methods
+        )
+
+        # Avg CN
+        self._CN_avg_by_min_dist_method = compute_avg_CN(
+            self.CN_connections_by_min_dist_method
+        )
+
+        self._CN_avg_by_best_methods = compute_avg_CN(
+            self.CN_connections_by_best_methods
+        )
+
+        # Max CN
+        self._CN_max_by_min_dist_method = max(
+            self.CN_unique_values_by_min_dist_method
+        )
+        self._CN_max_by_best_methods = max(
+            self.CN_unique_values_by_best_methods
+        )
+        # Min CN
+        self._CN_min_by_min_dist_method = min(
+            self.CN_unique_values_by_min_dist_method
+        )
+        self._CN_min_by_best_methods = min(
+            self.CN_unique_values_by_best_methods
+        )
+
+    @property
+    def shortest_distance(self):
+        """Property that checks if connections are computed and computes."""
+        if self.connections is None:
+            self.compute_connections()
+        return self._shortest_distance
+
+    @property
+    def connections_flattened(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._connections_flattened
+
+    @property
+    def shortest_bond_pair_distance(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._shortest_bond_pair_distance
+
+    @property
+    def shortest_site_pair_distance(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._shortest_site_pair_distance
+
+    @property
+    def radius_values(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._radius_values
+
+    @property
+    def radius_sum(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._radius_sum
+
+    @property
+    def CN_max_gap_per_site(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_max_gap_per_site
+
+    @property
+    def CN_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_best_methods
+
+    @property
+    def CN_connections_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_connections_by_best_methods
+
+    @property
+    def CN_connections_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_connections_by_min_dist_method
+
+    """
+    Compute avg, min, max, unique for best and min_dist method
+    """
+
+    # Bond counts
+    @property
+    def CN_bond_count_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_bond_count_by_min_dist_method
+
+    @property
+    def CN_bond_count_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_bond_count_by_best_methods
+
+    # Bond fractions
+    @property
+    def CN_bond_fractions_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_bond_fractions_by_min_dist_method
+
+    @property
+    def CN_bond_fractions_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_bond_fractions_by_best_methods
+
+    # Unique CN
+    @property
+    def CN_unique_values_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_unique_values_by_min_dist_method
+
+    @property
+    def CN_unique_values_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_unique_values_by_best_methods
+
+    # Average CN
+    @property
+    def CN_avg_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_avg_by_min_dist_method
+
+    @property
+    def CN_avg_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_avg_by_best_methods
+
+    @property
+    def CN_max_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_max_by_min_dist_method
+
+    @property
+    def CN_max_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_max_by_best_methods
+
+    @property
+    def CN_min_by_min_dist_method(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_min_by_min_dist_method
+
+    @property
+    def CN_min_by_best_methods(self):
+        if self.connections is None:
+            self.compute_connections()
+        return self._CN_min_by_best_methods
 
     def get_polyhedron_labels_from_site(
         self, label: str
@@ -193,33 +394,6 @@ class Cif:
             self.CN_connections_by_min_dist_method, label
         )
 
-    # Connections
-    def get_connections_bond_counts(self, connections):
-        if self.connections is None:
-            self.compute_connections()
-        return get_bond_counts(self.formula, connections)
-
-    def get_connections_bond_fractions(self, connections):
-        if self.connections is None:
-            self.compute_connections()
-        bond_counts = get_bond_counts(self.formula, connections)
-        return get_bond_fractions(bond_counts)
-
-    def get_connections_coordination_numbers(self, connections):
-        if self.connections is None:
-            self.compute_connections()
-        return get_CN_values(connections)
-
-    def get_connections_average_coordination_number(self, connections):
-        if self.connections is None:
-            self.compute_connections()
-        return get_avg_CN(connections)
-
-    def get_connections_unique_coordination_numbers(self, connections):
-        if self.connections is None:
-            self.compute_connections()
-        return get_unique_CN_values(connections)
-
     def plot_polyhedron(self, site_label, output_dir=None):
         if self.connections is None:
             self.compute_connections()
@@ -227,64 +401,3 @@ class Cif:
             self.CN_connections_by_min_dist_method, site_label
         )
         polyhedron.plot(coords, labels, self.file_path, output_dir)
-
-    @property
-    def shortest_pair_distance(self):
-        """Property that checks if connections are computed and computes."""
-        if self.connections is None:
-            self.compute_connections()
-        return self._shortest_pair_distance
-
-    @property
-    def shortest_dist_per_bond_pair(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._shortest_distance_per_bond_pair
-
-    @property
-    def shortest_distance_per_site(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._shortest_distance_per_site
-
-    @property
-    def connections_flattened(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._connections_flattened
-
-    @property
-    def radius_values(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._radius_values_per_element
-
-    @property
-    def radius_sum_data(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._radius_sum_per_bond
-
-    @property
-    def CN_max_gap_per_site(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._CN_max_gap_per_site
-
-    @property
-    def best_CN_method(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._best_CN_polyhedrons
-
-    @property
-    def CN_connections_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._CN_connections_by_min_dist_method
-
-    @property
-    def CN_connections_by_best_method(self):
-        if self.connections is None:
-            self.compute_connections()
-        return self._CN_connections_by_best_method

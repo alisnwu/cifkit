@@ -66,10 +66,15 @@ class CifEnsemble:
         return self._get_unique_property_values_from_set("unique_elements")
 
     @property
-    def unique_coordination_numbers(self) -> set[str]:
-        """Get unique elements from all .cif files in the folder."""
+    def CN_unique_values_by_min_dist_method(self) -> set[str]:
         return self._get_unique_property_values_from_set(
-            "unique_coordination_numbers"
+            "CN_unique_values_by_min_dist_method"
+        )
+
+    @property
+    def CN_unique_values_by_best_methods(self) -> set[str]:
+        return self._get_unique_property_values_from_set(
+            "CN_unique_values_by_best_methods"
         )
 
     def _attribute_stats(self, attribute_name, transform=None):
@@ -129,11 +134,11 @@ class CifEnsemble:
 
     @property
     def min_distance_stats(self) -> dict[float, int]:
-        return self._attribute_stats("shortest_pair_distance")
+        return self._attribute_stats("shortest_distance")
 
-    @property
-    def unique_coordination_numbers_stats(self) -> dict[float, int]:
-        return self._attribute_stats("unique_coordination_numbers")
+    # @property
+    # def unique_coordination_numbers_stats(self) -> dict[float, int]:
+    #     return self._attribute_stats("unique_coordination_numbers")
 
     def _collect_cif_data(self, attribute, transform=None):
         """Generic method to collect data from CIF files based on an attribute."""
@@ -152,7 +157,7 @@ class CifEnsemble:
 
     @property
     def minimum_distances(self) -> list[tuple[str, float]]:
-        return self._collect_cif_data("shortest_pair_distance")
+        return self._collect_cif_data("shortest_distance")
 
     @property
     def supercell_atom_counts(self) -> list[tuple[str, int]]:
@@ -213,18 +218,22 @@ class CifEnsemble:
     def filter_by_elements_containing(self, values: list[str]) -> set[str]:
         return self._filter_contains_any("unique_elements", values)
 
-    def filter_by_coordination_numbers_containing(
-        self, values: list[int]
-    ) -> set[str]:
-        return self._filter_contains_any("unique_coordination_numbers", values)
-
     def filter_by_elements_exact_matching(self, values: list[str]) -> set[str]:
         return self._filter_exact_match("unique_elements", values)
 
-    def filter_by_coordination_exact_matching(
+    def filter_by_CN_min_dist_method_containing(
         self, values: list[int]
     ) -> set[str]:
-        return self._filter_exact_match("unique_coordination_numbers", values)
+        return self._filter_contains_any(
+            "CN_unique_values_by_min_dist_method", values
+        )
+
+    def filter_by_CN_min_dist_method_exact_matching(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_exact_match(
+            "CN_unique_values_by_best_methods", values
+        )
 
     def _filter_by_range(
         self, property: str, min: float | int, max: float | int
@@ -244,7 +253,7 @@ class CifEnsemble:
         self, min_distance: float, max_distance: float
     ) -> set[str]:
         return self._filter_by_range(
-            "shortest_pair_distance", min_distance, max_distance
+            "shortest_distance", min_distance, max_distance
         )
 
     def filter_by_supercell_count(

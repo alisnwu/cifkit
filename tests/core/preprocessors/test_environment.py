@@ -2,7 +2,6 @@ import numpy as np
 
 from cifpy.preprocessors.environment import (
     get_site_connections,
-    get_CN_connections_by_min_dist_method,
 )
 from deepdiff import DeepDiff
 
@@ -28,12 +27,3 @@ def test_get_nearest_dists_per_site_cooridnation_number(
     assert_minimum_distance("U1", connections_URhIn, 2.984)
     assert_minimum_distance("Rh1", connections_URhIn, 2.852)
     assert_minimum_distance("Rh2", connections_URhIn, 2.697)
-
-
-def test_filter_connections_with_cn(connections_URhIn):
-    connections_CN = get_CN_connections_by_min_dist_method(connections_URhIn)
-
-    assert len(connections_CN.get("In1")) == 14
-    assert len(connections_CN.get("U1")) == 11
-    assert len(connections_CN.get("Rh1")) == 9
-    assert len(connections_CN.get("Rh2")) == 9

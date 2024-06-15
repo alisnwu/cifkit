@@ -9,6 +9,7 @@ def get_is_radius_data_available(elements: list[str]) -> bool:
     for each element in the list.
     """
     data = get_radius_data()
+    print(data)
     for element in elements:
         element_data = data.get(element, {})
         if not (

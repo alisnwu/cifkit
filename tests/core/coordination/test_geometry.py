@@ -7,9 +7,9 @@ from scipy.spatial import ConvexHull
 
 
 @pytest.mark.fast
-def test_get_polyhedron_coordinates_labels(connections_CN_URhIn):
+def test_get_polyhedron_coordinates_labels(CN_connections_by_min_dist_URhIn):
     polyhedron_points, vertex_labels = get_polyhedron_coordinates_labels(
-        connections_CN_URhIn, "U1"
+        CN_connections_by_min_dist_URhIn, "U1"
     )
 
     assert vertex_labels == [

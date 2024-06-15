@@ -22,7 +22,7 @@ def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
 
         # Iterate over each connection for the current label
         for conn in label_connections:
-            conn_label, _, _, _, _ = conn
+            conn_label, _, _, _ = conn
 
             # Get the atom type for the connected label
             conn_element = get_atom_type_from_label(conn_label)
@@ -67,7 +67,7 @@ def get_bond_fractions(
     return bond_fractions
 
 
-def get_CN_values(connections: dict[str, list]) -> dict:
+def count_connections_per_site(connections: dict) -> dict:
     """
     Calculate the coordination number for each atom site.
     """
@@ -78,13 +78,15 @@ def get_CN_values(connections: dict[str, list]) -> dict:
     return neighbor_count
 
 
-def get_avg_CN(coordination_numbers: dict[str, int]) -> float:
+def compute_avg_CN(connections: dict[str, int]) -> float:
+    coordination_numbers = count_connections_per_site(connections)
     total = 0
-    for _, number in coordination_numbers.items():
-        total += number
+    for _, value in coordination_numbers.items():
+        total += value
     return np.round(total / len(coordination_numbers), 3)
 
 
-def get_unique_CN_values(coordination_numbers: dict[str, int]) -> set:
+def get_unique_CN_values(connections: dict) -> set:
+    coordination_numbers = count_connections_per_site(connections)
     unique_numbers = set(coordination_numbers.values())
     return unique_numbers

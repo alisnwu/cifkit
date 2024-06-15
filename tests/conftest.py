@@ -10,7 +10,7 @@ from cifpy.models.cif import Cif
 from cifpy.models.cif_ensemble import CifEnsemble
 from cifpy.preprocessors import environment
 from cifpy.coordination import composition
-from cifpy.coordination import method
+from cifpy.coordination import method, filter
 
 """
 CifEnsemble - histogram test
@@ -196,18 +196,15 @@ def connections_URhIn(
 
 
 @pytest.fixture(scope="module")
-def connections_CN_URhIn(connections_URhIn):
-    return environment.get_CN_connections_by_min_dist_method(connections_URhIn)
-
-
-@pytest.fixture(scope="module")
 def flattened_connections_URhIn(connections_URhIn):
     return environment_util.flat_site_connections(connections_URhIn)
 
 
 @pytest.fixture(scope="module")
-def bond_counts_CN(formula_URhIn, connections_CN_URhIn):
-    return composition.get_bond_counts(formula_URhIn, connections_CN_URhIn)
+def bond_counts_CN(formula_URhIn, CN_connections_by_min_dist_URhIn):
+    return composition.get_bond_counts(
+        formula_URhIn, CN_connections_by_min_dist_URhIn
+    )
 
 
 @pytest.fixture(scope="module")
@@ -236,5 +233,47 @@ def max_gaps_per_label_URhIn():
             "dist_by_CIF_radius_sum": {"max_gap": 0.324, "CN": 9},
             "dist_by_CIF_radius_refined_sum": {"max_gap": 0.397, "CN": 9},
             "dist_by_Pauling_radius_sum": {"max_gap": 0.378, "CN": 9},
+        },
+    }
+
+
+@pytest.fixture(scope="module")
+def CN_connections_by_min_dist_URhIn(
+    max_gaps_per_label_URhIn, connections_URhIn
+):
+    return filter.get_CN_connections_by_min_dist_method(
+        max_gaps_per_label_URhIn, connections_URhIn
+    )
+
+
+@pytest.fixture(scope="module")
+def CN_connections_by_min_dist_URhIn(
+    max_gaps_per_label_URhIn, connections_URhIn
+):
+    return filter.get_CN_connections_by_min_dist_method(
+        max_gaps_per_label_URhIn, connections_URhIn
+    )
+
+
+@pytest.fixture(scope="module")
+def CN_bond_count_by_min_dist_method():
+    return {
+        "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
+        "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
+        "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
+        "U1": {("In", "U"): 6, ("Rh", "U"): 5},
+    }
+
+
+@pytest.fixture(scope="module")
+def CN_bond_count_by_best_methods():
+    return {
+        "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
+        "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
+        "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
+        "U1": {
+            ("In", "U"): 6,
+            ("Rh", "U"): 5,
+            ("U", "U"): 6,
         },
     }
