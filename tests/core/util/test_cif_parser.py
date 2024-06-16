@@ -77,11 +77,11 @@ def test_get_num_of_atom_unique_labels(loop_values_URhIn):
 
 
 def test_get_unique_elements(loop_values_URhIn):
-    assert get_unique_elements_from_loop(loop_values_URhIn) == [
+    assert get_unique_elements_from_loop(loop_values_URhIn) == {
         "In",
         "Rh",
         "U",
-    ]
+    }
 
 
 def test_get_atom_labels(loop_values_URhIn):
@@ -141,13 +141,20 @@ def test_get_line_content_from_tag(file_path_URhIn):
     assert len(content_lines) == 4
     assert content_lines[0].strip() == "In1 In 3 g 0.2505 0 0.5 1"
     assert content_lines[1].strip() == "U1 U 3 f 0.5925 0 0 1"
-    assert content_lines[2].strip() == "Rh1 Rh 2 d 0.333333 0.666667 0.5 1"
+    assert (
+        content_lines[2].strip()
+        == "Rh1 Rh 2 d 0.333333 0.666667 0.5 1"
+    )
     assert content_lines[3].strip() == "Rh2 Rh 1 a 0 0 0 1"
 
 
 def test_get_formula_structure_weight_sgroup(cif_block_URhIn):
-    parsed_result = get_formula_structure_weight_s_group(cif_block_URhIn)
-    formula, structure, weight, s_group_num, s_group_name = parsed_result
+    parsed_result = get_formula_structure_weight_s_group(
+        cif_block_URhIn
+    )
+    formula, structure, weight, s_group_num, s_group_name = (
+        parsed_result
+    )
     assert formula == "URhIn"
     assert structure == "ZrNiAl"
     assert weight == 455.8

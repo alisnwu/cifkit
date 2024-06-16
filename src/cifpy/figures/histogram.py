@@ -115,7 +115,9 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
         )
 
 
-def generate_histogram(data: dict, settings: dict, output_dir: str) -> None:
+def generate_histogram(
+    data: dict, settings: dict, output_dir: str
+) -> None:
     """
     Generate a histogram from a dictionary of data and save
     it to a specified directory.
@@ -124,7 +126,9 @@ def generate_histogram(data: dict, settings: dict, output_dir: str) -> None:
     if settings.get("key_data_type") == "string":
         # Assuming all keys can be converted to integers for sorting purposes
         # Sorting is needed for for composition types, order from 1, 2, 3, etc.
-        data = {str(key): data[key] for key in sorted(data.keys(), key=int)}
+        data = {
+            str(key): data[key] for key in sorted(data.keys(), key=int)
+        }
 
     if not settings.get("key_data_type") == "float":
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
@@ -150,7 +154,9 @@ def generate_histogram(data: dict, settings: dict, output_dir: str) -> None:
     plt.tight_layout()
 
     # File name
-    output_file_path = folder.get_file_path(output_dir, settings["file_name"])
+    output_file_path = folder.get_file_path(
+        output_dir, settings["file_name"]
+    )
 
     # Ensure the output directory exists
     if not os.path.exists(output_dir):

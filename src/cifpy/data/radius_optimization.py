@@ -4,7 +4,9 @@ from scipy.optimize import minimize
 from cifpy.data.radius import get_radius_data
 
 
-def generate_adjacent_pairs(elements: list[str]) -> list[tuple[str, str]]:
+def generate_adjacent_pairs(
+    elements: list[str],
+) -> list[tuple[str, str]]:
     """
     Generate a list of tuples, where each tuple is
     a pair of adjacent atom labels.
@@ -13,7 +15,8 @@ def generate_adjacent_pairs(elements: list[str]) -> list[tuple[str, str]]:
     # Binary -> [('In', 'Rh')]
     # Ternary -> [('In', 'Rh'), ('Rh', 'U')]
     label_to_pair = [
-        (elements[i], elements[i + 1]) for i in range(len(elements) - 1)
+        (elements[i], elements[i + 1])
+        for i in range(len(elements) - 1)
     ]
     return label_to_pair
 
@@ -27,7 +30,9 @@ def objective(params, original_radii: list[float]) -> list[float]:
     return np.sum(((original_radii - params) / original_radii) ** 2)
 
 
-def constraint(params, index_pair: tuple[int, int], shortest_distance: dict):
+def constraint(
+    params, index_pair: tuple[int, int], shortest_distance: dict
+):
     """
     Enforce that the sum of the radii of the pair does not
     exceed the shortest allowed distance between them.
@@ -58,12 +63,16 @@ def get_refined_CIF_radius(
         print(
             f"Setting constraint for {pair[0]}-{pair[1]} with distance {dist}"
         )
-        i, j = sorted_elements.index(pair[0]), sorted_elements.index(pair[1])
+        i, j = sorted_elements.index(pair[0]), sorted_elements.index(
+            pair[1]
+        )
         constraints.append(
             {
                 "type": "eq",
                 "fun": partial(
-                    constraint, index_pair=(i, j), shortest_distance=dist
+                    constraint,
+                    index_pair=(i, j),
+                    shortest_distance=dist,
                 ),
             }
         )

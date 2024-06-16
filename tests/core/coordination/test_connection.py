@@ -1,8 +1,12 @@
 import numpy as np
-from cifpy.coordination.geometry import get_polyhedron_coordinates_labels
+from cifpy.coordination.geometry import (
+    get_polyhedron_coordinates_labels,
+)
 
 
-def test_get_polyhedron_coordinates_label(CN_connections_by_min_dist_URhIn):
+def test_get_polyhedron_coordinates_label(
+    CN_connections_by_min_dist_URhIn,
+):
     expected_labels = [
         "Rh2",
         "Rh2",

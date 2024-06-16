@@ -70,7 +70,9 @@ def get_unitcell_coords_after_sym_operations_per_label(
     """
 
     all_coords = set()
-    for operation in block.find_loop("_space_group_symop_operation_xyz"):
+    for operation in block.find_loop(
+        "_space_group_symop_operation_xyz"
+    ):
         operation = operation.replace("'", "")
         try:
             op = gemmi.Op(operation)
@@ -100,7 +102,9 @@ def get_unitcell_coords_after_sym_operations_per_label(
 def flatten_original_coordinates(
     all_coords: list[tuple[float, float, float, str]]
 ):
-    points = np.array([list(map(float, coord[:-1])) for coord in all_coords])
+    points = np.array(
+        [list(map(float, coord[:-1])) for coord in all_coords]
+    )
     return points
 
 

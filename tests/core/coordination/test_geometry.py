@@ -7,9 +7,13 @@ from scipy.spatial import ConvexHull
 
 
 @pytest.mark.fast
-def test_get_polyhedron_coordinates_labels(CN_connections_by_min_dist_URhIn):
-    polyhedron_points, vertex_labels = get_polyhedron_coordinates_labels(
-        CN_connections_by_min_dist_URhIn, "U1"
+def test_get_polyhedron_coordinates_labels(
+    CN_connections_by_min_dist_URhIn,
+):
+    polyhedron_points, vertex_labels = (
+        get_polyhedron_coordinates_labels(
+            CN_connections_by_min_dist_URhIn, "U1"
+        )
     )
 
     assert vertex_labels == [
@@ -26,7 +30,11 @@ def test_get_polyhedron_coordinates_labels(CN_connections_by_min_dist_URhIn):
         "In1",
         "U1",
     ]
-    assert polyhedron_points[-1] == [4.43, 0.0, 0.0] or [-2.215, 3.836, 0.0]
+    assert polyhedron_points[-1] == [4.43, 0.0, 0.0] or [
+        -2.215,
+        3.836,
+        0.0,
+    ]
 
 
 @pytest.mark.fast
@@ -47,7 +55,9 @@ def test_compute_polyhedron_metrics():
     ]
 
     hull = ConvexHull(polyhedron_points)
-    polyhedron_metrics = compute_polyhedron_metrics(polyhedron_points, hull)
+    polyhedron_metrics = compute_polyhedron_metrics(
+        polyhedron_points, hull
+    )
     assert polyhedron_metrics == {
         "volume_of_polyhedron": 60.631,
         "distance_from_avg_point_to_center": 0.328,

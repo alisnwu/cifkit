@@ -1,5 +1,8 @@
 import logging
-from cifpy.utils.prompt import log_save_file_message, log_connected_points
+from cifpy.utils.prompt import (
+    log_save_file_message,
+    log_connected_points,
+)
 
 
 def test_log_save_file_message(caplog):

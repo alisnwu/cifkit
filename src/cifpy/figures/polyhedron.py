@@ -53,11 +53,15 @@ def plot(points, labels, file_path, output_dir=None):
     for simplex in hull.simplices:
         faces.append([3] + list(simplex))
     poly_data = pv.PolyData(points, faces)
-    plotter.add_mesh(poly_data, color="aqua", opacity=0.5, show_edges=True)
+    plotter.add_mesh(
+        poly_data, color="aqua", opacity=0.5, show_edges=True
+    )
 
     # Determine the output directory based on provided path
     if not output_dir:
-        output_dir = os.path.join(os.path.dirname(file_path), "polyhedrons")
+        output_dir = os.path.join(
+            os.path.dirname(file_path), "polyhedrons"
+        )
 
     # Ensure the output directory exists
     if not os.path.exists(output_dir):

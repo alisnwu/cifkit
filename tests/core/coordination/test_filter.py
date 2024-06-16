@@ -6,8 +6,12 @@ from cifpy.coordination.filter import (
 
 
 @pytest.mark.fast
-def test_find_best_polyhedron(max_gaps_per_label_URhIn, connections_URhIn):
-    result = find_best_polyhedron(max_gaps_per_label_URhIn, connections_URhIn)
+def test_find_best_polyhedron(
+    max_gaps_per_label_URhIn, connections_URhIn
+):
+    result = find_best_polyhedron(
+        max_gaps_per_label_URhIn, connections_URhIn
+    )
     # Define a dictionary of expected values for specific keys
     expected_values = {
         "In1": {
@@ -36,7 +40,8 @@ def test_find_best_polyhedron(max_gaps_per_label_URhIn, connections_URhIn):
     for key, expected in expected_values.items():
         assert result[key]["method_used"] == expected["method_used"]
         assert (
-            result[key]["number_of_vertices"] == expected["number_of_vertices"]
+            result[key]["number_of_vertices"]
+            == expected["number_of_vertices"]
         )
         assert (
             result[key]["distance_from_avg_point_to_center"]

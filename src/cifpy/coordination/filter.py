@@ -39,16 +39,16 @@ def find_best_polyhedron(max_gaps_per_label, connections):
                 )
                 # Check if the polyhedron has the lowest distance to center.
                 if (
-                    polyhedron_metrics["distance_from_avg_point_to_center"]
+                    polyhedron_metrics[
+                        "distance_from_avg_point_to_center"
+                    ]
                     < min_distance_to_center
                 ):
                     min_distance_to_center = polyhedron_metrics[
                         "distance_from_avg_point_to_center"
                     ]
                     best_polyhedron_metrics = polyhedron_metrics
-                    best_method_used = (
-                        method  # Record the method that produced these metrics
-                    )
+                    best_method_used = method  # Record the method that produced these metrics
 
             except Exception as e:
                 print(
@@ -65,13 +65,15 @@ def find_best_polyhedron(max_gaps_per_label, connections):
     return best_polyhedrons
 
 
-def get_CN_connections_by_min_dist_method(max_gaps_per_label, connections):
+def get_CN_connections_by_min_dist_method(
+    max_gaps_per_label, connections
+):
     CN_by_shortest_dist = {}
     for label, methods_info in max_gaps_per_label.items():
         # Access the 'dist_by_shortest_dist' method and get the 'CN' value
-        CN_by_shortest_dist[label] = methods_info["dist_by_shortest_dist"][
-            "CN"
-        ]
+        CN_by_shortest_dist[label] = methods_info[
+            "dist_by_shortest_dist"
+        ]["CN"]
 
     CN_connections: dict = {}
     # Iterate through each label and number of connections

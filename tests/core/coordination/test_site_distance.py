@@ -21,6 +21,7 @@ def test_get_shortest_distance_per_site(connections_URhIn):
 
     assert all(
         result[label][0] == expected[label][0]
-        and pytest.approx(result[label][1], 0.001) == expected[label][1]
+        and pytest.approx(result[label][1], 0.001)
+        == expected[label][1]
         for label in expected
     )

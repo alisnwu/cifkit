@@ -3,7 +3,9 @@ from cifpy.utils.string_parser import get_atom_type_from_label
 from cifpy.utils import bond_pair
 
 
-def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
+def get_bond_counts(
+    formula: str, connections: dict[str, list]
+) -> dict:
     """
     Return a dictionary containing bond pairs and counts per label site.
     """
@@ -28,7 +30,9 @@ def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
             conn_element = get_atom_type_from_label(conn_label)
 
             # Create a tuple representing the bond pair, sorted
-            sorted_bond_pair = tuple(sorted((ref_element, conn_element)))
+            sorted_bond_pair = tuple(
+                sorted((ref_element, conn_element))
+            )
 
             # Check if the bond pair is one of the valid pairs
             if sorted_bond_pair in all_bond_pairs:

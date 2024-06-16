@@ -1,5 +1,9 @@
 from cifpy.models.cif import Cif
-from cifpy.utils.folder import move_files, copy_files, get_file_path_list
+from cifpy.utils.folder import (
+    move_files,
+    copy_files,
+    get_file_path_list,
+)
 from cifpy.figures.histogram import plot_histograms
 from collections import Counter
 
@@ -63,7 +67,9 @@ class CifEnsemble:
     @property
     def unique_elements(self) -> set[str]:
         """Get unique elements from all .cif files in the folder."""
-        return self._get_unique_property_values_from_set("unique_elements")
+        return self._get_unique_property_values_from_set(
+            "unique_elements"
+        )
 
     @property
     def CN_unique_values_by_min_dist_method(self) -> set[str]:
@@ -163,7 +169,9 @@ class CifEnsemble:
     def supercell_atom_counts(self) -> list[tuple[str, int]]:
         return self._collect_cif_data("supercell_atom_count")
 
-    def _filter_by_single_value(self, property_name: str, values: list):
+    def _filter_by_single_value(
+        self, property_name: str, values: list
+    ):
         cif_file_paths = set()
         for cif in self.cifs:
             property_value = getattr(cif, property_name, None)
@@ -199,36 +207,68 @@ class CifEnsemble:
     def filter_by_structures(self, values: list[str]) -> set[str]:
         return self._filter_by_single_value("structure", values)
 
-    def filter_by_space_group_names(self, values: list[str]) -> set[str]:
+    def filter_by_space_group_names(
+        self, values: list[str]
+    ) -> set[str]:
         return self._filter_by_single_value("space_group_name", values)
 
-    def filter_by_space_group_numbers(self, values: list[int]) -> set[str]:
-        return self._filter_by_single_value("space_group_number", values)
+    def filter_by_space_group_numbers(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_by_single_value(
+            "space_group_number", values
+        )
 
-    def filter_by_site_mixing_types(self, values: list[str]) -> set[str]:
+    def filter_by_site_mixing_types(
+        self, values: list[str]
+    ) -> set[str]:
         return self._filter_by_single_value("site_mixing_type", values)
 
     def filter_by_tags(self, values: list[str]) -> set[str]:
         return self._filter_by_single_value("tag", values)
 
-    def filter_by_composition_types(self, values: list[str]) -> set[str]:
+    def filter_by_composition_types(
+        self, values: list[str]
+    ) -> set[str]:
         return self._filter_by_single_value("composition_type", values)
 
     # Filter with sets
-    def filter_by_elements_containing(self, values: list[str]) -> set[str]:
+    def filter_by_elements_containing(
+        self, values: list[str]
+    ) -> set[str]:
         return self._filter_contains_any("unique_elements", values)
 
-    def filter_by_elements_exact_matching(self, values: list[str]) -> set[str]:
+    def filter_by_elements_exact_matching(
+        self, values: list[str]
+    ) -> set[str]:
         return self._filter_exact_match("unique_elements", values)
 
-    def filter_by_CN_min_dist_method_containing(
+    """
+    Filter by CN  4 of them
+    """
+
+    def filter_by_CN_dist_method_containing(
         self, values: list[int]
     ) -> set[str]:
         return self._filter_contains_any(
             "CN_unique_values_by_min_dist_method", values
         )
 
-    def filter_by_CN_min_dist_method_exact_matching(
+    def filter_by_CN_dist_method_exact_matching(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_exact_match(
+            "CN_unique_values_by_min_dist_method", values
+        )
+
+    def filter_by_CN_best_methods_containing(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_contains_any(
+            "CN_unique_values_by_best_methods", values
+        )
+
+    def filter_by_CN_best_methods_exact_matching(
         self, values: list[int]
     ) -> set[str]:
         return self._filter_exact_match(

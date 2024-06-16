@@ -77,7 +77,9 @@ def test_filter_by_value(cif_ensemble_test: CifEnsemble):
         "tests/data/cif/ensemble_test/300169.cif",
     }
 
-    assert cif_ensemble_test.filter_by_formulas(["LaRu2Ge2", "Mo"]) == {
+    assert cif_ensemble_test.filter_by_formulas(
+        ["LaRu2Ge2", "Mo"]
+    ) == {
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250697.cif",
@@ -151,6 +153,95 @@ def test_filter_by_value(cif_ensemble_test: CifEnsemble):
 
 
 """
+Filter by set
+Type 1. Element
+"""
+
+
+@pytest.mark.fast
+def test_filter_by_elements(cif_ensemble_test):
+    assert cif_ensemble_test.filter_by_elements_containing(["Ge"]) == {
+        "tests/data/cif/ensemble_test/300171.cif",
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/300169.cif",
+    }
+
+    assert cif_ensemble_test.filter_by_elements_exact_matching(
+        ["Ge", "Ru", "La"]
+    ) == {
+        "tests/data/cif/ensemble_test/300169.cif",
+    }
+
+
+"""
+Filter by set
+Type 2. Coordination numbers
+"""
+
+
+@pytest.mark.fast
+def test_filter_by_CN_dist_method_containing(
+    cif_ensemble_test: CifEnsemble,
+):
+    # print(cif_ensemble_test.CN_unique_values_by_min_dist_method)
+    # {16, 5, 9, 12, 14}
+    # print(cif_ensemble_test.CN_unique_values_by_best_methods)
+    # {16, 9, 10, 12, 14}
+    # "tests/data/cif/ensemble_test/300170.cif" - best methods
+    # {16, 10, 12}
+    # "tests/data/cif/ensemble_test/300170.cif" - min dist method
+    # {16, 12, 5}
+
+    assert cif_ensemble_test.filter_by_CN_dist_method_containing(
+        [5]
+    ) == {
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/300169.cif",
+    }
+
+
+@pytest.mark.fast
+def test_filter_by_CN_dist_method_exact_matching(
+    cif_ensemble_test: CifEnsemble,
+):
+    assert cif_ensemble_test.filter_by_CN_dist_method_exact_matching(
+        [14]
+    ) == {
+        "tests/data/cif/ensemble_test/260171.cif",
+        "tests/data/cif/ensemble_test/250709.cif",
+        "tests/data/cif/ensemble_test/250697.cif",
+    }
+
+
+@pytest.mark.fast
+def test_filter_by_CN_best_methods_containing(
+    cif_ensemble_test: CifEnsemble,
+):
+    assert (
+        cif_ensemble_test.filter_by_CN_best_methods_containing([5])
+        == set()
+    )
+    assert cif_ensemble_test.filter_by_CN_best_methods_containing(
+        [10]
+    ) == {
+        "tests/data/cif/ensemble_test/300170.cif",
+        "tests/data/cif/ensemble_test/300169.cif",
+    }
+
+
+@pytest.mark.fast
+def test_filter_by_CN_best_methods_exact_matching(
+    cif_ensemble_test: CifEnsemble,
+):
+    assert (
+        cif_ensemble_test.filter_by_CN_best_methods_exact_matching(
+            [10]
+        )
+        == set()
+    )
+
+
+"""#
 tests/data/cif/ensemble_test/300169.cif
 {'Ge1': 5, 'Ru1': 12, 'La1': 16}
 tests/data/cif/ensemble_test/260171.cif
@@ -171,41 +262,19 @@ Test filter by value
 """
 
 
-@pytest.mark.fast
-def test_filter_by_coordination_numbers(cif_ensemble_test: CifEnsemble):
-    assert cif_ensemble_test.filter_by_CN_min_dist_method_containing([5]) == {
-        "tests/data/cif/ensemble_test/300169.cif",
-        "tests/data/cif/ensemble_test/300170.cif",
-    }
+# assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching(
+#     [16]
+# ) == {
+#     "tests/data/cif/ensemble_test/300169.cif",
+#     "tests/data/cif/ensemble_test/300170.cif",
+#     "tests/data/cif/ensemble_test/300171.cif",
+# }
 
-    # assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching(
-    #     [16]
-    # ) == {
-    #     "tests/data/cif/ensemble_test/300169.cif",
-    #     "tests/data/cif/ensemble_test/300170.cif",
-    #     "tests/data/cif/ensemble_test/300171.cif",
-    # }
-
-    # assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching(
-    #     [9, 12, 16]
-    # ) == {
-    #     "tests/data/cif/ensemble_test/300171.cif",
-    # }
-
-
-# @pytest.mark.fast
-# def test_filter_by_elements(cif_ensemble_test):
-#     assert cif_ensemble_test.filter_by_elements_containing(["Ge"]) == {
-#         "tests/data/cif/ensemble_test/300171.cif",
-#         "tests/data/cif/ensemble_test/300170.cif",
-#         "tests/data/cif/ensemble_test/300169.cif",
-#     }
-
-#     assert cif_ensemble_test.filter_by_elements_exact_matching(
-#         ["Ge", "Ru", "La"]
-#     ) == {
-#         "tests/data/cif/ensemble_test/300169.cif",
-#     }
+# assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching(
+#     [9, 12, 16]
+# ) == {
+#     "tests/data/cif/ensemble_test/300171.cif",
+# }
 
 
 # """
@@ -255,7 +324,9 @@ def test_move_files(tmp_path: Path, cif_ensemble_test: CifEnsemble):
     initial_file_count = get_file_count(initial_dir_path)
     # Move files to the destination directory
     cif_ensemble_test.move_cif_files(file_paths, dest_dir)
-    assert get_file_count(dest_dir) == initial_file_count - len(file_paths)
+    assert get_file_count(dest_dir) == initial_file_count - len(
+        file_paths
+    )
     cif_ensemble_test.move_cif_files(
         set(get_file_path_list(dest_dir)), initial_dir_path
     )
@@ -336,17 +407,25 @@ def test_min_distance_stats(cif_ensemble_test):
     assert result == expected
 
 
+@pytest.mark.fast
+def test_unique_elements_stats(cif_ensemble_test):
+    result = cif_ensemble_test.unique_elements_stats
+    expected = {
+        "Ce": 1,
+        "Eu": 1,
+        "Ge": 3,
+        "Ir": 1,
+        "La": 1,
+        "Mo": 3,
+        "Ru": 2,
+    }
+    assert result == expected
+
+
 # @pytest.mark.fast
 # def test_unique_coordination_numbers_stats(cif_ensemble_test):
 #     result = cif_ensemble_test.unique_coordination_numbers_stats
 #     expected = {16: 3, 12: 3, 5: 2, 14: 3, 9: 1}
-#     assert result == expected
-
-
-# @pytest.mark.fast
-# def test_unique_elements_stats(cif_ensemble_test):
-#     result = cif_ensemble_test.unique_elements_stats
-#     expected = {"Ce": 1, "Eu": 1, "Ge": 3, "Ir": 1, "La": 1, "Mo": 3, "Ru": 2}
 #     assert result == expected
 
 

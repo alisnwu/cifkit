@@ -12,7 +12,9 @@ def test_get_radius_data():
         assert "CIF_radius" in radii_data[element]
         assert "Pauling_radius_CN12" in radii_data[element]
         assert isinstance(radii_data[element]["CIF_radius"], float)
-        assert isinstance(radii_data[element]["Pauling_radius_CN12"], float)
+        assert isinstance(
+            radii_data[element]["Pauling_radius_CN12"], float
+        )
 
     # Check specific values for one element to ensure data accuracy
     assert radii_data["Si"]["CIF_radius"] == 1.176

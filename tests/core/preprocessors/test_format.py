@@ -27,8 +27,8 @@ def run_preprocess_test_on_cif_files(cif_dir):
         for i in range(num_element_labels):
             atom_type_label = loop_values[0][i]
             atom_type_symbol = loop_values[1][i]
-            parsed_atom_type_symbol = string_parser.get_atom_type_from_label(
-                atom_type_label
+            parsed_atom_type_symbol = (
+                string_parser.get_atom_type_from_label(atom_type_label)
             )
             assert atom_type_symbol == parsed_atom_type_symbol
 
@@ -77,7 +77,9 @@ def test_preprocess_cif_file_on_label_element_type_8():
 
 
 def test_preprocess_cif_file_on_label_element_type_mixed():
-    cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_mixed"
+    cif_dir = (
+        "tests/data/cif/format_label/symbolic_atom_label_type_mixed"
+    )
 
     temp_dir = tempfile.mkdtemp()
     temp_cif_dir = os.path.join(temp_dir, os.path.basename(cif_dir))
@@ -101,8 +103,14 @@ def test_preprocess_cif_file_on_label_element_type_mixed():
 
         if filename == "250805.cif":
             assert len(lines) == 3
-            assert lines[1].strip() == "PrM1 Pr 8 b 0.375 0.375 0.375 0.75"
-            assert lines[2].strip() == "PtM2 Pt 8 b 0.375 0.375 0.375 0.25"
+            assert (
+                lines[1].strip()
+                == "PrM1 Pr 8 b 0.375 0.375 0.375 0.75"
+            )
+            assert (
+                lines[2].strip()
+                == "PtM2 Pt 8 b 0.375 0.375 0.375 0.25"
+            )
         if filename == "1020250.cif":
             assert len(lines) == 3
             assert lines[1].strip() == "Co Co 8 c 0.25 0.25 0.25 1"
@@ -122,13 +130,19 @@ def test_preprocess_cif_file_on_label_element_type_mixed():
 
         if filename == "1049941.cif":
             assert len(lines) == 11
-            assert lines[0].strip() == "Pr1 Pr 4 j 0.02076 0.5 0.30929 1"
+            assert (
+                lines[0].strip() == "Pr1 Pr 4 j 0.02076 0.5 0.30929 1"
+            )
             assert lines[-1].strip() == "In4 In 2 a 0 0 0 1"
 
         if filename == "381111.cif":
             assert len(lines) == 6
-            assert lines[0].strip() == "Ni1A Ni 4 j 0 0.172 0.5 0.88(1)"
-            assert lines[1].strip() == "Ga1B Ga 4 j 0 0.172 0.5 0.12(1)"
+            assert (
+                lines[0].strip() == "Ni1A Ni 4 j 0 0.172 0.5 0.88(1)"
+            )
+            assert (
+                lines[1].strip() == "Ga1B Ga 4 j 0 0.172 0.5 0.12(1)"
+            )
 
         # Type 7
         if filename == "1817279.cif":
@@ -147,22 +161,35 @@ def test_preprocess_cif_file_on_label_element_type_mixed():
         # Type 8
         if filename == "1814810.cif":
             assert len(lines) == 13
-            assert lines[0].strip() == "Er7 Er 16 h 0.06284 0.06662 0.39495 1"
-            assert lines[9].strip() == "Er13A Er 4 c 0.75 0.25 0.14542 0.83(2)"
             assert (
-                lines[10].strip() == "In13B In 4 c 0.75 0.25 0.14542 0.17(2)"
+                lines[0].strip()
+                == "Er7 Er 16 h 0.06284 0.06662 0.39495 1"
             )
             assert (
-                lines[11].strip() == "In13A In 4 c 0.75 0.25 0.59339 0.93(3)"
+                lines[9].strip()
+                == "Er13A Er 4 c 0.75 0.25 0.14542 0.83(2)"
             )
             assert (
-                lines[12].strip() == "Co13B Co 4 c 0.75 0.25 0.59339 0.07(3)"
+                lines[10].strip()
+                == "In13B In 4 c 0.75 0.25 0.14542 0.17(2)"
+            )
+            assert (
+                lines[11].strip()
+                == "In13A In 4 c 0.75 0.25 0.59339 0.93(3)"
+            )
+            assert (
+                lines[12].strip()
+                == "Co13B Co 4 c 0.75 0.25 0.59339 0.07(3)"
             )
 
         # Type 9
         if filename == "1200981.cif":
             assert len(lines) == 4
-            assert lines[1].strip() == "SnB Sn 4 c 0.0595 0.25 0.0952 1"
-            assert lines[2].strip() == "SnA Sn 4 c 0.0983 0.25 0.6419 1"
+            assert (
+                lines[1].strip() == "SnB Sn 4 c 0.0595 0.25 0.0952 1"
+            )
+            assert (
+                lines[2].strip() == "SnA Sn 4 c 0.0983 0.25 0.6419 1"
+            )
 
     shutil.rmtree(temp_dir)

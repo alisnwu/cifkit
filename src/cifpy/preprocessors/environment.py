@@ -21,7 +21,9 @@ def get_site_connections(
     all_labels_connections = {}
     for site_label in labels:
         filtered_unitcell_points = [
-            point for point in unitcell_points if point[3] == site_label
+            point
+            for point in unitcell_points
+            if point[3] == site_label
         ]
 
         dist_result = get_nearest_dists_per_site(
@@ -37,7 +39,9 @@ def get_site_connections(
         (
             label,
             connections,
-        ) = get_most_connected_point_per_site(site_label, dist_dict, dist_set)
+        ) = get_most_connected_point_per_site(
+            site_label, dist_dict, dist_set
+        )
 
         all_labels_connections[label] = connections
 

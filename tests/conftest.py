@@ -43,8 +43,10 @@ def cif_folder_path_test():
 def parsed_formula_weight_structure_s_group_data(
     cif_folder_path_test,
 ):
-    results = cif_parser.get_unique_formulas_structures_weights_s_groups(
-        cif_folder_path_test
+    results = (
+        cif_parser.get_unique_formulas_structures_weights_s_groups(
+            cif_folder_path_test
+        )
     )
     return results
 
@@ -86,7 +88,9 @@ def loop_values_URhIn(cif_block_URhIn):
 
 @pytest.fixture(scope="module")
 def unitcell_coords_URhIn(cif_block_URhIn):
-    return supercell.get_unitcell_coords_for_all_labels(cif_block_URhIn)
+    return supercell.get_unitcell_coords_for_all_labels(
+        cif_block_URhIn
+    )
 
 
 @pytest.fixture(scope="module")
@@ -213,25 +217,37 @@ def max_gaps_per_label_URhIn():
         "In1": {
             "dist_by_shortest_dist": {"max_gap": 0.306, "CN": 14},
             "dist_by_CIF_radius_sum": {"max_gap": 0.39, "CN": 14},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.341, "CN": 12},
+            "dist_by_CIF_radius_refined_sum": {
+                "max_gap": 0.341,
+                "CN": 12,
+            },
             "dist_by_Pauling_radius_sum": {"max_gap": 0.398, "CN": 14},
         },
         "U1": {
             "dist_by_shortest_dist": {"max_gap": 0.197, "CN": 11},
             "dist_by_CIF_radius_sum": {"max_gap": 0.312, "CN": 11},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.27, "CN": 17},
+            "dist_by_CIF_radius_refined_sum": {
+                "max_gap": 0.27,
+                "CN": 17,
+            },
             "dist_by_Pauling_radius_sum": {"max_gap": 0.254, "CN": 17},
         },
         "Rh1": {
             "dist_by_shortest_dist": {"max_gap": 0.315, "CN": 9},
             "dist_by_CIF_radius_sum": {"max_gap": 0.347, "CN": 9},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.418, "CN": 9},
+            "dist_by_CIF_radius_refined_sum": {
+                "max_gap": 0.418,
+                "CN": 9,
+            },
             "dist_by_Pauling_radius_sum": {"max_gap": 0.4, "CN": 9},
         },
         "Rh2": {
             "dist_by_shortest_dist": {"max_gap": 0.31, "CN": 9},
             "dist_by_CIF_radius_sum": {"max_gap": 0.324, "CN": 9},
-            "dist_by_CIF_radius_refined_sum": {"max_gap": 0.397, "CN": 9},
+            "dist_by_CIF_radius_refined_sum": {
+                "max_gap": 0.397,
+                "CN": 9,
+            },
             "dist_by_Pauling_radius_sum": {"max_gap": 0.378, "CN": 9},
         },
     }

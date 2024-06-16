@@ -103,7 +103,7 @@ def get_unique_label_count(loop_values: list) -> int:
     return len(loop_values[0])
 
 
-def get_unique_elements_from_loop(loop_values: list) -> list[str]:
+def get_unique_elements_from_loop(loop_values: list) -> set[str]:
     """
     Return a list of alphabetically sorted unique elements from loop values.
     """
@@ -112,7 +112,7 @@ def get_unique_elements_from_loop(loop_values: list) -> list[str]:
     for i in range(num_atom_labels):
         element = loop_values[1][i]
         element_list.add(str(element))
-    return sorted(element_list)
+    return element_list
 
 
 def get_unique_site_labels(loop_values: list) -> list[str]:
@@ -155,8 +155,8 @@ def get_loop_value_dict(
     num_of_atom_labels = get_unique_label_count(loop_values)
 
     for i in range(num_of_atom_labels):
-        label, occupancy, coordinates = get_label_occupancy_coordinates(
-            loop_values, i
+        label, occupancy, coordinates = (
+            get_label_occupancy_coordinates(loop_values, i)
         )
         loop_value_dict[label] = {
             "occupancy": occupancy,
@@ -194,7 +194,9 @@ def get_start_end_line_indexes(
     return start_index, end_index
 
 
-def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
+def get_line_content_from_tag(
+    file_path: str, start_keyword: str
+) -> list[str]:
     """
     Returns a list containing file content with starting keyword.
     """
@@ -281,7 +283,9 @@ def get_tag_from_third_line(file_path: str) -> str:
 
         # Split based on '#' and filter out empty strings
         third_line_parts = [
-            part.strip() for part in third_line.split("#") if part.strip()
+            part.strip()
+            for part in third_line.split("#")
+            if part.strip()
         ]
 
         formula_tag = third_line_parts[1]
@@ -337,14 +341,21 @@ def check_unique_atom_site_labels(file_path: str):
     for line in content_lines:
         parts = line.split()
         if len(parts) != 8:
-            raise ValueError(CifParserError.WRONG_LOOP_VALUE_COUNT.value)
+            raise ValueError(
+                CifParserError.WRONG_LOOP_VALUE_COUNT.value
+            )
 
         parsed_site_label = parts[0]
         parsed_element = parts[1]
         site_labels.add(parsed_site_label)
 
-        if get_atom_type_from_label(parsed_site_label) != parsed_element:
-            raise ValueError(CifParserError.INVALID_PARSED_ELEMENT.value)
+        if (
+            get_atom_type_from_label(parsed_site_label)
+            != parsed_element
+        ):
+            raise ValueError(
+                CifParserError.INVALID_PARSED_ELEMENT.value
+            )
 
     # If the count of unique labels does not match the number of lines, raise an error
     if len(content_lines) != len(site_labels):

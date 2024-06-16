@@ -11,10 +11,12 @@ def get_coord_occupancy_sum(loop_values):
     coord_occupancy_sum = {}
 
     for i in range(num_atom_labels):
-        _, occupancy, coordinates = cif_parser.get_label_occupancy_coordinates(
-            loop_values, i
+        _, occupancy, coordinates = (
+            cif_parser.get_label_occupancy_coordinates(loop_values, i)
         )
-        occupancy_num = coord_occupancy_sum.get(coordinates, 0) + occupancy
+        occupancy_num = (
+            coord_occupancy_sum.get(coordinates, 0) + occupancy
+        )
         coord_occupancy_sum[coordinates] = occupancy_num
 
     return coord_occupancy_sum
