@@ -1,5 +1,5 @@
 import pytest
-from cifpy.utils.bond_pair import (
+from cifkit.utils.bond_pair import (
     get_homogenous_element_pairs,
     get_heterogenous_element_pairs,
     get_all_bond_pairs,

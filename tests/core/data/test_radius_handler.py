@@ -1,5 +1,5 @@
 import pytest
-from cifpy.data.radius_handler import (
+from cifkit.data.radius_handler import (
     get_CIF_pauling_radius,
     compute_radius_sum,
     compute_radius_sum,
@@ -40,8 +40,6 @@ def test_compute_radius_sum(radius_data_URhIn):
 
 @pytest.mark.fast
 def test_compute_radius_sum(radius_data_URhIn, radius_sum_data_URhIn):
-
-    print(radius_data_URhIn)
     result = compute_radius_sum(radius_data_URhIn)
     expected = radius_sum_data_URhIn
     assert result == expected

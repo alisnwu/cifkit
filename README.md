@@ -1,4 +1,4 @@
-# CifPy
+# cifkit
 
 CifPy is a Python toolkit for high-throughput analysis of .cif files
 

@@ -1,7 +1,7 @@
 from pathlib import Path
 import pytest
-from cifpy.models.cif_ensemble import CifEnsemble
-from cifpy.utils.folder import get_file_count, get_file_path_list
+from cifkit import CifEnsemble
+from cifkit.utils.folder import get_file_count, get_file_path_list
 
 
 def test_init(cif_ensemble_test: CifEnsemble):
@@ -183,9 +183,9 @@ Type 2. Coordination numbers
 def test_filter_by_CN_dist_method_containing(
     cif_ensemble_test: CifEnsemble,
 ):
-    # print(cif_ensemble_test.CN_unique_values_by_min_dist_method)
+    # cif_ensemble_test.CN_unique_values_by_min_dist_method)
     # {16, 5, 9, 12, 14}
-    # print(cif_ensemble_test.CN_unique_values_by_best_methods)
+    # cif_ensemble_test.CN_unique_values_by_best_methods)
     # {16, 9, 10, 12, 14}
     # "tests/data/cif/ensemble_test/300170.cif" - best methods
     # {16, 10, 12}
@@ -440,12 +440,13 @@ def test_unique_CN_values_by_best_methods_stat(cif_ensemble_test):
 Test stat histograms
 """
 
+
 @pytest.mark.slow
-def test_generate_histogram(
-    cif_ensemble_test, tmp_path
-):
+def test_generate_histogram(cif_ensemble_test, tmp_path):
     output_dir = tmp_path / "histograms"
-    cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
+    cif_ensemble_test.generate_stat_histograms(
+        output_dir=str(output_dir)
+    )
 
     # List of expected files
     expected_files = [

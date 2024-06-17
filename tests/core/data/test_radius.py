@@ -1,5 +1,5 @@
 import pytest
-from cifpy.data.radius import get_radius_data
+from cifkit.data.radius import get_radius_data
 
 
 @pytest.mark.fast

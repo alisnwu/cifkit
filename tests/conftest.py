@@ -1,16 +1,15 @@
-# conftest.py
 import pytest
-from cifpy.preprocessors import (
+from cifkit.preprocessors import (
     supercell,
     environment,
     environment_util,
 )
-from cifpy.utils import cif_parser, folder
-from cifpy.models.cif import Cif
-from cifpy.models.cif_ensemble import CifEnsemble
-from cifpy.preprocessors import environment
-from cifpy.coordination import composition
-from cifpy.coordination import method, filter
+from cifkit.utils import cif_parser, folder
+from cifkit import Cif
+from cifkit import CifEnsemble
+from cifkit.preprocessors import environment
+from cifkit.coordination import composition
+from cifkit.coordination import method, filter
 
 """
 CifEnsemble - histogram test
@@ -190,7 +189,6 @@ def connections_URhIn(
     unitcell_points_URhIn,
     supercell_points_URhIn,
 ):
-
     return environment.get_site_connections(
         parsed_cif_data_URhIn,
         unitcell_points_URhIn,

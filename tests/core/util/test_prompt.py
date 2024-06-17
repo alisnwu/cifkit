@@ -1,5 +1,5 @@
 import logging
-from cifpy.utils.prompt import (
+from cifkit.utils.prompt import (
     log_save_file_message,
     log_connected_points,
 )

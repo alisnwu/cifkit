@@ -1,7 +1,7 @@
 import pytest
 import logging
-from cifpy.utils.error_messages import GeneralError
-from cifpy.utils.string_parser import (
+from cifkit.utils.error_messages import GeneralError
+from cifkit.utils.string_parser import (
     get_atom_type_from_label,
     get_string_to_formatted_float,
     trim_string,
@@ -31,7 +31,6 @@ def test_get_atom_type(site_label, expected):
 
 
 def test_get_atom_type_with_error():
-
     with pytest.raises(ValueError) as e:
         get_atom_type_from_label("1Fe")
     assert str(e.value) == GeneralError.NON_ALPHABETIC_START.value

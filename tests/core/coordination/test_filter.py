@@ -1,5 +1,5 @@
 import pytest
-from cifpy.coordination.filter import (
+from cifkit.coordination.filter import (
     find_best_polyhedron,
     get_CN_connections_by_min_dist_method,
 )

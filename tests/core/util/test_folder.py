@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
 import os
-from cifpy.utils.folder import (
+from cifkit.utils.folder import (
     get_file_path,
     get_file_count,
     get_file_path_list,
@@ -11,7 +11,7 @@ from cifpy.utils.folder import (
     move_files,
     copy_files,
 )
-from cifpy.utils.error_messages import FileError
+from cifkit.utils.error_messages import FileError
 
 
 def test_get_file_count(cif_folder_path_test):

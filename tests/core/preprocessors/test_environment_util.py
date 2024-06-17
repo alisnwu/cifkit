@@ -1,4 +1,4 @@
-from cifpy.preprocessors.environment_util import flat_site_connections
+from cifkit.preprocessors.environment_util import flat_site_connections
 
 import pytest
 

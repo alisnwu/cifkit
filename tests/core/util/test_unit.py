@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from cifpy.utils.unit import (
+from cifkit.utils.unit import (
     get_radians_from_degrees,
     round_float,
     fractional_to_cartesian,

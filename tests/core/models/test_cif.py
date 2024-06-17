@@ -1,8 +1,8 @@
 import os
 import shutil
 import pytest
-from cifpy.models.cif import Cif
-from cifpy.utils.error_messages import CifParserError
+from cifkit import Cif
+from cifkit.utils.error_messages import CifParserError
 
 
 def test_cif_static_properties(cif_URhIn):
@@ -84,18 +84,21 @@ def test_lazy_loading(cif_URhIn):
     cif_URhIn.compute_connections()
     assert cif_URhIn.connections is not None
 
+
 @pytest.mark.fast
 def test_shortest_distance(cif_URhIn):
-    print("Print shortest distance")
     assert cif_URhIn.shortest_distance == 2.697
 
+
+@pytest.mark.fast
 def test_shortest_distance_computation():
     cif_URhIn = Cif("tests/data/cif/URhIn.cif")
     assert cif_URhIn.connections is None
     distance = cif_URhIn.shortest_distance
     assert cif_URhIn.connections is not None
     assert distance == 2.697
-    
+
+
 @pytest.mark.fast
 def test_connections_flattened(cif_URhIn):
     assert cif_URhIn.connections_flattened[0] == (("In", "Rh"), 2.697)
@@ -304,31 +307,24 @@ def test_CN_min_by_best_methods(cif_URhIn):
     assert cif_URhIn.CN_min_by_best_methods == 9
 
 
-def test_polyhedron_labels_from_site(cif_URhIn):
+@pytest.mark.fast
+def test_get_polyhedron_labels_by_CN_min_dist_method(cif_URhIn):
+    (
+        polyhedron_points,
+        labels,
+    ) = cif_URhIn.get_polyhedron_labels_by_CN_min_dist_method("U1")
+    assert len(polyhedron_points) == 12  # including the central atom
+    assert len(labels) == 12  # including the central atom
 
-    expected_labels = [
-        "Rh2",
-        "Rh2",
-        "Rh1",
-        "Rh1",
-        "U1",
-        "U1",
-        "In1",
-        "In1",
-        "U1",
-        "U1",
-        "U1",
-        "U1",
-        "In1",
-        "In1",
-        "In1",
-    ]
 
-    polyhedron_points, labels = (
-        cif_URhIn.get_polyhedron_labels_from_site("In1")
-    )
-    assert len(polyhedron_points) == 15
-    assert labels == expected_labels
+@pytest.mark.fast
+def test_get_polyhedron_labels_by_CN_best_methods(cif_URhIn):
+    (
+        polyhedron_points,
+        labels,
+    ) = cif_URhIn.get_polyhedron_labels_by_CN_best_methods("U1")
+    assert len(polyhedron_points) == 18  # including the central atom
+    assert len(labels) == 18  # including the central atom
 
 
 """Test polyhedron"""

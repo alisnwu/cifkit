@@ -1,4 +1,4 @@
-from cifpy.coordination.bond_distance import (
+from cifkit.coordination.bond_distance import (
     get_shortest_distance_per_bond_pair,
 )
 
@@ -6,7 +6,6 @@ from cifpy.coordination.bond_distance import (
 def test_get_minimum_dist_per_bond_pair(
     flattened_connections_URhIn,
 ):
-
     # Call the function under test
     min_dist_per_element_pair = get_shortest_distance_per_bond_pair(
         flattened_connections_URhIn

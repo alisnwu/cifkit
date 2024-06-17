@@ -1,4 +1,4 @@
-from cifpy.preprocessors.supercell_util import (
+from cifkit.preprocessors.supercell_util import (
     get_cell_atom_count,
 )
 

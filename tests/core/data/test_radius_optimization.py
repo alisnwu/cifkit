@@ -1,12 +1,11 @@
 import numpy as np
 import pytest
-from cifpy.data.radius_optimization import (
+from cifkit.data.radius_optimization import (
     get_refined_CIF_radius,
 )
 
 
 def test_optimization(cif_URhIn):
-
     # Example usage:
     elements_sorted = sorted(cif_URhIn.unique_elements)
     assert elements_sorted == ["In", "Rh", "U"]

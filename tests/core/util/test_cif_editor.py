@@ -4,7 +4,7 @@ import tempfile
 import os
 import filecmp
 
-from cifpy.utils.cif_editor import (
+from cifkit.utils.cif_editor import (
     remove_author_loop,
 )
 

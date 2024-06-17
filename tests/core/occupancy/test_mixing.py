@@ -1,5 +1,5 @@
-from cifpy.utils.cif_parser import get_loop_values, get_cif_block
-from cifpy.occupacny.mixing import get_site_mixing_type
+from cifkit.utils.cif_parser import get_loop_values, get_cif_block
+from cifkit.occupacny.mixing import get_site_mixing_type
 import pytest
 
 

@@ -1,10 +1,10 @@
-import cifpy
+import cifkit
 import numpy as np
-from cifpy.utils import unit
+from cifkit.utils import unit
 import pytest
 
 
-from cifpy.preprocessors.supercell import (
+from cifkit.preprocessors.supercell import (
     get_unitcell_coords_after_sym_operations_per_label,
     get_unitcell_coords_for_all_labels,
     flatten_original_coordinates,

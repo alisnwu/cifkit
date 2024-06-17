@@ -1,6 +1,6 @@
 import pytest
 
-from cifpy.coordination.composition import (
+from cifkit.coordination.composition import (
     get_bond_counts,
     get_bond_fractions,
     count_connections_per_site,
@@ -27,7 +27,6 @@ def test_get_bond_counts(
 
 
 def test_get_bond_fraction(bond_counts_CN):
-
     # Expected output based on input data
     expected_fractions = {
         ("In", "In"): 4 / 43,

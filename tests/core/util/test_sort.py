@@ -1,4 +1,4 @@
-from cifpy.utils.sort import sort_element_pair_tuples
+from cifkit.utils.sort import sort_element_pair_tuples
 
 
 def test_sort_element_pair_tuples():

@@ -10,8 +10,8 @@
 The following is an example with `Cif`
 
 ```python
-from cifpy.models.cif import Cif
-from cifpy.utils import folder
+from cifkit.models.cif import Cif
+from cifkit.utils import folder
 
 file_paths = folder.get_file_path_list("tests/data/cif/folder")
 
@@ -111,6 +111,6 @@ cif_ensemble_test.filter_by_space_group_numbers([139])
 ## Installation
 
 ```bash
-pip install cifpy
+pip install cifkit
 pip install -e .
 ```

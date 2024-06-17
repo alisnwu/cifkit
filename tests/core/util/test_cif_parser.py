@@ -1,8 +1,8 @@
 import pytest
 
-from cifpy.utils.error_messages import GeneralError, CifParserError
-from cifpy.utils import folder
-from cifpy.utils.cif_parser import (
+from cifkit.utils.error_messages import GeneralError, CifParserError
+from cifkit.utils import folder
+from cifkit.utils.cif_parser import (
     get_cif_block,
     get_unitcell_lengths,
     get_unitcell_angles_rad,
@@ -152,9 +152,13 @@ def test_get_formula_structure_weight_sgroup(cif_block_URhIn):
     parsed_result = get_formula_structure_weight_s_group(
         cif_block_URhIn
     )
-    formula, structure, weight, s_group_num, s_group_name = (
-        parsed_result
-    )
+    (
+        formula,
+        structure,
+        weight,
+        s_group_num,
+        s_group_name,
+    ) = parsed_result
     assert formula == "URhIn"
     assert structure == "ZrNiAl"
     assert weight == 455.8
@@ -164,9 +168,13 @@ def test_get_formula_structure_weight_sgroup(cif_block_URhIn):
 
 def test_get_unique_formulas_structure_weight(cif_folder_path_test):
     file_path_list = folder.get_file_path_list(cif_folder_path_test)
-    formulas, structures, weights, s_group_nums, s_group_names = (
-        get_unique_formulas_structures_weights_s_groups(file_path_list)
-    )
+    (
+        formulas,
+        structures,
+        weights,
+        s_group_nums,
+        s_group_names,
+    ) = get_unique_formulas_structures_weights_s_groups(file_path_list)
     assert formulas == {"LaRu2Ge2", "CeRu2Ge2", "EuIr2Ge2"}
     assert structures == {"CeAl2Ga2"}
     assert weights == {486.2, 487.4, 681.6}
@@ -183,7 +191,6 @@ def test_get_tag_from_third_line():
 
 
 def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
-
     atom_site_info = parse_atom_site_occupancy_info(file_path_URhIn)
     expected = {
         "In1": {
@@ -228,7 +235,6 @@ def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
 
 
 def test_check_unique_atom_site_labels(file_path_URhIn):
-
     check_unique_atom_site_labels(file_path_URhIn)
     file_path = "tests/data/cif/error/duplicate_labels/457848.cif"
     with pytest.raises(ValueError) as e:

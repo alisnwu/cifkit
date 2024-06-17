@@ -1,4 +1,4 @@
-from cifpy.utils.random import generate_random_numbers
+from cifkit.utils.random import generate_random_numbers
 
 
 def test_generate_random_numbers():

@@ -1,5 +1,5 @@
 import pytest
-from cifpy.coordination.method import compute_CN_max_gap_per_site
+from cifkit.coordination.method import compute_CN_max_gap_per_site
 
 
 @pytest.mark.fast

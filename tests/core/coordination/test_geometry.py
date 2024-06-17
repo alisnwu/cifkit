@@ -1,5 +1,5 @@
 import pytest
-from cifpy.coordination.geometry import (
+from cifkit.coordination.geometry import (
     get_polyhedron_coordinates_labels,
     compute_polyhedron_metrics,
 )
@@ -10,10 +10,11 @@ from scipy.spatial import ConvexHull
 def test_get_polyhedron_coordinates_labels(
     CN_connections_by_min_dist_URhIn,
 ):
-    polyhedron_points, vertex_labels = (
-        get_polyhedron_coordinates_labels(
-            CN_connections_by_min_dist_URhIn, "U1"
-        )
+    (
+        polyhedron_points,
+        vertex_labels,
+    ) = get_polyhedron_coordinates_labels(
+        CN_connections_by_min_dist_URhIn, "U1"
     )
 
     assert vertex_labels == [
