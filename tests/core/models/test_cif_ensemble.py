@@ -422,41 +422,48 @@ def test_unique_elements_stats(cif_ensemble_test):
     assert result == expected
 
 
-# @pytest.mark.fast
-# def test_unique_coordination_numbers_stats(cif_ensemble_test):
-#     result = cif_ensemble_test.unique_coordination_numbers_stats
-#     expected = {16: 3, 12: 3, 5: 2, 14: 3, 9: 1}
-#     assert result == expected
+@pytest.mark.fast
+def test_unique_CN_values_by_min_dist_method_stat(cif_ensemble_test):
+    result = cif_ensemble_test.unique_CN_values_by_min_dist_method_stat
+    expected = {16: 3, 12: 3, 5: 2, 14: 3, 9: 1}
+    assert result == expected
+
+
+@pytest.mark.fast
+def test_unique_CN_values_by_best_methods_stat(cif_ensemble_test):
+    result = cif_ensemble_test.unique_CN_values_by_method_methods_stat
+    expected = {16: 3, 10: 2, 12: 3, 14: 3, 9: 1}
+    assert result == expected
 
 
 """
 Test stat histograms
 """
 
-# def test_generate_histogram(
-#     cif_ensemble_test, cif_ensemble_histogram_test, tmp_path
-# ):
-#     # output_dir = tmp_path / "histograms"
-#     # cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
+@pytest.mark.slow
+def test_generate_histogram(
+    cif_ensemble_test, tmp_path
+):
+    output_dir = tmp_path / "histograms"
+    cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
 
-#     # cif_ensemble_histogram_test.generate_stat_histograms()
-#     cif_ensemble_test.generate_stat_histograms()
-#     # List of expected files
-#     expected_files = [
-#         "structures.png",
-#         "formula.png",
-#         "tag.png",
-#         "space_group_number.png",
-#         "space_group_name.png",
-#         "supercell_size.png",
-#         "min_distance.png",
-#         "elements.png",
-#         #  "coordination_numbers.png",
-#         "composition_type.png",
-#         "site_mixing_type.png",
-#     ]
+    # List of expected files
+    expected_files = [
+        "structures.png",
+        "formula.png",
+        "tag.png",
+        "space_group_number.png",
+        "space_group_name.png",
+        "supercell_size.png",
+        "min_distance.png",
+        "elements.png",
+        "CN_by_min_dist_method.png",
+        "CN_by_best_methods.png",
+        "composition_type.png",
+        "site_mixing_type.png",
+    ]
 
-#     # # Check that all expected files are created
-#     # for file_name in expected_files:
-#     #     file_path = output_dir / file_name
-#     #     assert file_path.exists()
+    # Check that all expected files are created
+    for file_name in expected_files:
+        file_path = output_dir / file_name
+        assert file_path.exists()

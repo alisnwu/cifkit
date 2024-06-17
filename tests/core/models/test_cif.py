@@ -79,11 +79,23 @@ def test_cif_static_properties(cif_URhIn):
 
 
 @pytest.mark.fast
+def test_lazy_loading(cif_URhIn):
+    assert cif_URhIn.connections is None
+    cif_URhIn.compute_connections()
+    assert cif_URhIn.connections is not None
+
+@pytest.mark.fast
 def test_shortest_distance(cif_URhIn):
     print("Print shortest distance")
     assert cif_URhIn.shortest_distance == 2.697
 
-
+def test_shortest_distance_computation():
+    cif_URhIn = Cif("tests/data/cif/URhIn.cif")
+    assert cif_URhIn.connections is None
+    distance = cif_URhIn.shortest_distance
+    assert cif_URhIn.connections is not None
+    assert distance == 2.697
+    
 @pytest.mark.fast
 def test_connections_flattened(cif_URhIn):
     assert cif_URhIn.connections_flattened[0] == (("In", "Rh"), 2.697)

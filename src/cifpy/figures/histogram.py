@@ -60,10 +60,18 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
             },
         },
         {
-            "data": cif_ensemble.unique_coordination_numbers_stats,
+            "data": cif_ensemble.unique_CN_values_by_min_dist_method_stat,
             "settings": {
-                "file_name": "coordination_numbers.png",
-                "title": "Coordination Numbers Distribution",
+                "file_name": "CN_by_min_dist_method.png",
+                "title": "Coordination Numbers Distribution by Min Dist Method",
+                "xlabel": "Coordination Number",
+            },
+        },
+        {
+            "data": cif_ensemble.unique_CN_values_by_method_methods_stat,
+            "settings": {
+                "file_name": "CN_by_best_methods.png",
+                "title": "Coordination Numbers Distribution by Best Methods",
                 "xlabel": "Coordination Number",
             },
         },

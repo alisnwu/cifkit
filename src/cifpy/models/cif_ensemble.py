@@ -142,9 +142,21 @@ class CifEnsemble:
     def min_distance_stats(self) -> dict[float, int]:
         return self._attribute_stats("shortest_distance")
 
-    # @property
-    # def unique_coordination_numbers_stats(self) -> dict[float, int]:
-    #     return self._attribute_stats("unique_coordination_numbers")
+    @property
+    def unique_CN_values_by_min_dist_method_stat(
+        self,
+    ) -> dict[float, int]:
+        return self._attribute_stats(
+            "CN_unique_values_by_min_dist_method"
+        )
+
+    @property
+    def unique_CN_values_by_method_methods_stat(
+        self,
+    ) -> dict[float, int]:
+        return self._attribute_stats(
+            "CN_unique_values_by_best_methods"
+        )
 
     def _collect_cif_data(self, attribute, transform=None):
         """Generic method to collect data from CIF files based on an attribute."""
@@ -244,7 +256,7 @@ class CifEnsemble:
         return self._filter_exact_match("unique_elements", values)
 
     """
-    Filter by CN  4 of them
+    Filter by CN 
     """
 
     def filter_by_CN_dist_method_containing(

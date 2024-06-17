@@ -46,7 +46,6 @@ from cifpy.preprocessors.environment_util import flat_site_connections
 from cifpy.coordination.composition import (
     get_bond_counts,
     get_bond_fractions,
-    count_connections_per_site,
     compute_avg_CN,
     get_unique_CN_values,
 )
@@ -74,7 +73,6 @@ from cifpy.coordination.geometry import (
     get_polyhedron_coordinates_labels,
 )
 
-from cifpy.utils import prompt
 from cifpy.utils.bond_pair import (
     get_heterogenous_element_pairs,
     get_homogenous_element_pairs,
@@ -83,6 +81,12 @@ from cifpy.utils.bond_pair import (
 
 from cifpy.occupacny.mixing import get_site_mixing_type
 
+def ensure_connections(func):
+    def wrapper(self, *args, **kwargs):
+        if self.connections is None:
+            self.compute_connections()
+        return func(self, *args, **kwargs)
+    return wrapper
 
 class Cif:
     def __init__(self, file_path: str) -> None:
@@ -271,64 +275,54 @@ class Cif:
         )
 
     @property
+    @ensure_connections
     def shortest_distance(self):
         """Property that checks if connections are computed and computes."""
-        if self.connections is None:
-            self.compute_connections()
         return self._shortest_distance
 
     @property
+    @ensure_connections
     def connections_flattened(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._connections_flattened
 
     @property
+    @ensure_connections
     def shortest_bond_pair_distance(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._shortest_bond_pair_distance
 
     @property
+    @ensure_connections
     def shortest_site_pair_distance(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._shortest_site_pair_distance
 
     @property
+    @ensure_connections
     def radius_values(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._radius_values
 
     @property
+    @ensure_connections
     def radius_sum(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._radius_sum
 
     @property
+    @ensure_connections
     def CN_max_gap_per_site(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_max_gap_per_site
 
     @property
+    @ensure_connections
     def CN_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_best_methods
 
     @property
+    @ensure_connections
     def CN_connections_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_connections_by_best_methods
 
     @property
+    @ensure_connections
     def CN_connections_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_connections_by_min_dist_method
 
     """
@@ -337,92 +331,78 @@ class Cif:
 
     # Bond counts
     @property
+    @ensure_connections
     def CN_bond_count_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_bond_count_by_min_dist_method
 
     @property
+    @ensure_connections
     def CN_bond_count_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_bond_count_by_best_methods
 
     # Bond fractions
     @property
+    @ensure_connections
     def CN_bond_fractions_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_bond_fractions_by_min_dist_method
 
     @property
+    @ensure_connections
     def CN_bond_fractions_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_bond_fractions_by_best_methods
 
     # Unique CN
     @property
+    @ensure_connections
     def CN_unique_values_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_unique_values_by_min_dist_method
 
     @property
+    @ensure_connections
     def CN_unique_values_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_unique_values_by_best_methods
 
     # Average CN
     @property
+    @ensure_connections
     def CN_avg_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_avg_by_min_dist_method
 
     @property
+    @ensure_connections
     def CN_avg_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_avg_by_best_methods
 
     @property
+    @ensure_connections
     def CN_max_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_max_by_min_dist_method
 
     @property
+    @ensure_connections
     def CN_max_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_max_by_best_methods
 
     @property
+    @ensure_connections
     def CN_min_by_min_dist_method(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_min_by_min_dist_method
 
     @property
+    @ensure_connections
     def CN_min_by_best_methods(self):
-        if self.connections is None:
-            self.compute_connections()
         return self._CN_min_by_best_methods
 
+    @ensure_connections
     def get_polyhedron_labels_from_site(
         self, label: str
     ) -> tuple[list[list[float]], list[str]]:
-        if self.compute_connections is None:
-            self.compute_connections()
         return get_polyhedron_coordinates_labels(
             self.CN_connections_by_min_dist_method, label
         )
 
+    @ensure_connections
     def plot_polyhedron(self, site_label, output_dir=None):
-        if self.connections is None:
-            self.compute_connections()
         coords, labels = get_polyhedron_coordinates_labels(
             self.CN_connections_by_min_dist_method, site_label
         )
