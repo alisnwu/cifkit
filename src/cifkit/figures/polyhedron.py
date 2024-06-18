@@ -34,7 +34,15 @@ def generate_color_mapping(labels):
     return color_map
 
 
-def plot(points, vertex_labels, file_path, formula, is_displayed, output_dir=None):
+def plot(
+    points,
+    vertex_labels,
+    file_path,
+    formula,
+    show_labels,
+    is_displayed,
+    output_dir=None,
+):
     """
     Generate and save a 3D plot of a molecular structure.
     """
@@ -46,7 +54,7 @@ def plot(points, vertex_labels, file_path, formula, is_displayed, output_dir=Non
     central_atom_coord = points[-1]
     central_atom_label = vertex_labels[-1]
     # Coordination numbers
-    coordination_number = len(points) - 1    
+    coordination_number = len(points) - 1
 
     # Title
     title = f"Formula: {formula}, Central atom: {central_atom_label}, CN: {coordination_number},\n{file_path}"
@@ -60,26 +68,26 @@ def plot(points, vertex_labels, file_path, formula, is_displayed, output_dir=Non
         sphere = pv.Sphere(radius=radius, center=point)
         plotter.add_mesh(sphere, color=label_colors[label])
 
-        # Add labels with index
-        indexed_label = (
-            f"{idx + 1}. {label}"  # Creating a label with numbering
-        )
+        # Creating a label with numbering
+        indexed_label = f"{idx + 1}. {label}"
         adjusted_point = point + [
             0.3,
             0.3,
             0.3,
         ]  # Offset to avoid overlapping with the sphere
-        if idx != len(points) - 1:
-            plotter.add_point_labels(
-                adjusted_point,
-                [indexed_label],  # Use the indexed label
-                font_size=50,
-                text_color=label_colors[label],
-                always_visible=True,
-                shape=None,
-                margin=0,
-                reset_camera=False,
-            )
+
+        if show_labels:
+            if idx != len(points) - 1:
+                plotter.add_point_labels(
+                    adjusted_point,
+                    [indexed_label],  # Use the indexed label
+                    font_size=50,
+                    text_color=label_colors[label],
+                    always_visible=True,
+                    shape=None,
+                    margin=0,
+                    reset_camera=False,
+                )
 
     delaunay = Delaunay(points)
     hull = ConvexHull(points)
@@ -144,5 +152,3 @@ def plot(points, vertex_labels, file_path, formula, is_displayed, output_dir=Non
     """
     # Save the screenshot
     plotter.screenshot(save_path)
-
-

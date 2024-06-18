@@ -4,8 +4,10 @@ Import statements placed bottom to avoid cluttering.
 
 # Polyhedron
 import os
+import logging
 from cifkit.figures import polyhedron
 from cifkit.utils.unit import round_dict_values
+from cifkit.utils.log_messages import CifLog
 
 # Parser .cif file
 from cifkit.utils.cif_parser import (
@@ -96,12 +98,18 @@ def ensure_connections(func):
     return wrapper
 
 
-class Cif:
-    def __init__(self, file_path: str, display=True) -> None:
+# Global logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
+
+class Cif:
+    def __init__(self, file_path: str, logging_enabled=False) -> None:
         self.file_path = file_path
-        if display:
-            print(f"Processing {self.file_path}")
+        self.logging_enabled = logging_enabled
+
         """Initialize the Cif object with the file path."""
         self.file_name = os.path.basename(file_path)
         self.file_name_without_ext = os.path.splitext(self.file_name)[0]
@@ -110,15 +118,22 @@ class Cif:
         self._preprocess()
         self._load_data()
 
+    def _log_info(self, message):
+        """Log a formatted message if logging is enabled."""
+        if self.logging_enabled:
+            formatted_message = message.format(file_path=self.file_path)
+            logging.info(formatted_message)
+
     def _preprocess(self):
         """Preprocess each .cif file and check any error."""
+        self._log_info(CifLog.PREPROCESSING.value)
         check_unique_atom_site_labels(self.file_path)
         remove_author_loop(self.file_path)
         preprocess_label_element_loop_values(self.file_path)
 
     def _load_data(self):
         """Load data from the .cif file and process it."""
-
+        self._log_info(CifLog.LOADING_DATA.value)
         self._block = get_cif_block(self.file_path)
         self._parse_cif_data()
         self._generate_supercell()
@@ -162,6 +177,7 @@ class Cif:
     """
 
     def compute_connections(self, cutoff_radius=10.0):
+        self._log_info(CifLog.COMPUTE_CONNECTIONS.value)
         """Compute nearest neighbor connections per site label."""
         self.connections = get_site_connections(
             [
@@ -403,7 +419,9 @@ class Cif:
         )
 
     @ensure_connections
-    def plot_polyhedron(self, site_label, is_displayed=False, output_dir=None):
+    def plot_polyhedron(
+        self, site_label, show_labels=True, is_displayed=False, output_dir=None
+    ):
         coords, vertex_labels = get_polyhedron_coordinates_labels(
             self.CN_connections_by_best_methods, site_label
         )
@@ -412,6 +430,7 @@ class Cif:
             vertex_labels,
             self.file_path,
             self.formula,
+            show_labels,
             is_displayed,
             output_dir,
         )

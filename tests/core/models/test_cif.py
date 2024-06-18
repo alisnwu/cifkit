@@ -1,8 +1,10 @@
 import os
 import shutil
 import pytest
+import logging
 from cifkit import Cif
 from cifkit.utils.error_messages import CifParserError
+from cifkit.utils.log_messages import CifLog
 from cifkit.utils import folder
 
 
@@ -88,6 +90,38 @@ def test_lazy_loading(cif_URhIn):
     assert cif_URhIn.connections is None
     cif_URhIn.compute_connections()
     assert cif_URhIn.connections is not None
+
+
+"""
+Test log
+"""
+
+
+@pytest.mark.fast
+def test_init_log(caplog):
+    file_path = "tests/data/cif/URhIn.cif"
+    cif = Cif(file_path, logging_enabled=True)
+
+    with caplog.at_level(logging.INFO):
+        assert (
+            CifLog.PREPROCESSING.value.format(file_path=file_path)
+            in caplog.text
+        )
+
+        assert CifLog.LOADING_DATA.value in caplog.text
+
+    cif.compute_connections()
+    with caplog.at_level(logging.INFO):
+        assert CifLog.COMPUTE_CONNECTIONS.value in caplog.text
+
+
+@pytest.mark.fast
+def test_init_no_log(caplog):
+    file_path = "tests/data/cif/URhIn.cif"
+    Cif(file_path)
+
+    with caplog.at_level(logging.INFO):
+        assert caplog.text == ""
 
 
 @pytest.mark.fast
@@ -342,10 +376,6 @@ def test_plot_polyhedron_default_output_folder(cif_URhIn):
     expected_output_dir = "tests/data/cif/polyhedrons"
     output_file_path = os.path.join(expected_output_dir, "URhIn_In1.png")
 
-    # Ensure the directory exists
-    if not os.path.exists(expected_output_dir):
-        os.makedirs(expected_output_dir)
-
     # Define the output file path
     cif_URhIn.plot_polyhedron("In1")
 
@@ -359,13 +389,9 @@ def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
     expected_output_dir = "tests/data/cif/polyhedrons_user"
     output_file_path = os.path.join(expected_output_dir, "URhIn_In1.png")
 
-    # Ensure the directory exists
-    if not os.path.exists(expected_output_dir):
-        os.makedirs(expected_output_dir)
-
     # Define the output file path
     cif_URhIn.plot_polyhedron(
-        "In1", is_displayed=True, output_dir="tests/data/cif/polyhedrons_user"
+        "In1", is_displayed=False, output_dir="tests/data/cif/polyhedrons_user"
     )
 
     assert os.path.exists(output_file_path)
@@ -378,16 +404,12 @@ def test_plot_polyhedrons(cif_ensemble_test):
     # Define the directory to store the output
     expected_output_dir = "tests/data/cif/ensemble_test/polyhedrons"
     # Ensure the directory exists
-    if not os.path.exists(expected_output_dir):
-        os.makedirs(expected_output_dir)
 
     cifs = cif_ensemble_test.cifs
     for cif in cifs:
         labels = cif.site_labels
-        print("Label from the cif object")
-        print(labels)
         for label in labels:
-            cif.plot_polyhedron(label)
+            cif.plot_polyhedron(label, show_labels=True)
 
     # Check the number of files
     image_file_count = folder.get_file_count(expected_output_dir, ".png")

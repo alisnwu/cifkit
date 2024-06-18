@@ -7,9 +7,8 @@ from cifkit.preprocessors import (
 from cifkit.utils import cif_parser, folder
 from cifkit import Cif
 from cifkit import CifEnsemble
-from cifkit.preprocessors import environment
 from cifkit.coordination import composition
-from cifkit.coordination import method, filter
+from cifkit.coordination import filter
 
 """
 CifEnsemble - histogram test
