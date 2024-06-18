@@ -1,27 +1,85 @@
 import os
 import pyvista as pv
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.spatial import ConvexHull
 from scipy.spatial import Delaunay
 
 
-def plot(points, labels, file_path, is_displayed, output_dir=None):
+def generate_contrasting_colors():
+    """Return a list of manually selected contrasting colors."""
+    return [
+        "#00FFFF",  # Cyan
+        "#0000FF",  # Blue
+        "#FF0000",  # Red
+        "#800080",  # Purple
+        "#FF00FF",  # Magenta
+        "#FFFF00",  # Yellow
+        "#00FF00",  # Lime
+        "#FF4500",  # Orange Red
+        "#2E8B57",  # Sea Green
+        "#1E90FF",  # Dodger Blue
+        "#FF1493",  # Deep Pink
+        "#FFD700",  # Gold
+    ]
+
+
+def generate_color_mapping(labels):
+    """Generate a dictionary mapping labels to contrasting colors."""
+    colors = generate_contrasting_colors()
+    color_map = {}
+    unique_labels = set(labels)
+    for i, label in enumerate(unique_labels):
+        color_map[label] = colors[i % len(colors)]
+    return color_map
+
+
+def plot(points, vertex_labels, file_path, formula, is_displayed, output_dir=None):
     """
     Generate and save a 3D plot of a molecular structure.
     """
-    plotter = pv.Plotter(off_screen = not is_displayed)
-        
+
+    plotter = pv.Plotter(off_screen=not is_displayed, window_size=(1600, 1200))
+    label_colors = generate_color_mapping(vertex_labels)
+
     points = np.array(points)
     central_atom_coord = points[-1]
-    central_atom_label = labels[-1]
+    central_atom_label = vertex_labels[-1]
+    # Coordination numbers
+    coordination_number = len(points) - 1    
 
-    # plotter = pv.Plotter()
+    # Title
+    title = f"Formula: {formula}, Central atom: {central_atom_label}, CN: {coordination_number},\n{file_path}"
+    plotter.add_title(title, font="arial")
+    # Constructing title and subtitle
 
-    for point, label in zip(points, labels):
-        radius = 0.6 if np.array_equal(point, central_atom_coord) else 0.4  # Central atom larger
+    for idx, (point, label) in enumerate(zip(points, vertex_labels)):
+        radius = (
+            0.4 if np.array_equal(point, central_atom_coord) else 0.4
+        )  # Central atom larger
         sphere = pv.Sphere(radius=radius, center=point)
-        plotter.add_mesh(sphere, color='#D3D3D3')  # Light grey color
+        plotter.add_mesh(sphere, color=label_colors[label])
 
+        # Add labels with index
+        indexed_label = (
+            f"{idx + 1}. {label}"  # Creating a label with numbering
+        )
+        adjusted_point = point + [
+            0.3,
+            0.3,
+            0.3,
+        ]  # Offset to avoid overlapping with the sphere
+        if idx != len(points) - 1:
+            plotter.add_point_labels(
+                adjusted_point,
+                [indexed_label],  # Use the indexed label
+                font_size=50,
+                text_color=label_colors[label],
+                always_visible=True,
+                shape=None,
+                margin=0,
+                reset_camera=False,
+            )
 
     delaunay = Delaunay(points)
     hull = ConvexHull(points)
@@ -43,23 +101,27 @@ def plot(points, labels, file_path, is_displayed, output_dir=None):
     for edge in edges:
         if edge in hull_edges:
             start, end = points[edge[0]], points[edge[1]]
-            cylinder = pv.Cylinder(center=(start + end) / 2, direction=end - start, radius=0.05, height=np.linalg.norm(end - start))
-            plotter.add_mesh(cylinder, color='grey')
+            cylinder = pv.Cylinder(
+                center=(start + end) / 2,
+                direction=end - start,
+                radius=0.05,
+                height=np.linalg.norm(end - start),
+            )
+            plotter.add_mesh(cylinder, color="grey")
 
     faces = []
     for simplex in hull.simplices:
         faces.append([3] + list(simplex))
     poly_data = pv.PolyData(points, faces)
 
-    plotter.add_mesh(poly_data, color='aqua', opacity=0.5, show_edges=True)
+    plotter.add_mesh(poly_data, color="aqua", opacity=0.5, show_edges=True)
 
     plotter.show()
-
 
     """
     Output
     """
-    
+
     # Determine the output directory based on provided path
     if not output_dir:
         output_dir = os.path.join(os.path.dirname(file_path), "polyhedrons")
@@ -82,3 +144,5 @@ def plot(points, labels, file_path, is_displayed, output_dir=None):
     """
     # Save the screenshot
     plotter.screenshot(save_path)
+
+

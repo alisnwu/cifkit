@@ -404,7 +404,14 @@ class Cif:
 
     @ensure_connections
     def plot_polyhedron(self, site_label, is_displayed=False, output_dir=None):
-        coords, labels = get_polyhedron_coordinates_labels(
+        coords, vertex_labels = get_polyhedron_coordinates_labels(
             self.CN_connections_by_best_methods, site_label
         )
-        polyhedron.plot(coords, labels, self.file_path, is_displayed, output_dir)
+        polyhedron.plot(
+            coords,
+            vertex_labels,
+            self.file_path,
+            self.formula,
+            is_displayed,
+            output_dir,
+        )
