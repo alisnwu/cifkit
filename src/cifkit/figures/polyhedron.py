@@ -5,21 +5,23 @@ from scipy.spatial import ConvexHull
 from scipy.spatial import Delaunay
 
 
-def plot(points, labels, file_path, output_dir=None):
+def plot(points, labels, file_path, is_displayed, output_dir=None):
     """
     Generate and save a 3D plot of a molecular structure.
     """
+    plotter = pv.Plotter(off_screen = not is_displayed)
+        
     points = np.array(points)
-    plotter = pv.Plotter(off_screen=True)
     central_atom_coord = points[-1]
     central_atom_label = labels[-1]
 
+    # plotter = pv.Plotter()
+
     for point, label in zip(points, labels):
-        radius = (
-            0.6 if np.array_equal(point, central_atom_coord) else 0.4
-        )  # Central atom larger
+        radius = 0.6 if np.array_equal(point, central_atom_coord) else 0.4  # Central atom larger
         sphere = pv.Sphere(radius=radius, center=point)
-        plotter.add_mesh(sphere, color="#D3D3D3")  # Light grey color
+        plotter.add_mesh(sphere, color='#D3D3D3')  # Light grey color
+
 
     delaunay = Delaunay(points)
     hull = ConvexHull(points)
@@ -41,20 +43,23 @@ def plot(points, labels, file_path, output_dir=None):
     for edge in edges:
         if edge in hull_edges:
             start, end = points[edge[0]], points[edge[1]]
-            cylinder = pv.Cylinder(
-                center=(start + end) / 2,
-                direction=end - start,
-                radius=0.05,
-                height=np.linalg.norm(end - start),
-            )
-            plotter.add_mesh(cylinder, color="grey")
+            cylinder = pv.Cylinder(center=(start + end) / 2, direction=end - start, radius=0.05, height=np.linalg.norm(end - start))
+            plotter.add_mesh(cylinder, color='grey')
 
     faces = []
     for simplex in hull.simplices:
         faces.append([3] + list(simplex))
     poly_data = pv.PolyData(points, faces)
-    plotter.add_mesh(poly_data, color="aqua", opacity=0.5, show_edges=True)
 
+    plotter.add_mesh(poly_data, color='aqua', opacity=0.5, show_edges=True)
+
+    plotter.show()
+
+
+    """
+    Output
+    """
+    
     # Determine the output directory based on provided path
     if not output_dir:
         output_dir = os.path.join(os.path.dirname(file_path), "polyhedrons")
@@ -72,5 +77,8 @@ def plot(points, labels, file_path, output_dir=None):
     )
     save_path = os.path.join(output_dir, plot_filename)
 
+    """
+    Save
+    """
     # Save the screenshot
     plotter.screenshot(save_path)

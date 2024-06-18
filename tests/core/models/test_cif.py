@@ -3,7 +3,7 @@ import shutil
 import pytest
 from cifkit import Cif
 from cifkit.utils.error_messages import CifParserError
-
+from cifkit.utils import folder
 
 @pytest.mark.fast
 def test_cif_static_properties(cif_URhIn):
@@ -330,7 +330,10 @@ def test_get_polyhedron_labels_by_CN_best_methods(cif_URhIn):
     assert len(labels) == 18  # including the central atom
 
 
-"""Test polyhedron"""
+"""
+Test
+polyhedron
+"""
 
 
 def test_plot_polyhedron_default_output_folder(cif_URhIn):
@@ -360,12 +363,32 @@ def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
         os.makedirs(expected_output_dir)
 
     # Define the output file path
-    cif_URhIn.plot_polyhedron("In1", "tests/data/cif/polyhedrons_user")
+    cif_URhIn.plot_polyhedron("In1", output_dir="tests/data/cif/polyhedrons_user")
 
     assert os.path.exists(output_file_path)
     assert os.path.getsize(output_file_path) > 1024
+    
     shutil.rmtree(expected_output_dir)
 
+def test_plot_polyhedrons(cif_ensemble_test):
+    # Define the directory to store the output
+    expected_output_dir = "tests/data/cif/ensemble_test/polyhedrons"
+    # Ensure the directory exists
+    if not os.path.exists(expected_output_dir):
+        os.makedirs(expected_output_dir)
+        
+    cifs = cif_ensemble_test.cifs
+    for cif in cifs:
+        labels = cif.site_labels
+        for label in labels:
+            cif.plot_polyhedron(label)
+
+
+    # Check the number of files
+    image_file_count = folder.get_file_count(expected_output_dir, ".png")
+    assert image_file_count == 12
+
+    shutil.rmtree(expected_output_dir)
 
 """
 Test error during init

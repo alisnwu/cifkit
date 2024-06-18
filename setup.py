@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="cifkit",
-    version="0.19",
+    version="0.20",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     install_requires=[],  # List your dependencies here
