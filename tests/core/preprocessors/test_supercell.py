@@ -5,9 +5,7 @@ import pytest
 
 
 from cifkit.preprocessors.supercell import (
-    get_unitcell_coords_after_sym_operations_per_label,
     get_unitcell_coords_for_all_labels,
-    flatten_original_coordinates,
     get_supercell_points,
 )
 
@@ -168,9 +166,7 @@ def supercell_2_points_URhIn():
     yield unitcell_points
 
 
-def test_get_unit_cell_coordinates(
-    cif_block_URhIn, unitcell_points_URhIn
-):
+def test_get_unit_cell_coordinates(cif_block_URhIn, unitcell_points_URhIn):
     coordinates = get_unitcell_coords_for_all_labels(cif_block_URhIn)
 
     # Flatten the coordinates for comparision with the expected
@@ -197,9 +193,7 @@ def test_get_supercell_points_one_direction_shift(
     assert len(supercell_points) == 116
 
 
-def test_get_supercell_points_no_shift(
-    cif_block_URhIn, unitcell_points_URhIn
-):
+def test_get_supercell_points_no_shift(cif_block_URhIn, unitcell_points_URhIn):
     # No sfhits
     supercell_points = get_supercell_points(cif_block_URhIn, 1)
     assert set(supercell_points) == unitcell_points_URhIn

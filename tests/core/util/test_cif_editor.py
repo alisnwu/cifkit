@@ -14,9 +14,7 @@ def setup_and_teardown_file():
     temp_dir = tempfile.mkdtemp()
     original_file_path = "tests/data/cif/format_author/author.cif"
     temp_file_path = os.path.join(temp_dir, "author.cif")
-    reference_file_path = (
-        "tests/data/cif/format_author/author_removed.cif"
-    )
+    reference_file_path = "tests/data/cif/format_author/author_removed.cif"
 
     shutil.copyfile(original_file_path, temp_file_path)
     yield temp_file_path, reference_file_path

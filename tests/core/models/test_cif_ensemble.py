@@ -23,7 +23,12 @@ def test_unique_values(cif_ensemble_test: CifEnsemble):
     }
     assert cif_ensemble_test.unique_space_group_numbers == {139, 229}
     assert cif_ensemble_test.unique_composition_types == {1, 3}
-    assert cif_ensemble_test.unique_tags == {"hex", "rt", "rt_hex", ""}
+    assert cif_ensemble_test.unique_tags == {
+        "hex",
+        "rt",
+        "rt_hex",
+        "",
+    }
 
     assert cif_ensemble_test.unique_site_mixing_types == {
         "deficiency_no_atomic_mixing",
@@ -77,9 +82,7 @@ def test_filter_by_value(cif_ensemble_test: CifEnsemble):
         "tests/data/cif/ensemble_test/300169.cif",
     }
 
-    assert cif_ensemble_test.filter_by_formulas(
-        ["LaRu2Ge2", "Mo"]
-    ) == {
+    assert cif_ensemble_test.filter_by_formulas(["LaRu2Ge2", "Mo"]) == {
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250697.cif",
@@ -192,9 +195,7 @@ def test_filter_by_CN_dist_method_containing(
     # "tests/data/cif/ensemble_test/300170.cif" - min dist method
     # {16, 12, 5}
 
-    assert cif_ensemble_test.filter_by_CN_dist_method_containing(
-        [5]
-    ) == {
+    assert cif_ensemble_test.filter_by_CN_dist_method_containing([5]) == {
         "tests/data/cif/ensemble_test/300170.cif",
         "tests/data/cif/ensemble_test/300169.cif",
     }
@@ -204,9 +205,7 @@ def test_filter_by_CN_dist_method_containing(
 def test_filter_by_CN_dist_method_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert cif_ensemble_test.filter_by_CN_dist_method_exact_matching(
-        [14]
-    ) == {
+    assert cif_ensemble_test.filter_by_CN_dist_method_exact_matching([14]) == {
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250709.cif",
         "tests/data/cif/ensemble_test/250697.cif",
@@ -217,13 +216,8 @@ def test_filter_by_CN_dist_method_exact_matching(
 def test_filter_by_CN_best_methods_containing(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert (
-        cif_ensemble_test.filter_by_CN_best_methods_containing([5])
-        == set()
-    )
-    assert cif_ensemble_test.filter_by_CN_best_methods_containing(
-        [10]
-    ) == {
+    assert cif_ensemble_test.filter_by_CN_best_methods_containing([5]) == set()
+    assert cif_ensemble_test.filter_by_CN_best_methods_containing([10]) == {
         "tests/data/cif/ensemble_test/300170.cif",
         "tests/data/cif/ensemble_test/300169.cif",
     }
@@ -234,9 +228,7 @@ def test_filter_by_CN_best_methods_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
     assert (
-        cif_ensemble_test.filter_by_CN_best_methods_exact_matching(
-            [10]
-        )
+        cif_ensemble_test.filter_by_CN_best_methods_exact_matching([10])
         == set()
     )
 
@@ -324,9 +316,7 @@ def test_move_files(tmp_path: Path, cif_ensemble_test: CifEnsemble):
     initial_file_count = get_file_count(initial_dir_path)
     # Move files to the destination directory
     cif_ensemble_test.move_cif_files(file_paths, dest_dir)
-    assert get_file_count(dest_dir) == initial_file_count - len(
-        file_paths
-    )
+    assert get_file_count(dest_dir) == initial_file_count - len(file_paths)
     cif_ensemble_test.move_cif_files(
         set(get_file_path_list(dest_dir)), initial_dir_path
     )
@@ -444,9 +434,7 @@ Test stat histograms
 @pytest.mark.slow
 def test_generate_histogram(cif_ensemble_test, tmp_path):
     output_dir = tmp_path / "histograms"
-    cif_ensemble_test.generate_stat_histograms(
-        output_dir=str(output_dir)
-    )
+    cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
 
     # List of expected files
     expected_files = [

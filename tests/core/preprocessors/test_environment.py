@@ -6,9 +6,7 @@ from cifkit.preprocessors.environment import (
 from deepdiff import DeepDiff
 
 
-def assert_minimum_distance(
-    label, connections_dict, expected_min_distance
-):
+def assert_minimum_distance(label, connections_dict, expected_min_distance):
     """
     Asserts that the minimum distance for a given label in the
     connections dictionary matches the expected minimum distance.
@@ -18,9 +16,7 @@ def assert_minimum_distance(
     # Check if there are any connections, and calculate the minimum distance
     if connections:
         min_distance = min(connection[1] for connection in connections)
-        assert np.isclose(
-            min_distance, expected_min_distance, atol=1e-2
-        )
+        assert np.isclose(min_distance, expected_min_distance, atol=1e-2)
 
 
 def test_get_nearest_dists_per_site_cooridnation_number(

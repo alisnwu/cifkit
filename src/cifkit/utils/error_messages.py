@@ -18,9 +18,7 @@ class CifParserError(Enum):
     INVALID_LOOP_TAGS = (
         "The returned loop tags do not match the expected tags."
     )
-    WRONG_LOOP_VALUE_COUNT = (
-        "Wrong number of values in loop _atom_site_*"
-    )
+    WRONG_LOOP_VALUE_COUNT = "Wrong number of values in loop _atom_site_*"
     DUPLICATE_LABELS = "The file contains duplicate atom site labels."
     INVALID_PARSED_ELEMENT = (
         "The element was not correctly parsed from the site label."
@@ -33,4 +31,6 @@ class FileError(Enum):
 
 
 class OccupancyError(Enum):
-    INVALID_MIXING_TYPE = "The file cannot be categorized into one of the 4 mixing types."
+    INVALID_MIXING_TYPE = (
+        "The file cannot be categorized into one of the 4 mixing types."
+    )

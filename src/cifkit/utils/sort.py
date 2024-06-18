@@ -11,8 +11,6 @@ def sort_element_pair_tuples(
     ]
 
     # Priotize alphabetic sort, and sort by distance
-    sorted_tuples = sorted(
-        alp_sorted_tuples, key=lambda x: (x[0], x[1])
-    )
+    sorted_tuples = sorted(alp_sorted_tuples, key=lambda x: (x[0], x[1]))
 
     return sorted_tuples

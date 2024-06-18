@@ -33,16 +33,12 @@ def get_CIF_pauling_radius(elements: list[str]) -> dict:
     return radii
 
 
-def get_radius_values_per_element(
-    elements, shortest_bond_distances
-) -> dict:
+def get_radius_values_per_element(elements, shortest_bond_distances) -> dict:
     """
     Merge CIF and Pauling radius data with CIF refined radius data.
     """
     CIF_pauling_rad = get_CIF_pauling_radius(elements)
-    CIF_refined_rad = get_refined_CIF_radius(
-        elements, shortest_bond_distances
-    )
+    CIF_refined_rad = get_refined_CIF_radius(elements, shortest_bond_distances)
 
     combined_radii = {}
     for element in elements:
@@ -75,9 +71,7 @@ def compute_radius_sum(radius_values) -> dict:
 
             # Element pair label, e.g., A-B or A-A
             pair_label = (
-                f"{elem_i}-{elem_j}"
-                if i != j
-                else f"{elem_i}-{elem_i}"
+                f"{elem_i}-{elem_j}" if i != j else f"{elem_i}-{elem_i}"
             )
 
             # Sum radii for each radius type
@@ -86,9 +80,7 @@ def compute_radius_sum(radius_values) -> dict:
                 + radius_values[elem_j]["CIF_radius"],
                 3,
             )
-            pair_distances["CIF_radius_refined_sum"][
-                pair_label
-            ] = round(
+            pair_distances["CIF_radius_refined_sum"][pair_label] = round(
                 radius_values[elem_i]["CIF_radius_refined"]
                 + radius_values[elem_j]["CIF_radius_refined"],
                 3,

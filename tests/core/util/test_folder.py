@@ -98,13 +98,11 @@ def test_move_files(tmp_path, cif_folder_path_test, file_paths_test):
     move_files(dest_dir, file_paths_test)
 
     # Check the file count in the source directory after move
-    assert get_file_count(
-        cif_folder_path_test
-    ) == initial_file_count - len(file_paths_test)
-    # Move files back to the original source directory
-    move_files(
-        str(cif_folder_path_test), get_file_path_list(str(dest_dir))
+    assert get_file_count(cif_folder_path_test) == initial_file_count - len(
+        file_paths_test
     )
+    # Move files back to the original source directory
+    move_files(str(cif_folder_path_test), get_file_path_list(str(dest_dir)))
 
     # Final file count in the source directory
     final_file_count = get_file_count(cif_folder_path_test)

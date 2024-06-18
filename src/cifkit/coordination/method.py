@@ -62,15 +62,11 @@ def compute_CN_max_gap_per_site(
                 norm_dist_by_CIF_radius_sum = compute_normalized_value(
                     pair_dist, CIF_radius_sum_norm_value
                 )
-                norm_dist_by_CIF_radius_refined_sum = (
-                    compute_normalized_value(
-                        pair_dist, CIF_radius_sum_refined_norm_value
-                    )
+                norm_dist_by_CIF_radius_refined_sum = compute_normalized_value(
+                    pair_dist, CIF_radius_sum_refined_norm_value
                 )
-                norm_dist_by_Pauling_radius_sum = (
-                    compute_normalized_value(
-                        pair_dist, Pauling_rad_sum_norm_value
-                    )
+                norm_dist_by_Pauling_radius_sum = compute_normalized_value(
+                    pair_dist, Pauling_rad_sum_norm_value
                 )
 
             # Compute normalized distances
@@ -91,20 +87,17 @@ def compute_CN_max_gap_per_site(
                 }
 
             for method, norm_distance in distances.items():
-                norm_dists_per_label[ref_label][method].append(
-                    norm_distance
-                )
+                norm_dists_per_label[ref_label][method].append(norm_distance)
 
                 # Calculate and update max gaps
                 if previous_values[method] is not None:
                     current_gap = round(
-                        abs(norm_distance - previous_values[method]), 3
+                        abs(norm_distance - previous_values[method]),
+                        3,
                     )
                     if (
                         current_gap
-                        > max_gaps_per_label[ref_label][method][
-                            "max_gap"
-                        ]
+                        > max_gaps_per_label[ref_label][method]["max_gap"]
                     ):
                         max_gaps_per_label[ref_label][method][
                             "max_gap"
@@ -120,9 +113,7 @@ def compute_normalized_value(number, ref_number):
     return round((number / ref_number), 5)
 
 
-def get_rad_sum_value(
-    rad_sum_data, method_name, ref_label, other_label
-):
+def get_rad_sum_value(rad_sum_data, method_name, ref_label, other_label):
     """
     Return the sum of radii value for a given pair of elements,
     ensuring the pair is alphabetically sorted.

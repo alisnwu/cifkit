@@ -42,10 +42,8 @@ def cif_folder_path_test():
 def parsed_formula_weight_structure_s_group_data(
     cif_folder_path_test,
 ):
-    results = (
-        cif_parser.get_unique_formulas_structures_weights_s_groups(
-            cif_folder_path_test
-        )
+    results = cif_parser.get_unique_formulas_structures_weights_s_groups(
+        cif_folder_path_test
     )
     return results
 
@@ -87,9 +85,7 @@ def loop_values_URhIn(cif_block_URhIn):
 
 @pytest.fixture(scope="module")
 def unitcell_coords_URhIn(cif_block_URhIn):
-    return supercell.get_unitcell_coords_for_all_labels(
-        cif_block_URhIn
-    )
+    return supercell.get_unitcell_coords_for_all_labels(cif_block_URhIn)
 
 
 @pytest.fixture(scope="module")
@@ -219,7 +215,10 @@ def max_gaps_per_label_URhIn():
                 "max_gap": 0.341,
                 "CN": 12,
             },
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.398, "CN": 14},
+            "dist_by_Pauling_radius_sum": {
+                "max_gap": 0.398,
+                "CN": 14,
+            },
         },
         "U1": {
             "dist_by_shortest_dist": {"max_gap": 0.197, "CN": 11},
@@ -228,7 +227,10 @@ def max_gaps_per_label_URhIn():
                 "max_gap": 0.27,
                 "CN": 17,
             },
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.254, "CN": 17},
+            "dist_by_Pauling_radius_sum": {
+                "max_gap": 0.254,
+                "CN": 17,
+            },
         },
         "Rh1": {
             "dist_by_shortest_dist": {"max_gap": 0.315, "CN": 9},

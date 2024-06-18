@@ -56,9 +56,7 @@ def test_compute_polyhedron_metrics():
     ]
 
     hull = ConvexHull(polyhedron_points)
-    polyhedron_metrics = compute_polyhedron_metrics(
-        polyhedron_points, hull
-    )
+    polyhedron_metrics = compute_polyhedron_metrics(polyhedron_points, hull)
     assert polyhedron_metrics == {
         "volume_of_polyhedron": 60.631,
         "distance_from_avg_point_to_center": 0.328,

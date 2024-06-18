@@ -141,17 +141,12 @@ def test_get_line_content_from_tag(file_path_URhIn):
     assert len(content_lines) == 4
     assert content_lines[0].strip() == "In1 In 3 g 0.2505 0 0.5 1"
     assert content_lines[1].strip() == "U1 U 3 f 0.5925 0 0 1"
-    assert (
-        content_lines[2].strip()
-        == "Rh1 Rh 2 d 0.333333 0.666667 0.5 1"
-    )
+    assert content_lines[2].strip() == "Rh1 Rh 2 d 0.333333 0.666667 0.5 1"
     assert content_lines[3].strip() == "Rh2 Rh 1 a 0 0 0 1"
 
 
 def test_get_formula_structure_weight_sgroup(cif_block_URhIn):
-    parsed_result = get_formula_structure_weight_s_group(
-        cif_block_URhIn
-    )
+    parsed_result = get_formula_structure_weight_s_group(cif_block_URhIn)
     (
         formula,
         structure,
@@ -232,6 +227,37 @@ def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
     }
 
     assert atom_site_info == expected
+
+
+@pytest.mark.fast
+def test_get_parsed_atom_site_occupancy_info_with_braket():
+    """
+    Er7 Er 16 h 0.06284 0.06662 0.39495 1
+    Co13B Co 4 c 0.75 0.25 0.59339 0.07(3)
+    `"""
+    file_path = "tests/data/cif/cif_parser/1814810.cif"
+    atom_site_info = parse_atom_site_occupancy_info(file_path)
+    print(atom_site_info)
+    assert atom_site_info == {
+        "Er7": {
+            "element": "Er",
+            "site_occupancy": 1.0,
+            "x_frac_coord": 0.06284,
+            "y_frac_coord": 0.06662,
+            "z_frac_coord": 0.39495,
+            "symmetry_multiplicity": 16,
+            "wyckoff_symbol": "h",
+        },
+        "Co13B": {
+            "element": "Co",
+            "site_occupancy": 0.07,
+            "x_frac_coord": 0.75,
+            "y_frac_coord": 0.25,
+            "z_frac_coord": 0.59339,
+            "symmetry_multiplicity": 4,
+            "wyckoff_symbol": "c",
+        },
+    }
 
 
 def test_check_unique_atom_site_labels(file_path_URhIn):

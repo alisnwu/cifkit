@@ -57,8 +57,7 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
 
     edge_centers = np.array(
         [
-            (polyhedron_points[edge[0]] + polyhedron_points[edge[1]])
-            / 2
+            (polyhedron_points[edge[0]] + polyhedron_points[edge[1]]) / 2
             for edge in edges
         ]
     )
@@ -69,9 +68,7 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
 
     radius_of_inscribed_sphere = shortest_distance_to_face
 
-    volume_of_inscribed_sphere = (
-        4 / 3 * np.pi * radius_of_inscribed_sphere**3
-    )
+    volume_of_inscribed_sphere = 4 / 3 * np.pi * radius_of_inscribed_sphere**3
 
     packing_efficiency = volume_of_inscribed_sphere / hull.volume
 
@@ -97,9 +94,7 @@ def compute_center_of_mass_and_distance(
     Calculate the center of mass of a polyhedron and the distance
     from the center of mass to a given point.
     """
-    center_of_mass = np.mean(
-        polyhedron_points[hull.vertices, :], axis=0
-    )
+    center_of_mass = np.mean(polyhedron_points[hull.vertices, :], axis=0)
     vector_to_center_of_mass = center_of_mass - central_atom_coord
     distance_to_center = np.linalg.norm(vector_to_center_of_mass)
     return center_of_mass, distance_to_center

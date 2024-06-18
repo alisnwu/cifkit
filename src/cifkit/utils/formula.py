@@ -93,9 +93,7 @@ def get_unique_elements_from_formulas(formulas: list) -> set[str]:
         )  # Assume this function returns a list of tuples
         for element, _ in parsed_formula:
             if element:  # Ensure that element is not empty
-                unique_elements.add(
-                    element
-                )  # Add the element to the set
+                unique_elements.add(element)  # Add the element to the set
 
     return unique_elements
 

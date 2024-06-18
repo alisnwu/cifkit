@@ -30,7 +30,6 @@ def get_string_to_formatted_float(str_value: str) -> float:
     Remove parentheses from a value string and convert to float.
     """
     str_value = str_value.strip()
-    isinstance
 
     return (
         float(str_value.split("(")[0])

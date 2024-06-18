@@ -3,6 +3,7 @@ Import statements placed bottom to avoid cluttering.
 """
 
 # Polyhedron
+import os
 from cifkit.figures import polyhedron
 from cifkit.utils.unit import round_dict_values
 
@@ -42,7 +43,9 @@ from cifkit.data.radius_handler import (
 )
 
 # Coordination number
-from cifkit.preprocessors.environment_util import flat_site_connections
+from cifkit.preprocessors.environment_util import (
+    flat_site_connections,
+)
 from cifkit.coordination.composition import (
     get_bond_counts,
     get_bond_fractions,
@@ -94,12 +97,15 @@ def ensure_connections(func):
 
 
 class Cif:
-    def __init__(self, file_path: str) -> None:
-        """Initialize the Cif object with the file path."""
+    def __init__(self, file_path: str, display=True) -> None:
+
         self.file_path = file_path
-        self.connections = (
-            None  # Private attribute to store connections
-        )
+        if display:
+            print(f"Processing {self.file_path}")
+        """Initialize the Cif object with the file path."""
+        self.file_name = os.path.basename(file_path)
+        self.file_name_without_ext = os.path.splitext(self.file_name)[0]
+        self.connections = None  # Private attribute to store connections
         self._shortest_pair_distance = None
         self._preprocess()
         self._load_data()
@@ -123,9 +129,7 @@ class Cif:
         self.unitcell_lengths = get_unitcell_lengths(self._block)
         self.unitcell_angles = get_unitcell_angles_rad(self._block)
         self.site_labels = get_unique_site_labels(self._loop_values)
-        self.unique_elements = get_unique_elements_from_loop(
-            self._loop_values
-        )
+        self.unique_elements = get_unique_elements_from_loop(self._loop_values)
         (
             self.formula,
             self.structure,
@@ -135,15 +139,11 @@ class Cif:
         ) = get_formula_structure_weight_s_group(self._block)
         self.composition_type = len(self.unique_elements)
         self.tag = get_tag_from_third_line(self.file_path)
-        self.atom_site_info = parse_atom_site_occupancy_info(
-            self.file_path
-        )
+        self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
         self.heterogeneous_bond_pairs = get_heterogenous_element_pairs(
             self.formula
         )
-        self.homogenous_bond_pairs = get_homogenous_element_pairs(
-            self.formula
-        )
+        self.homogenous_bond_pairs = get_homogenous_element_pairs(self.formula)
         self.all_bond_pairs = get_all_bond_pairs(self.formula)
         self.site_mixing_type = get_site_mixing_type(self._loop_values)
         self.is_radius_data_available = get_is_radius_data_available(
@@ -154,12 +154,8 @@ class Cif:
         """Generate supercell information based on the unit cell data."""
         self.unitcell_points = get_supercell_points(self._block, 1)
         self.supercell_points = get_supercell_points(self._block, 3)
-        self.unitcell_atom_count = get_cell_atom_count(
-            self.unitcell_points
-        )
-        self.supercell_atom_count = get_cell_atom_count(
-            self.supercell_points
-        )
+        self.unitcell_atom_count = get_cell_atom_count(self.unitcell_points)
+        self.supercell_atom_count = get_cell_atom_count(self.supercell_points)
 
     """
     Coordination number util
@@ -179,25 +175,19 @@ class Cif:
         )
 
         # Flattened coordinations
-        self._connections_flattened = flat_site_connections(
-            self.connections
-        )
+        self._connections_flattened = flat_site_connections(self.connections)
 
         # Shortest distance
-        self._shortest_distance = get_shortest_distance(
-            self.connections
-        )
+        self._shortest_distance = get_shortest_distance(self.connections)
 
         # Shortest distance per bond pair
         self._shortest_bond_pair_distance = (
-            get_shortest_distance_per_bond_pair(
-                self.connections_flattened
-            )
+            get_shortest_distance_per_bond_pair(self.connections_flattened)
         )
 
         # Shortest distance per site
-        self._shortest_site_pair_distance = (
-            get_shortest_distance_per_site(self.connections)
+        self._shortest_site_pair_distance = get_shortest_distance_per_site(
+            self.connections
         )
 
         # Parse individual radii per element
@@ -239,17 +229,15 @@ class Cif:
             self.formula, self.CN_connections_by_best_methods
         )
         # Bond fractions
-        self._CN_bond_fractions_by_min_dist_method = (
-            get_bond_fractions(self.CN_bond_count_by_min_dist_method)
+        self._CN_bond_fractions_by_min_dist_method = get_bond_fractions(
+            self.CN_bond_count_by_min_dist_method
         )
         self._CN_bond_fractions_by_best_methods = get_bond_fractions(
             self.CN_bond_count_by_best_methods
         )
         # Unique CN
-        self._CN_unique_values_by_min_dist_method = (
-            get_unique_CN_values(
-                self.CN_connections_by_min_dist_method
-            )
+        self._CN_unique_values_by_min_dist_method = get_unique_CN_values(
+            self.CN_connections_by_min_dist_method
         )
         self._CN_unique_values_by_best_methods = get_unique_CN_values(
             self.CN_connections_by_best_methods

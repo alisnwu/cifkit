@@ -196,9 +196,7 @@ def get_start_end_line_indexes(
     return start_index, end_index
 
 
-def get_line_content_from_tag(
-    file_path: str, start_keyword: str
-) -> list[str]:
+def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
     """
     Returns a list containing file content with starting keyword.
     """
@@ -288,9 +286,7 @@ def get_tag_from_third_line(file_path: str) -> str:
 
         # Split based on '#' and filter out empty strings
         third_line_parts = [
-            part.strip()
-            for part in third_line.split("#")
-            if part.strip()
+            part.strip() for part in third_line.split("#") if part.strip()
         ]
 
         formula_tag = third_line_parts[1]
@@ -318,10 +314,10 @@ def parse_atom_site_occupancy_info(file_path: str) -> dict:
         element = parts[1]
         symmetry_multiplicity = int(parts[2])
         wyckoff_symbol = parts[3]
-        x_frac_coord = float(parts[4])  # Fractional coordinate x
-        y_frac_coord = float(parts[5])  # Fractional coordinate y
-        z_frac_coord = float(parts[6])  # Fractional coordinate z
-        site_occupancy = float(parts[7])
+        x_frac_coord = get_string_to_formatted_float(parts[4])
+        y_frac_coord = get_string_to_formatted_float(parts[5])
+        z_frac_coord = get_string_to_formatted_float(parts[6])
+        site_occupancy = get_string_to_formatted_float(parts[7])
 
         parsed_data[atom_site_label] = {
             "element": element,
@@ -346,21 +342,14 @@ def check_unique_atom_site_labels(file_path: str):
     for line in content_lines:
         parts = line.split()
         if len(parts) != 8:
-            raise ValueError(
-                CifParserError.WRONG_LOOP_VALUE_COUNT.value
-            )
+            raise ValueError(CifParserError.WRONG_LOOP_VALUE_COUNT.value)
 
         parsed_site_label = parts[0]
         parsed_element = parts[1]
         site_labels.add(parsed_site_label)
 
-        if (
-            get_atom_type_from_label(parsed_site_label)
-            != parsed_element
-        ):
-            raise ValueError(
-                CifParserError.INVALID_PARSED_ELEMENT.value
-            )
+        if get_atom_type_from_label(parsed_site_label) != parsed_element:
+            raise ValueError(CifParserError.INVALID_PARSED_ELEMENT.value)
 
     # If the count of unique labels does not match the number of lines, raise an error
     if len(content_lines) != len(site_labels):

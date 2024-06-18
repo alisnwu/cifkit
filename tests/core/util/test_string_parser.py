@@ -60,7 +60,8 @@ def test_get_atom_type_with_error():
         ),  # Negative decimal with parentheses
     ],
 )
-def test_remove_string_braket(value_string, expected):
+@pytest.mark.fast
+def test_get_string_to_formatted_float(value_string, expected):
     assert get_string_to_formatted_float(value_string) == expected
 
 

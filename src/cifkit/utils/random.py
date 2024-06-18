@@ -11,6 +11,4 @@ def generate_random_numbers(
     if is_float:
         return [random.uniform(low, high) for _ in range(count)]
     else:
-        return [
-            random.randint(int(low), int(high)) for _ in range(count)
-        ]
+        return [random.randint(int(low), int(high)) for _ in range(count)]

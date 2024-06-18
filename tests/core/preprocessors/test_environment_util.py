@@ -1,4 +1,6 @@
-from cifkit.preprocessors.environment_util import flat_site_connections
+from cifkit.preprocessors.environment_util import (
+    flat_site_connections,
+)
 
 import pytest
 
@@ -14,8 +16,7 @@ def test_flat_site_connections(connections_URhIn):
             isinstance(connection, tuple) and len(connection) == 2
         ), "Each item should be a tuple with two elements."
         assert (
-            isinstance(connection[0], tuple)
-            and len(connection[0]) == 2
+            isinstance(connection[0], tuple) and len(connection[0]) == 2
         ), "First element of each item should be a tuple of two strings."
         assert isinstance(
             connection[1], float

@@ -5,7 +5,11 @@ from cifkit import Cif
 from cifkit.utils.error_messages import CifParserError
 
 
+@pytest.mark.fast
 def test_cif_static_properties(cif_URhIn):
+    assert cif_URhIn.file_path == "tests/data/cif/URhIn.cif"
+    assert cif_URhIn.file_name == "URhIn.cif"
+    assert cif_URhIn.file_name_without_ext == "URhIn"
     assert cif_URhIn.unique_elements == {"In", "Rh", "U"}
     assert cif_URhIn.composition_type == 3
     assert cif_URhIn.formula == "URhIn"
@@ -129,8 +133,7 @@ def test_shortest_distance_per_site(cif_URhIn):
 
     assert all(
         result[label][0] == expected[label][0]
-        and pytest.approx(result[label][1], 0.001)
-        == expected[label][1]
+        and pytest.approx(result[label][1], 0.001) == expected[label][1]
         for label in result
     )
 
@@ -333,9 +336,7 @@ def test_get_polyhedron_labels_by_CN_best_methods(cif_URhIn):
 def test_plot_polyhedron_default_output_folder(cif_URhIn):
     # Define the directory to store the output
     expected_output_dir = "tests/data/cif/polyhedrons"
-    output_file_path = os.path.join(
-        expected_output_dir, "URhIn_In1.png"
-    )
+    output_file_path = os.path.join(expected_output_dir, "URhIn_In1.png")
 
     # Ensure the directory exists
     if not os.path.exists(expected_output_dir):
@@ -352,9 +353,7 @@ def test_plot_polyhedron_default_output_folder(cif_URhIn):
 def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
     # Define the directory to store the output
     expected_output_dir = "tests/data/cif/polyhedrons_user"
-    output_file_path = os.path.join(
-        expected_output_dir, "URhIn_In1.png"
-    )
+    output_file_path = os.path.join(expected_output_dir, "URhIn_In1.png")
 
     # Ensure the directory exists
     if not os.path.exists(expected_output_dir):
@@ -386,7 +385,5 @@ def test_init_error_coord_missing():
     file_path = "tests/data/cif/error/missing_loop/452743.cif"
     with pytest.raises(ValueError) as e:
         Cif(file_path)
-    expected_error_message = (
-        CifParserError.WRONG_LOOP_VALUE_COUNT.value
-    )
+    expected_error_message = CifParserError.WRONG_LOOP_VALUE_COUNT.value
     assert expected_error_message == str(e.value)

@@ -16,9 +16,7 @@ def get_coord_occupancy_sum(loop_values):
             occupancy,
             coordinates,
         ) = cif_parser.get_label_occupancy_coordinates(loop_values, i)
-        occupancy_num = (
-            coord_occupancy_sum.get(coordinates, 0) + occupancy
-        )
+        occupancy_num = coord_occupancy_sum.get(coordinates, 0) + occupancy
         coord_occupancy_sum[coordinates] = occupancy_num
 
     return coord_occupancy_sum
