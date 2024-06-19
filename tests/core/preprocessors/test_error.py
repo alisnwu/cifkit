@@ -21,16 +21,16 @@ def test_move_files_based_on_errors(tmp_path):
 
     # Define expected directories
     expected_dirs = {
-        "duplicate_labels": tmp_dir / "duplicate_labels",
-        "wrong_loop_value": tmp_dir / "wrong_loop_value",
-        "invalid_label": tmp_dir / "invalid_label",
-        "other_error": tmp_dir / "other_error",
+        "error_duplicate_labels": tmp_dir / "error_duplicate_labels",
+        "error_wrong_loop_value": tmp_dir / "error_wrong_loop_value",
+        "error_invalid_label": tmp_dir / "error_invalid_label",
+        "error_others": tmp_dir / "error_others",
     }
 
     # Run the function with the paths in the temporary directory
     move_files_based_on_errors(str(tmp_dir))
 
     # Assert the number of files in each directory
-    assert get_file_count(expected_dirs["duplicate_labels"]) == 1
-    assert get_file_count(expected_dirs["wrong_loop_value"]) == 1
-    # assert get_file_count(expected_dirs["other_error"]) == 1
+    assert get_file_count(expected_dirs["error_wrong_loop_value"]) == 1
+    assert get_file_count(expected_dirs["error_duplicate_labels"]) == 1
+    assert get_file_count(expected_dirs["error_duplicate_labels"]) == 1

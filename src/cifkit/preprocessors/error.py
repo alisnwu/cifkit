@@ -21,43 +21,49 @@ def move_files_based_on_errors(dir_path):
 
     # Dictionary to hold directory paths for each error type
     error_directories = {
-        CifParserError.SYMMETRY_OPERATION_ERROR: dir_path / "bad_op",
-        CifParserError.WRONG_LOOP_VALUE_COUNT: dir_path / "wrong_loop_value",
-        CifParserError.MISSING_COORDINATES: dir_path / "bad_coords",
-        CifParserError.INVALID_PARSED_ELEMENT: dir_path / "invalid_label",
-        CifParserError.DUPLICATE_LABELS: dir_path / "duplicate_labels",
-        "other_error": dir_path / "other_error",
+        "error_operations": dir_path / "error_operations",
+        "error_duplicate_labels": dir_path / "error_duplicate_labels",
+        "error_wrong_loop_value": dir_path / "error_wrong_loop_value",
+        "error_coords": dir_path / "error_coords",
+        "error_invalid_label": dir_path / "error_invalid_label",
+        "error_others": dir_path / "error_others",
     }
 
     # Ensure all direct
-    num_files = {key.value: 0 for key in CifParserError}
-    num_files["other_error"] = 0
-
+    file_paths = list(dir_path.glob("*.cif"))
+    num_files_moved = {key: 0 for key in error_directories.keys()}
     file_paths = folder.get_file_paths(str(dir_path))
 
-    for file_path in file_paths:
+    for i, file_path in enumerate(file_paths, start=1):
         filename = os.path.basename(file_path)
-        moved = False
-
+        print(f"Preprocessing {file_path} ({i}/{len(file_paths)})")
         try:
             Cif(file_path)
         except Exception as e:
             error_message = str(e)
-            for error, message in CifParserError.__members__.items():
-                if message.value in error_message:
-                             
-                    make_directory_and_move(
-                        file_path, error_directories[message], filename
-                    )
-                    num_files[message.value] += 1
-                    moved = True
-                    break
+            # Example of handling specific errors, adjust as needed
+            if "symmetry operation" in error_message:
+                error_type = "error_operations"
+            elif "contains duplicate atom site labels" in error_message:
+                error_type = "error_duplicate_labels"
+            elif "Wrong number of values in loop" in error_message:
+                error_type = "error_wrong_loop_value"
+            elif "missing atomic coordinates" in error_message:
+                error_type = "error_coords"
+            elif "incorrectly parsed element" in error_message:
+                error_type = "error_invalid_label"
+            else:
+                error_type = "error_others"
 
-            if not moved:
-                make_directory_and_move(
-                    file_path, error_directories["other_error"], filename
-                )
-                num_files["other_error"] += 1
+            make_directory_and_move(
+                file_path, error_directories[error_type], filename
+            )
+            num_files_moved[error_type] += 1
+            print(
+                f"File {filename} moved to '{error_type}' due to: {error_message}"
+            )
 
-            print(f"File {filename} moved due to error: {error_message}")
-    print(num_files)
+    # Display the number of files moved to each folder
+    print("\nSUMMARY")
+    for error_type, count in num_files_moved.items():
+        print(f"# of files moved to '{error_type}' folder: {count}")
