@@ -9,19 +9,21 @@ from cifkit.coordination.composition import (
 )
 
 
-def test_get_bond_counts(formula_URhIn, CN_connections_by_min_dist_URhIn):
+def test_get_bond_counts(CN_connections_by_min_dist_URhIn):
     expected = {
         "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
         "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},
         "Rh2": {("In", "Rh"): 6, ("Rh", "U"): 3},
         "U1": {("In", "U"): 6, ("Rh", "U"): 5},
     }
+    elements = {"In", "Rh", "U"}
+
     assert (
-        get_bond_counts(formula_URhIn, CN_connections_by_min_dist_URhIn)
-        == expected
+        get_bond_counts(elements, CN_connections_by_min_dist_URhIn) == expected
     )
 
 
+@pytest.mark.now
 def test_get_bond_fraction(bond_counts_CN):
     # Expected output based on input data
     expected_fractions = {

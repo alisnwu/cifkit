@@ -23,24 +23,48 @@ def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.space_group_number == 189
 
     assert cif_URhIn.tag == "rt"
-    assert cif_URhIn.heterogeneous_bond_pairs == {
-        ("In", "Rh"),
-        ("In", "U"),
-        ("Rh", "U"),
-    }
-    assert cif_URhIn.homogenous_bond_pairs == {
+
+    assert cif_URhIn.bond_pairs == {
         ("U", "U"),
         ("Rh", "Rh"),
         ("In", "In"),
+        ("In", "Rh"),
+        ("In", "U"),
+        ("Rh", "U"),
     }
 
-    assert cif_URhIn.all_bond_pairs == {
-        ("U", "U"),
+    assert cif_URhIn.bond_pairs_sorted_by_mendeleev == {
         ("Rh", "Rh"),
+        ("U", "Rh"),
+        ("U", "U"),
         ("In", "In"),
-        ("In", "Rh"),
-        ("In", "U"),
-        ("Rh", "U"),
+        ("Rh", "In"),
+        ("U", "In"),
+    }
+
+    assert cif_URhIn.site_label_pairs == {
+        ("In1", "Rh2"),
+        ("Rh1", "Rh2"),
+        ("Rh2", "Rh2"),
+        ("In1", "Rh1"),
+        ("Rh1", "U1"),
+        ("In1", "U1"),
+        ("Rh2", "U1"),
+        ("In1", "In1"),
+        ("Rh1", "Rh1"),
+        ("U1", "U1"),
+    }
+    assert cif_URhIn.site_label_pairs_sorted_by_mendeleev == {
+        ("Rh2", "Rh2"),
+        ("Rh1", "Rh2"),
+        ("U1", "Rh2"),
+        ("Rh2", "In1"),
+        ("In1", "In1"),
+        ("Rh1", "Rh1"),
+        ("U1", "Rh1"),
+        ("U1", "U1"),
+        ("Rh1", "In1"),
+        ("U1", "In1"),
     }
 
     assert cif_URhIn.atom_site_info == {
@@ -243,6 +267,7 @@ by (1) min_dist method and (2) best method
 @pytest.mark.fast
 def test_CN_bond_counts_by_min_dist_method(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_min_dist_method
+
     assert result == {
         "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
         "Rh1": {("In", "Rh"): 3, ("Rh", "U"): 6},

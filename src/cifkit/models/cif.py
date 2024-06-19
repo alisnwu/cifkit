@@ -79,9 +79,8 @@ from cifkit.coordination.geometry import (
 )
 
 from cifkit.utils.bond_pair import (
-    get_heterogenous_element_pairs,
-    get_homogenous_element_pairs,
-    get_all_bond_pairs,
+    get_bond_pairs,
+    get_pairs_sorted_by_mendeleev,
 )
 
 from cifkit.occupacny.mixing import get_site_mixing_type
@@ -161,12 +160,17 @@ class Cif:
         self.composition_type = len(self.unique_elements)
         self.tag = get_tag_from_third_line(self.file_path)
         self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
-        self.heterogeneous_bond_pairs = get_heterogenous_element_pairs(
-            self.formula
+        self.bond_pairs = get_bond_pairs(self.unique_elements)
+        self.site_label_pairs = get_bond_pairs(self.site_labels)
+        self.bond_pairs_sorted_by_mendeleev = get_pairs_sorted_by_mendeleev(
+            self.unique_elements
         )
-        self.homogenous_bond_pairs = get_homogenous_element_pairs(self.formula)
-        self.all_bond_pairs = get_all_bond_pairs(self.formula)
-        self.site_mixing_type = get_site_mixing_type(self._loop_values)
+        self.site_label_pairs_sorted_by_mendeleev = (
+            get_pairs_sorted_by_mendeleev(self.site_labels)
+        )
+        self.site_mixing_type = get_site_mixing_type(
+            self.site_labels, self.atom_site_info
+        )
         self.is_radius_data_available = get_is_radius_data_available(
             self.unique_elements
         )
@@ -245,10 +249,10 @@ class Cif:
         )
         # Bond counts
         self._CN_bond_count_by_min_dist_method = get_bond_counts(
-            self.formula, self.CN_connections_by_min_dist_method
+            self.unique_elements, self.CN_connections_by_min_dist_method
         )
         self._CN_bond_count_by_best_methods = get_bond_counts(
-            self.formula, self.CN_connections_by_best_methods
+            self.unique_elements, self.CN_connections_by_best_methods
         )
         # Bond fractions
         self._CN_bond_fractions_by_min_dist_method = get_bond_fractions(

@@ -14,7 +14,7 @@ def make_directory_and_move(file_path, dir_path, new_file_path):
 
 
 def move_files_based_on_errors(dir_path):
-    print("\nCIF Preprocessing has begun...\n")
+    print(f"\nCIF Preprocessing in {dir_path} begun...\n")
 
     # Ensure dir_path is a Path object
     dir_path = Path(dir_path)

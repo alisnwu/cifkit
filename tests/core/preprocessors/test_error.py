@@ -7,7 +7,7 @@ from cifkit.utils.folder import get_file_paths, copy_files, get_file_count
 from cifkit.utils.error_messages import CifParserError
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_move_files_based_on_errors(tmp_path):
     # Setup source directory and temporary directory for testing
     source_dir = "tests/data/cif/error/combined"

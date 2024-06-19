@@ -1,39 +1,51 @@
 from cifkit.utils import formula
+from cifkit.utils.string_parser import get_atom_type_from_label
+from cifkit.data.mendeleeve_handler import get_mendeleev_nums_from_pair_tuple
 from itertools import combinations
+from itertools import product
 
 
-def get_heterogenous_element_pairs(
-    formula_str: str,
+def get_bond_pairs(labels: set[str]) -> set[tuple[str, str]]:
+    """
+    Generate all possible unique pairs, each tuple sorted alphabetically.
+    """
+    possible_pairs = list(product(labels, repeat=2))
+    sorted_pairs = [tuple(sorted(pair)) for pair in possible_pairs]
+    return set(sorted_pairs)
+
+
+def get_pairs_sorted_by_mendeleev(
+    labels: list[str],
 ) -> set[tuple[str, str]]:
     """
-    Generate all possible unique alphabetically sorted heterogenious pairs.
+    Generate all unique pairs, each tuple sorted by the Mendeleeve number.
     """
-    elements = formula.get_unique_elements(formula_str)
 
-    # Generate all possible pairs using combinations ensuring uniqueness
-    all_pairs = set(combinations(sorted(elements), 2))
-
-    # 'combinations' already sorts them alphabetically, see the test
-    return all_pairs
+    pairs = get_bond_pairs(labels)
+    sorted_pairs = {order_tuple_pair_by_mendeleev(pair) for pair in pairs}
+    return sorted_pairs
 
 
-def get_homogenous_element_pairs(
-    formula_str: str,
-) -> set[tuple[str, str]]:
+def order_tuple_pair_by_mendeleev(label_pair_tuple):
     """
-    Generate all possible sorted homogenous bonding pairs from a formula.
+    Order a pair of elements based on Mendeleev numbers.
     """
-    elements = formula.get_unique_elements(formula_str)
-    # Sort the elements alphabetically
-    elements.sort()
-    homogenous_pairs = [(element, element) for element in elements]
-    return set(homogenous_pairs)
+    first_label = label_pair_tuple[0]
+    second_label = label_pair_tuple[1]
 
+    (
+        first_mendeleev_num,
+        second_mendeleev_num,
+    ) = get_mendeleev_nums_from_pair_tuple(label_pair_tuple)
 
-def get_all_bond_pairs(formula_str: str) -> set[tuple[str, str]]:
-    """
-    Generate all possible sorted bond pairs from a formula.
-    """
-    heterogeneous_bond_pairs = get_heterogenous_element_pairs(formula_str)
-    homogenous_bond_pairs = get_homogenous_element_pairs(formula_str)
-    return heterogeneous_bond_pairs.union(homogenous_bond_pairs)
+    # If first element num is smaller
+    if first_mendeleev_num > second_mendeleev_num:
+        return (second_label, first_label)
+
+    # If first and second, same number, sort alphabetically
+    elif first_mendeleev_num == second_mendeleev_num:
+        return tuple(sorted(label_pair_tuple))
+
+    # If it in correct order, return as it is
+    else:
+        return label_pair_tuple

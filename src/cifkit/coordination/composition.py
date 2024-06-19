@@ -3,11 +3,11 @@ from cifkit.utils.string_parser import get_atom_type_from_label
 from cifkit.utils import bond_pair
 
 
-def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
+def get_bond_counts(elements: set[str], connections: dict[str, list]) -> dict:
     """
     Return a dictionary containing bond pairs and counts per label site.
     """
-    all_bond_pairs = bond_pair.get_all_bond_pairs(formula)
+    bond_pairs = bond_pair.get_bond_pairs(elements)
 
     # Initialize the dictionary to hold bond pair counts for each label
     bond_counts: dict = {}
@@ -31,7 +31,7 @@ def get_bond_counts(formula: str, connections: dict[str, list]) -> dict:
             sorted_bond_pair = tuple(sorted((ref_element, conn_element)))
 
             # Check if the bond pair is one of the valid pairs
-            if sorted_bond_pair in all_bond_pairs:
+            if sorted_bond_pair in bond_pairs:
                 if sorted_bond_pair in bond_counts[label]:
                     bond_counts[label][sorted_bond_pair] += 1
                 else:

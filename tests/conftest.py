@@ -198,9 +198,9 @@ def flattened_connections_URhIn(connections_URhIn):
 
 
 @pytest.fixture(scope="module")
-def bond_counts_CN(formula_URhIn, CN_connections_by_min_dist_URhIn):
+def bond_counts_CN(cif_URhIn, CN_connections_by_min_dist_URhIn):
     return composition.get_bond_counts(
-        formula_URhIn, CN_connections_by_min_dist_URhIn
+        cif_URhIn.unique_elements, CN_connections_by_min_dist_URhIn
     )
 
 
