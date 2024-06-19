@@ -106,7 +106,9 @@ logging.basicConfig(
 
 
 class Cif:
-    def __init__(self, file_path: str, logging_enabled=False) -> None:
+    def __init__(
+        self, file_path: str, is_formatted=False, logging_enabled=False
+    ) -> None:
         self.file_path = file_path
         self.logging_enabled = logging_enabled
 
@@ -115,7 +117,12 @@ class Cif:
         self.file_name_without_ext = os.path.splitext(self.file_name)[0]
         self.connections = None  # Private attribute to store connections
         self._shortest_pair_distance = None
-        self._preprocess()
+
+        # If it is not previously formatted
+        if not is_formatted:
+            check_unique_atom_site_labels(self.file_path)
+            self._preprocess()
+
         self._load_data()
 
     def _log_info(self, message):
@@ -127,7 +134,6 @@ class Cif:
     def _preprocess(self):
         """Preprocess each .cif file and check any error."""
         self._log_info(CifLog.PREPROCESSING.value)
-        check_unique_atom_site_labels(self.file_path)
         remove_author_loop(self.file_path)
         preprocess_label_element_loop_values(self.file_path)
 

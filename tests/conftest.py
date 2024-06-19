@@ -49,7 +49,7 @@ def parsed_formula_weight_structure_s_group_data(
 
 @pytest.fixture(scope="module")
 def file_paths_test(cif_folder_path_test):
-    return folder.get_file_path_list(cif_folder_path_test)
+    return folder.get_file_paths(cif_folder_path_test)
 
 
 """

@@ -162,7 +162,7 @@ def test_get_formula_structure_weight_sgroup(cif_block_URhIn):
 
 
 def test_get_unique_formulas_structure_weight(cif_folder_path_test):
-    file_path_list = folder.get_file_path_list(cif_folder_path_test)
+    file_path_list = folder.get_file_paths(cif_folder_path_test)
     (
         formulas,
         structures,

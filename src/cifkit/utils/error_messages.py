@@ -23,6 +23,10 @@ class CifParserError(Enum):
     INVALID_PARSED_ELEMENT = (
         "The element was not correctly parsed from the site label."
     )
+    SYMMETRY_OPERATION_ERROR = (
+        "An error occurred while processing symmetry operation"
+    )
+    MISSING_COORDINATES = "Missing atomic coordinates"
 
 
 class FileError(Enum):

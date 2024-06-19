@@ -2,18 +2,43 @@ from cifkit import Cif
 from cifkit.utils.folder import (
     move_files,
     copy_files,
-    get_file_path_list,
+    get_file_paths,
 )
 from cifkit.figures.histogram import plot_histograms
 from collections import Counter
+from cifkit.preprocessors.format import (
+    preprocess_label_element_loop_values,
+)
+from cifkit.utils.cif_editor import remove_author_loop
+from cifkit.preprocessors.error import move_files_based_on_errors
+from cifkit.utils.cif_parser import (
+    check_unique_atom_site_labels,
+)
 
 
 class CifEnsemble:
     def __init__(self, cif_dir_path: str) -> None:
+
+        # Process each file, handling exceptions that may occur
+        for file_path in get_file_paths(cif_dir_path):
+            try:
+                remove_author_loop(file_path)
+                preprocess_label_element_loop_values(file_path)
+                check_unique_atom_site_labels(file_path)
+            except Exception as e:
+                print(f"Error processing {file_path}: {e}")
+
+        # Move ill-formatted files after processing
+        move_files_based_on_errors(cif_dir_path)
+
+        # Initialize after sorted
+        self.file_paths = get_file_paths(cif_dir_path)
         self.dir_path = cif_dir_path
-        self.file_paths = get_file_path_list(cif_dir_path)
         self.file_count = len(self.file_paths)
-        self.cifs = [Cif(file_path) for file_path in self.file_paths]
+
+        self.cifs = [
+            Cif(file_path, is_formatted=True) for file_path in self.file_paths
+        ]
 
     def _get_unique_property_values(self, property_name: str):
         """Return unique values for a given property from cifs."""

@@ -1,9 +1,10 @@
 from pathlib import Path
 import pytest
 from cifkit import CifEnsemble
-from cifkit.utils.folder import get_file_count, get_file_path_list
+from cifkit.utils.folder import get_file_count, get_file_paths
 
 
+@pytest.mark.fast
 def test_init(cif_ensemble_test: CifEnsemble):
     assert cif_ensemble_test.dir_path == "tests/data/cif/ensemble_test"
     assert cif_ensemble_test.file_count == 6
@@ -318,7 +319,7 @@ def test_move_files(tmp_path: Path, cif_ensemble_test: CifEnsemble):
     cif_ensemble_test.move_cif_files(file_paths, dest_dir)
     assert get_file_count(dest_dir) == initial_file_count - len(file_paths)
     cif_ensemble_test.move_cif_files(
-        set(get_file_path_list(dest_dir)), initial_dir_path
+        set(get_file_paths(dest_dir)), initial_dir_path
     )
     assert get_file_count(initial_dir_path) == initial_file_count
 

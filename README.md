@@ -1,18 +1,14 @@
-# cifkit
+# cifkit: Python toolkit for high-throughput analysis of CIF files
 
-CifPy is a Python toolkit for high-throughput analysis of .cif files
+cifkit is designed for the high-throughput analysis of Crystallographic Information File (.cif) formats. In just 2-4 lines of code, cifkit allows users to (1) automatically format files, filter files based on a comprehensive set of attributes, (2) determine nearest neighbor and coordination environments at each site, (3) facilitate the plotting of polyhedrons.
 
-## Tasks
+## Overview
 
-- CifEnsemble: generate histograms on cif attributes
-- Test: include coverage percent
-- Test: include supported Python versions
-- Test: include requirements.txt
-- Test: include GitHub integration test
-- GitHub: include contribution
-- GitHub: include GitHub pull request/issue template
-- Doc: write features/tutorials
-- Doc: host the documentation
+cifkit provides two primary objects: `Cif` and `CifEnsemble`.
+
+- **`Cif`**: Initializes with a `.cif` file path. It parses the .cif file, preprocesses ill-formatted files, generates supercells, and computes nearest neighbors. It also determines coordination numbers using four different methods and generates polyhedrons for each site.
+
+- **`CifEnsemble`**: Initializes with a folder path containing `.cif` files. It identifies unique attributes, such as space groups and elements, across the .cif files, moves and copies files based on these attributes. It generates histograms for all attribute.
 
 ## Motivation
 
@@ -20,13 +16,6 @@ CifPy is a Python toolkit for high-throughput analysis of .cif files
 - Each tool requires preprocesing, formatting, copying, moving, and sorting .cif files.
 - To streamline the above tasks, I developed `CifPy` that can be easily imported for the above tasks.
 
-## Overview
-
-CifPy provides two simple objects `Cif` and `CifEnsemble`.
-
-`Cif` is initialized with the `.cif` filepath. This object facilitates computing various distance metrics within crystal structures, generating supercells, determining the coordination numbers, and handling CIF data related to symmetry groups, elements, and chemical formulas.
-
-`CifEnsemble` offers features for preprocessing and querying `.cif` files, such as identifying unique bonding pairs and calculating coordination numbers. Additionally, CifPy supports operations like moving and copying files based on specific crystallographic tags and properties, and generating statistical histograms to visualize data distributions.
 
 ## Principle
 
@@ -43,3 +32,27 @@ To run locally:
 ```bash
 pip install -e .
 ```
+
+## Progerss
+
+- 20240619: Implement logging, 
+- 20240618: Draw polyhedron from each site
+
+
+
+## Tasks
+
+- CifEnsemble: generate histograms on cif attributes
+- Test: include coverage percent
+- Test: include supported Python versions
+- Test: include requirements.txt
+- Test: include GitHub integration test
+- GitHub: include contribution
+- GitHub: include GitHub pull request/issue template
+- Doc: write features/tutorials
+- Doc: host the documentation
+
+
+## Developer
+
+Sangjoon Bob Lee (@bobleesj)

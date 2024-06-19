@@ -15,7 +15,7 @@ def run_preprocess_test_on_cif_files(cif_dir):
     temp_dir = tempfile.mkdtemp()
     temp_cif_dir = os.path.join(temp_dir, os.path.basename(cif_dir))
     shutil.copytree(cif_dir, temp_cif_dir)
-    cif_file_path_list = folder.get_file_path_list(temp_cif_dir)
+    cif_file_path_list = folder.get_file_paths(temp_cif_dir)
 
     for temp_cif_file_path in cif_file_path_list:
         preprocess_label_element_loop_values(temp_cif_file_path)
@@ -83,7 +83,7 @@ def test_preprocess_cif_file_on_label_element_type_mixed():
     temp_cif_dir = os.path.join(temp_dir, os.path.basename(cif_dir))
     shutil.copytree(cif_dir, temp_cif_dir)
 
-    cif_file_path_list = folder.get_file_path_list(temp_cif_dir)
+    cif_file_path_list = folder.get_file_paths(temp_cif_dir)
 
     for temp_cif_file_path in cif_file_path_list:
         preprocess_label_element_loop_values(temp_cif_file_path)

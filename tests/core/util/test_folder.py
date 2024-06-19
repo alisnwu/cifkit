@@ -4,7 +4,7 @@ import os
 from cifkit.utils.folder import (
     get_file_path,
     get_file_count,
-    get_file_path_list,
+    get_file_paths,
     make_output_folder,
     check_file_exists,
     check_file_not_empty,
@@ -21,7 +21,7 @@ def test_get_file_count(cif_folder_path_test):
 
 def test_get_file_path_list(cif_folder_path_test):
     expected_files = {"300169.cif", "300170.cif", "300171.cif"}
-    file_paths = get_file_path_list(cif_folder_path_test, ext=".cif")
+    file_paths = get_file_paths(cif_folder_path_test, ext=".cif")
     found_files = {os.path.basename(path) for path in file_paths}
     assert expected_files == found_files
     assert len(file_paths) == 3
@@ -102,7 +102,7 @@ def test_move_files(tmp_path, cif_folder_path_test, file_paths_test):
         file_paths_test
     )
     # Move files back to the original source directory
-    move_files(str(cif_folder_path_test), get_file_path_list(str(dest_dir)))
+    move_files(str(cif_folder_path_test), get_file_paths(str(dest_dir)))
 
     # Final file count in the source directory
     final_file_count = get_file_count(cif_folder_path_test)
@@ -117,8 +117,8 @@ def test_copy_files(tmp_path, cif_folder_path_test, file_paths_test):
     copy_files(str(dest_dir), file_paths_test)
 
     # Retrieve lists of file paths in both directories
-    source_files = get_file_path_list(cif_folder_path_test)
-    destination_files = get_file_path_list(str(dest_dir))
+    source_files = get_file_paths(cif_folder_path_test)
+    destination_files = get_file_paths(str(dest_dir))
 
     # Extract basenames and sort to ensure order does not affect comparison
     source_basenames = sorted(

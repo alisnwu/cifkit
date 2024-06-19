@@ -1,5 +1,4 @@
 from cifkit.utils import cif_parser, string_parser
-import re
 
 
 def preprocess_label_element_loop_values(file_path: str) -> None:

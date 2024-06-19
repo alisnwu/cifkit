@@ -19,7 +19,7 @@ def get_file_count(dir_path: str, ext=".cif") -> int:
     return len(glob.glob(os.path.join(dir_path, f"*{ext}")))
 
 
-def get_file_path_list(dir_path: str, ext=".cif") -> list[str]:
+def get_file_paths(dir_path: str, ext=".cif") -> list[str]:
     """
     Return a list of file paths with a given extension from a directory.
     """
