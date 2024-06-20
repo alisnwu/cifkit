@@ -27,6 +27,22 @@ def test_get_file_path_list(cif_folder_path_test):
     assert len(file_paths) == 3
 
 
+@pytest.mark.fast
+def test_get_file_path_list_nested(cif_folder_path_test):
+    expected_files = {
+        "300169_n2.cif",
+        "300169.cif",
+        "300170.cif",
+        "300171.cif",
+        "300169_n1.cif",
+    }
+    file_paths = get_file_paths(cif_folder_path_test, add_nested_files=True)
+    found_files = {os.path.basename(path) for path in file_paths}
+    print(found_files)
+    assert found_files == expected_files
+    assert len(file_paths) == 5
+
+
 def test_make_output_folder(tmp_path: str):
     new_folder_name = "plot"
     dir_path = tmp_path

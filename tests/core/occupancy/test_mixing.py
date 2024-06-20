@@ -91,7 +91,7 @@ Test atomic mixing between labels
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_atom_site_mixing_dict_1():
     cif = Cif("tests/data/cif/occupancy/300160.cif")
 
@@ -109,7 +109,7 @@ def test_get_atom_site_mixing_dict_1():
     }
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_atom_site_mixing_dict_1():
     cif = Cif("tests/data/cif/occupancy/300160.cif")
 
@@ -130,7 +130,7 @@ def test_get_atom_site_mixing_dict_1():
     }
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_atom_site_mixing_dict_2():
     """
     Pair: Rh2-Si 2.28 Å - deficiency_no_atomic_mixing
@@ -154,7 +154,7 @@ def test_get_atom_site_mixing_dict_2():
     assert data[("Rh2", "Si")] == "deficiency_without_atomic_mixing"
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_atom_site_mixing_dict_3():
     """
     Mendeleev # - Fe 55, Ge 79
@@ -185,7 +185,7 @@ def test_get_atom_site_mixing_dict_3():
     assert data[("Ge1", "Ge1")] == "full_occupancy_atomic_mixing"
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_atom_site_mixing_dict_4():
     """
     Mendeleev # - Ni 61, Sb 85
@@ -210,7 +210,7 @@ def test_get_atom_site_mixing_dict_4():
     assert data[("Ni1", "Sb2")] == "full_occupancy_atomic_mixing"
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_atom_site_mixing_dict_5():
 
     cif = Cif("tests/data/cif/occupancy/1617211.cif")

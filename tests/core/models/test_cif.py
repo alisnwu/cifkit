@@ -107,6 +107,30 @@ def test_cif_static_properties(cif_URhIn):
     }
 
     assert cif_URhIn.site_mixing_type == "full_occupancy"
+    assert cif_URhIn.mixing_info_per_label_pair == {
+        ("Rh2", "U1"): "full_occupancy",
+        ("In1", "In1"): "full_occupancy",
+        ("U1", "U1"): "full_occupancy",
+        ("In1", "Rh2"): "full_occupancy",
+        ("Rh1", "Rh1"): "full_occupancy",
+        ("Rh2", "Rh2"): "full_occupancy",
+        ("Rh1", "U1"): "full_occupancy",
+        ("Rh1", "Rh2"): "full_occupancy",
+        ("In1", "U1"): "full_occupancy",
+        ("In1", "Rh1"): "full_occupancy",
+    }
+    assert cif_URhIn.mixing_info_per_label_pair_sorted_by_mendeleev == {
+        ("U1", "Rh1"): "full_occupancy",
+        ("In1", "In1"): "full_occupancy",
+        ("Rh2", "In1"): "full_occupancy",
+        ("U1", "U1"): "full_occupancy",
+        ("U1", "In1"): "full_occupancy",
+        ("Rh1", "Rh1"): "full_occupancy",
+        ("U1", "Rh2"): "full_occupancy",
+        ("Rh2", "Rh2"): "full_occupancy",
+        ("Rh1", "Rh2"): "full_occupancy",
+        ("Rh1", "In1"): "full_occupancy",
+    }
 
 
 @pytest.mark.fast
@@ -263,8 +287,10 @@ Test bond fractions, counts, avg, min, max, unique CN
 by (1) min_dist method and (2) best method
 """
 
+"""Test bond counts"""
 
-@pytest.mark.fast
+
+@pytest.mark.now
 def test_CN_bond_counts_by_min_dist_method(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_min_dist_method
 
@@ -276,7 +302,7 @@ def test_CN_bond_counts_by_min_dist_method(cif_URhIn):
     }
 
 
-@pytest.mark.fast
+@pytest.mark.now
 def test_CN_bond_counts_by_best_methods(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_best_methods
     assert result == {
@@ -289,6 +315,32 @@ def test_CN_bond_counts_by_best_methods(cif_URhIn):
             ("U", "U"): 6,
         },
     }
+
+
+@pytest.mark.now
+def test_CN_bond_counts_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
+    result = cif_URhIn.CN_bond_count_by_min_dist_method_sorted_by_mendeleev
+    assert result == {
+        "In1": {("Rh", "In"): 4, ("U", "In"): 6, ("In", "In"): 4},
+        "U1": {("U", "Rh"): 5, ("U", "In"): 6},
+        "Rh1": {("Rh", "In"): 3, ("U", "Rh"): 6},
+        "Rh2": {("Rh", "In"): 6, ("U", "Rh"): 3},
+    }
+
+
+@pytest.mark.now
+def test_CN_bond_counts_by_best_methods_sorted_by_mendeleev(cif_URhIn):
+    result = cif_URhIn.CN_bond_count_by_best_methods_sorted_by_mendeleev
+    print(result)
+    assert result == {
+        "In1": {("Rh", "In"): 4, ("U", "In"): 6, ("In", "In"): 4},
+        "U1": {("U", "Rh"): 5, ("U", "In"): 6, ("U", "U"): 6},
+        "Rh1": {("Rh", "In"): 3, ("U", "Rh"): 6},
+        "Rh2": {("Rh", "In"): 6, ("U", "Rh"): 3},
+    }
+
+
+"""Test bond fractions"""
 
 
 @pytest.mark.fast
@@ -317,6 +369,40 @@ def test_CN_bond_fractions_by_best_methods(cif_URhIn):
         ("In", "Rh"): 13 / 49,
         ("In", "U"): 12 / 49,
         ("Rh", "U"): 14 / 49,
+        ("U", "U"): 6 / 49,
+    }
+
+    for key, expected_value in expected_fractions.items():
+        assert result[key] == pytest.approx(expected_value, abs=1e-3)
+
+
+@pytest.mark.now
+def test_CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
+    result = cif_URhIn.CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev
+
+    # Define the expected values directly as fractions where possible
+    expected_fractions = {
+        ("In", "In"): 4 / 43,
+        ("Rh", "In"): 13 / 43,
+        ("U", "In"): 12 / 43,
+        ("U", "Rh"): 14 / 43,
+    }
+
+    # URhIn
+    for key, expected_value in expected_fractions.items():
+        assert result[key] == pytest.approx(expected_value, abs=1e-3)
+
+
+@pytest.mark.now
+def test_CN_bond_fractions_by_best_methods_sorted_by_mendeleeve(cif_URhIn):
+    result = cif_URhIn.CN_bond_fractions_by_best_methods_sorted_by_mendeleev
+
+    # Define the expected values directly as fractions where possible
+    expected_fractions = {
+        ("In", "In"): 4 / 49,
+        ("Rh", "In"): 13 / 49,
+        ("U", "In"): 12 / 49,
+        ("U", "Rh"): 14 / 49,
         ("U", "U"): 6 / 49,
     }
 

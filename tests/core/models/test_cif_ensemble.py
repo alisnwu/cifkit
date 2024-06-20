@@ -32,7 +32,7 @@ def test_unique_values(cif_ensemble_test: CifEnsemble):
     }
 
     assert cif_ensemble_test.unique_site_mixing_types == {
-        "deficiency_no_atomic_mixing",
+        "deficiency_without_atomic_mixing",
         "full_occupancy",
     }
 
@@ -127,19 +127,13 @@ def test_filter_by_value(cif_ensemble_test: CifEnsemble):
     }
 
     assert cif_ensemble_test.filter_by_site_mixing_types(
-        ["deficiency_no_atomic_mixing"]
+        ["deficiency_without_atomic_mixing"]
     ) == {
         "tests/data/cif/ensemble_test/300171.cif",
     }
 
     assert cif_ensemble_test.filter_by_site_mixing_types(
-        ["deficiency_no_atomic_mixing"]
-    ) == {
-        "tests/data/cif/ensemble_test/300171.cif",
-    }
-
-    assert cif_ensemble_test.filter_by_site_mixing_types(
-        ["full_occupancy", "deficiency_no_atomic_mixing"]
+        ["full_occupancy", "deficiency_without_atomic_mixing"]
     ) == {
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/300170.cif",

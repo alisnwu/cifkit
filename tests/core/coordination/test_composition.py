@@ -9,6 +9,7 @@ from cifkit.coordination.composition import (
 )
 
 
+@pytest.mark.now
 def test_get_bond_counts(CN_connections_by_min_dist_URhIn):
     expected = {
         "In1": {("In", "In"): 4, ("In", "Rh"): 4, ("In", "U"): 6},
@@ -21,6 +22,26 @@ def test_get_bond_counts(CN_connections_by_min_dist_URhIn):
     assert (
         get_bond_counts(elements, CN_connections_by_min_dist_URhIn) == expected
     )
+
+
+@pytest.mark.now
+def test_get_bond_counts_sorted_by_mendeleev(CN_connections_by_min_dist_URhIn):
+    # URhIn
+    expected = {
+        "In1": {("In", "In"): 4, ("Rh", "In"): 4, ("U", "In"): 6},
+        "Rh1": {("Rh", "In"): 3, ("U", "Rh"): 6},
+        "Rh2": {("Rh", "In"): 6, ("U", "Rh"): 3},
+        "U1": {("U", "In"): 6, ("U", "Rh"): 5},
+    }
+    elements = {"In", "Rh", "U"}
+
+    result = get_bond_counts(
+        elements,
+        CN_connections_by_min_dist_URhIn,
+        sorted_by_mendeleev=True,
+    )
+
+    assert result == expected
 
 
 @pytest.mark.now
@@ -44,6 +65,7 @@ def test_get_bond_fraction(bond_counts_CN):
     assert pytest.approx(sum(result.values()), 0.005) == 1
 
 
+@pytest.mark.now
 def test_get_coordination_numbers(CN_connections_by_min_dist_URhIn):
     expected = {"In1": 14, "Rh1": 9, "Rh2": 9, "U1": 11}
     assert (

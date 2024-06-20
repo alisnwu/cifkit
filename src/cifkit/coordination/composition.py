@@ -3,11 +3,16 @@ from cifkit.utils.string_parser import get_atom_type_from_label
 from cifkit.utils import bond_pair
 
 
-def get_bond_counts(elements: set[str], connections: dict[str, list]) -> dict:
+def get_bond_counts(
+    elements: set[str], connections: dict[str, list], sorted_by_mendeleev=False
+) -> dict:
     """
     Return a dictionary containing bond pairs and counts per label site.
     """
-    bond_pairs = bond_pair.get_bond_pairs(elements)
+    if sorted_by_mendeleev:
+        bond_pairs = bond_pair.get_pairs_sorted_by_mendeleev(elements)
+    else:
+        bond_pairs = bond_pair.get_bond_pairs(elements)
 
     # Initialize the dictionary to hold bond pair counts for each label
     bond_counts: dict = {}
@@ -28,7 +33,16 @@ def get_bond_counts(elements: set[str], connections: dict[str, list]) -> dict:
             conn_element = get_atom_type_from_label(conn_label)
 
             # Create a tuple representing the bond pair, sorted
-            sorted_bond_pair = tuple(sorted((ref_element, conn_element)))
+            pair = (ref_element, conn_element)
+            sorted_bond_pair = None
+
+            # Sort by Mendeeleve
+            if sorted_by_mendeleev:
+                sorted_bond_pair = bond_pair.order_tuple_pair_by_mendeleev(
+                    pair
+                )
+            else:
+                sorted_bond_pair = tuple(sorted((ref_element, conn_element)))
 
             # Check if the bond pair is one of the valid pairs
             if sorted_bond_pair in bond_pairs:
@@ -40,9 +54,7 @@ def get_bond_counts(elements: set[str], connections: dict[str, list]) -> dict:
     return bond_counts
 
 
-def get_bond_fractions(
-    bond_pair_data: dict,
-) -> dict[tuple[str, str], float]:
+def get_bond_fractions(bond_pair_data: dict) -> dict[tuple[str, str], float]:
     """
     Calculate the fraction of each bond type across all labels.
     """

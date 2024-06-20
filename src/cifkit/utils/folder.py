@@ -19,11 +19,27 @@ def get_file_count(dir_path: str, ext=".cif") -> int:
     return len(glob.glob(os.path.join(dir_path, f"*{ext}")))
 
 
-def get_file_paths(dir_path: str, ext=".cif") -> list[str]:
+def get_file_paths(
+    dir_path: str, ext=".cif", add_nested_files=False
+) -> list[str]:
     """
     Return a list of file paths with a given extension from a directory.
     """
-    return glob.glob(os.path.join(dir_path, f"*{ext}"))
+    if add_nested_files:
+        # Traverse through directory and subdirectories
+        files_list = []
+        for root, dirs, files in os.walk(dir_path):
+            files_list.extend(
+                [
+                    os.path.join(root, file)
+                    for file in files
+                    if file.endswith(ext)
+                ]
+            )
+        return files_list
+    else:
+        # Find files in the specified directory only
+        return glob.glob(os.path.join(dir_path, f"*{ext}"))
 
 
 def make_output_folder(dir_path: str, new_folder_name: str) -> str:

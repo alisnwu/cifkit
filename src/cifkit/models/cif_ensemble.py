@@ -17,10 +17,12 @@ from cifkit.utils.cif_parser import (
 
 
 class CifEnsemble:
-    def __init__(self, cif_dir_path: str) -> None:
+    def __init__(self, cif_dir_path: str, add_nested_files=False) -> None:
 
         # Process each file, handling exceptions that may occur
-        for file_path in get_file_paths(cif_dir_path):
+        for file_path in get_file_paths(
+            cif_dir_path, add_nested_files=add_nested_files
+        ):
             try:
                 remove_author_loop(file_path)
                 preprocess_label_element_loop_values(file_path)
@@ -32,11 +34,13 @@ class CifEnsemble:
         move_files_based_on_errors(cif_dir_path)
 
         # Initialize after sorted
-        self.file_paths = get_file_paths(cif_dir_path)
+        self.file_paths = get_file_paths(
+            cif_dir_path, add_nested_files=add_nested_files
+        )
         self.dir_path = cif_dir_path
         self.file_count = len(self.file_paths)
 
-        self.cifs = [
+        self.cifs: list[Cif] = [
             Cif(file_path, is_formatted=True) for file_path in self.file_paths
         ]
 

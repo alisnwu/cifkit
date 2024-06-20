@@ -1,5 +1,4 @@
 from cifkit.utils.error_messages import OccupancyError
-from cifkit.utils.bond_pair import get_bond_pairs
 
 
 def frac_coordinates(atom_site_info, label):
@@ -30,7 +29,7 @@ def compute_coord_occupancy_sum(site_labels, atom_site_info):
     return coord_occupancy_sum
 
 
-def get_site_mixing_type(site_labels, atom_site_info) -> str:
+def get_site_mixing_type(site_labels, atom_site_info) -> dict:
     """
     Get file-level atomic site mixing info.
     """
@@ -118,7 +117,6 @@ def get_mixing_type_per_pair_dict(site_labels, label_pairs, atom_site_info):
             is_first_label_atomic_mixed = True
 
         if (coord_occupancy_sum[second_label_coord] - second_label_occ) == 0.0:
-            print("This must be zero for Fe and Fe2")
             is_second_label_atomic_mixed = False
         else:
             is_second_label_atomic_mixed = True
@@ -148,18 +146,12 @@ def get_mixing_type_per_pair_dict(site_labels, label_pairs, atom_site_info):
         ):
             atom_site_pair_dict[pair] = "deficiency_with_atomic_mixing"
 
-        print("Let us consider")
-        print("First, second label", first_label, second_label)
-        print("coord", first_label_coord, second_label_coord)
-        print("label occupancy", first_label_occ, second_label_occ)
-        print(
-            "label coord occupancy sum",
-            first_label_coord_sum,
-            second_label_coord_sum,
-        )
-        print("is_first_label_site_deficient:", is_first_label_site_deficient)
-        print("is_second_label_site_deficient:", is_second_label_deficient)
-        print("is_first_label_atomic_mixed:", is_first_label_atomic_mixed)
-        print("is_second_label_atomic_mixed:", is_second_label_atomic_mixed)
-        print()
+    """
+    categories_mapping = {
+      "1": "Deficiency with atomic mixing",
+      "2": "Full occupancy with atomic mixing",
+      "3": "Deficiency without atomic mixing",
+      "4": "Full occupancy",
+    }
+    """
     return atom_site_pair_dict

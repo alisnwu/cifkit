@@ -83,7 +83,10 @@ from cifkit.utils.bond_pair import (
     get_pairs_sorted_by_mendeleev,
 )
 
-from cifkit.occupacny.mixing import get_site_mixing_type
+from cifkit.occupacny.mixing import (
+    get_site_mixing_type,
+    get_mixing_type_per_pair_dict,
+)
 
 
 def ensure_connections(func):
@@ -174,6 +177,16 @@ class Cif:
         self.is_radius_data_available = get_is_radius_data_available(
             self.unique_elements
         )
+        self.mixing_info_per_label_pair = get_mixing_type_per_pair_dict(
+            self.site_labels, self.site_label_pairs, self.atom_site_info
+        )
+        self.mixing_info_per_label_pair_sorted_by_mendeleev = (
+            get_mixing_type_per_pair_dict(
+                self.site_labels,
+                self.site_label_pairs_sorted_by_mendeleev,
+                self.atom_site_info,
+            )
+        )
 
     def _generate_supercell(self):
         """Generate supercell information based on the unit cell data."""
@@ -254,6 +267,23 @@ class Cif:
         self._CN_bond_count_by_best_methods = get_bond_counts(
             self.unique_elements, self.CN_connections_by_best_methods
         )
+
+        # Bond counts sorted by mendeleev
+        self._CN_bond_count_by_min_dist_method_sorted_by_mendeleev = (
+            get_bond_counts(
+                self.unique_elements,
+                self.CN_connections_by_min_dist_method,
+                sorted_by_mendeleev=True,
+            )
+        )
+        self._CN_bond_count_by_best_methods_sorted_by_mendeleev = (
+            get_bond_counts(
+                self.unique_elements,
+                self.CN_connections_by_best_methods,
+                sorted_by_mendeleev=True,
+            )
+        )
+
         # Bond fractions
         self._CN_bond_fractions_by_min_dist_method = get_bond_fractions(
             self.CN_bond_count_by_min_dist_method
@@ -261,6 +291,20 @@ class Cif:
         self._CN_bond_fractions_by_best_methods = get_bond_fractions(
             self.CN_bond_count_by_best_methods
         )
+
+        # Bond fractions sorted by Mendeleev
+        self._CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev = (
+            get_bond_fractions(
+                self.CN_bond_count_by_min_dist_method_sorted_by_mendeleev
+            )
+        )
+
+        self._CN_bond_fractions_by_best_methods_sorted_by_mendeleev = (
+            get_bond_fractions(
+                self.CN_bond_count_by_best_methods_sorted_by_mendeleev
+            )
+        )
+
         # Unique CN
         self._CN_unique_values_by_min_dist_method = get_unique_CN_values(
             self.CN_connections_by_min_dist_method
@@ -348,7 +392,7 @@ class Cif:
     Compute avg, min, max, unique for best and min_dist method
     """
 
-    # Bond counts
+    # 1.1 Bond counts
     @property
     @ensure_connections
     def CN_bond_count_by_min_dist_method(self):
@@ -359,7 +403,18 @@ class Cif:
     def CN_bond_count_by_best_methods(self):
         return self._CN_bond_count_by_best_methods
 
-    # Bond fractions
+    # 1.2 Bond counts sorted by mendeleev
+    @property
+    @ensure_connections
+    def CN_bond_count_by_min_dist_method_sorted_by_mendeleev(self):
+        return self._CN_bond_count_by_min_dist_method_sorted_by_mendeleev
+
+    @property
+    @ensure_connections
+    def CN_bond_count_by_best_methods_sorted_by_mendeleev(self):
+        return self._CN_bond_count_by_best_methods_sorted_by_mendeleev
+
+    # 2.1 Bond fractions
     @property
     @ensure_connections
     def CN_bond_fractions_by_min_dist_method(self):
@@ -369,6 +424,17 @@ class Cif:
     @ensure_connections
     def CN_bond_fractions_by_best_methods(self):
         return self._CN_bond_fractions_by_best_methods
+
+    # 2.2. Bond fractions sorted by Mendeleev
+    @property
+    @ensure_connections
+    def CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev(self):
+        return self._CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev
+
+    @property
+    @ensure_connections
+    def CN_bond_fractions_by_best_methods_sorted_by_mendeleev(self):
+        return self._CN_bond_fractions_by_best_methods_sorted_by_mendeleev
 
     # Unique CN
     @property
