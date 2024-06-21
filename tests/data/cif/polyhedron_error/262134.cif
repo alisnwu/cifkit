@@ -1,6 +1,6 @@
 ##############################################################################
 #                                                                            #
-# Co-Er            # Er2Co17 hex                                   # 1955204 #
+# Co-Er            # Er2Co17 hex                                   #  262134 #
 #                                                                            #
 ##############################################################################
 #                                                                            #
@@ -18,14 +18,14 @@
 #                                                                            #
 ##############################################################################
 
-data_1955204
+data_262134
 _audit_creation_date                     2024-05-31
 _audit_creation_method
 ;
 Pearson's Crystal Data browser
 ;
-#_database_code_PCD                      1955204
-_database_code_PDF                       ?
+#_database_code_PCD                      262134
+_database_code_PDF                       04-001-3634
 
 # Entry summary
 
@@ -35,18 +35,18 @@ _chemical_name_mineral                   ?
 _chemical_compound_source                ?
 _chemical_name_structure_type            Th~2~Ni~17~,hP38,194
 _chemical_formula_weight                 1336.4
+_chemical_melting_point                  1618
 
 # Bibliographic data
 
-_publ_section_title
-'Magnetic properties of Er~2~Co~17-x~Si~x~ compounds'                         
-_journal_coden_ASTM                      JMMMDC
-_journal_name_full                       'J. Magn. Magn. Mater.'
-_journal_year                            2000
-_journal_volume                          214
-_journal_page_first                      31
-_journal_page_last                       36
-_journal_language                        English
+_publ_section_title                      'Das Zustandsbild Erbium-Kobalt'
+_journal_coden_ASTM                      ZEMTAE
+_journal_name_full                       'Z. Metallkd.'
+_journal_year                            1966
+_journal_volume                          57
+_journal_page_first                      728
+_journal_page_last                       731
+_journal_language                        German
 loop_
  _publ_author_name
  _publ_author_address
@@ -56,13 +56,13 @@ loop_
 
 # Standardized crystallographic data
 
-_cell_length_a                           8.327
-_cell_length_b                           8.327
-_cell_length_c                           8.123
+_cell_length_a                           8.31
+_cell_length_b                           8.31
+_cell_length_c                           8.113
 _cell_angle_alpha                        90
 _cell_angle_beta                         90
 _cell_angle_gamma                        120
-_cell_volume                             487.8
+_cell_volume                             485.19
 _cell_formula_units_Z                    2
 _space_group_IT_number                   194
 _space_group_name_H-M_alt                'P 63/m m c'
@@ -119,12 +119,12 @@ loop_
 
 _exptl_crystal_colour                    ?
 _exptl_crystal_density_meas              ?
-_exptl_crystal_density_diffrn            9.10
+_exptl_crystal_density_diffrn            9.15
 _cell_measurement_temperature            ?
-_cell_measurement_radiation              X-rays
+_cell_measurement_radiation              'X-rays, Co Ka'
 _cell_measurement_reflns_used            ?
 _diffrn_ambient_temperature              ?
-_diffrn_measurement_device               ?
+_diffrn_measurement_device               diffractometer
 _diffrn_measurement_device_type          ?
 _diffrn_radiation_type                   ?
 _diffrn_reflns_number                    ?
@@ -136,5 +136,5 @@ _refine_ls_number_reflns                 ?
 _refine_ls_R_factor_gt                   ?
 _refine_ls_wR_factor_gt                  ?
 
-# End of data set 1955204
+# End of data set 262134
 

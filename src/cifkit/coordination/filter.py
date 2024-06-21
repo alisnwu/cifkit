@@ -22,46 +22,45 @@ def find_best_polyhedron(max_gaps_per_label, connections):
             connection_data = connections[label][: CN_data["CN"]]
             polyhedron_points = []
 
-            # Extract the necessary data from connections
+            # Only if there are 4 or more points in the polyhedron
             if len(connection_data) > 3:
                 for connection in connection_data:
                     polyhedron_points.append(connection[3])
             else:
                 continue
+            
+            # Add the central atom as the last element
+            polyhedron_points.append(connection_data[0][2])
 
-            # Only if there are 4 or more points in the polyhedron
+            # Try to make a polyhedron
             try:
-                polyhedron_points.append(connection_data[0][2])
                 hull = ConvexHull(polyhedron_points)
-                # Add the last point
-                polyhedron_metrics = compute_polyhedron_metrics(
-                    polyhedron_points, hull
-                )
-                # Check if the polyhedron has the lowest distance to center.
-                if (
-                    polyhedron_metrics["distance_from_avg_point_to_center"]
-                    < min_distance_to_center
-                ):
-                    min_distance_to_center = polyhedron_metrics[
-                        "distance_from_avg_point_to_center"
-                    ]
-                    best_polyhedron_metrics = polyhedron_metrics
-                    best_method_used = (
-                        method  # Record the method that produced these metrics
-                    )
-
+                
             except Exception as e:
-                print(
-                    f"\nError in determining polyhedron for {label}: {str(e)}\n"
-                )
-                continue
+                # print(
+                #     f"Error in determining polyhedron for {label} using {method} - skipped"
+                # )
+                continue  # Move to the next method
 
+            polyhedron_metrics = compute_polyhedron_metrics(
+                polyhedron_points, hull
+            )
+            # Check if the polyhedron has the lowest distance to center.
+            if (
+                polyhedron_metrics["distance_from_avg_point_to_center"]
+                < min_distance_to_center
+            ):
+                min_distance_to_center = polyhedron_metrics[
+                    "distance_from_avg_point_to_center"
+                ]
+                best_polyhedron_metrics = polyhedron_metrics
+                best_method_used = method
+                
         if best_polyhedron_metrics:
             best_polyhedron_metrics["method_used"] = (
                 best_method_used  # Add method information to the metrics
             )
             best_polyhedrons[label] = best_polyhedron_metrics
-
     return best_polyhedrons
 
 
