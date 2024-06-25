@@ -18,7 +18,13 @@ from cifkit.utils.cif_parser import (
 
 class CifEnsemble:
     def __init__(self, cif_dir_path: str, add_nested_files=False) -> None:
-
+        print("hello world112312")
+        print("hello world112312")
+        print("hello world112312")
+        print("hello world112312")
+        print("hello world112312")
+        print("hello world112312")
+        print("hello world112312")
         # Process each file, handling exceptions that may occur
         for file_path in get_file_paths(
             cif_dir_path, add_nested_files=add_nested_files
@@ -252,10 +258,10 @@ class CifEnsemble:
     def filter_by_tags(self, values: list[str]) -> set[str]:
         return self._filter_by_single_value("tag", values)
 
-    def filter_by_composition_types(self, values: list[str]) -> set[str]:
+    def filter_by_composition_types(self, values: list[int]) -> set[str]:
         return self._filter_by_single_value("composition_type", values)
 
-    # Filter with sets
+    # Filter with setsz
     def filter_by_elements_containing(self, values: list[str]) -> set[str]:
         return self._filter_contains_any("unique_elements", values)
 

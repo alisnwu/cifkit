@@ -1,7 +1,7 @@
 from cifkit.utils.error_messages import OccupancyError
 
 
-def frac_coordinates(atom_site_info, label):
+def frac_coordinates(atom_site_info: dict, label: str) -> tuple[str, str, str]:
     """
     Return a tuple of fractional coordinates
     """
@@ -29,7 +29,7 @@ def compute_coord_occupancy_sum(site_labels, atom_site_info):
     return coord_occupancy_sum
 
 
-def get_site_mixing_type(site_labels, atom_site_info) -> dict:
+def get_site_mixing_type(site_labels: list[str], atom_site_info: dict) -> str:
     """
     Get file-level atomic site mixing info.
     """
@@ -62,7 +62,9 @@ def get_site_mixing_type(site_labels, atom_site_info) -> dict:
         raise ValueError(OccupancyError.INVALID_MIXING_TYPE.value)
 
 
-def get_mixing_type_per_pair_dict(site_labels, label_pairs, atom_site_info):
+def get_mixing_type_per_pair_dict(
+    site_labels: list[str], label_pairs, atom_site_info: dict
+):
     """
     Return a dictionary, alphabetically sorted pair
     """

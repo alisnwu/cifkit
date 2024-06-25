@@ -4,7 +4,7 @@ from cifkit.coordination.geometry import (
 )
 
 
-def test_get_polyhedron_coordinates_label(
+def test_CN_connections_by_min_dist(
     CN_connections_by_min_dist_URhIn,
 ):
     expected_labels = [

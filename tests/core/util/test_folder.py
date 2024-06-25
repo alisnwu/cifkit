@@ -44,15 +44,16 @@ def test_get_file_path_list_nested(cif_folder_path_test):
 
 
 def test_make_output_folder(tmp_path: str):
-    new_folder_name = "plot"
+    new_folder_name = Path("plot")
     dir_path = tmp_path
 
     # Path where the new folder should be created
     expected_path = tmp_path / new_folder_name
-    make_output_folder(dir_path, new_folder_name)
+    expected_path_str = str(expected_path)
+    make_output_folder(dir_path, expected_path_str)
 
     # Check if the folder was created correctly
-    assert os.path.exists(expected_path)
+    assert check_file_exists(expected_path_str)
     assert expected_path.is_dir()
 
 
@@ -60,10 +61,10 @@ def test_get_file_path(tmp_path: str):
     dir_path = tmp_path
     file_name = "example.py"
     # Expected path combining dir_path and file_name
-    expected_path = dir_path / file_name
+    expected_path = dir_path / Path(file_name)
 
     # Use the function to get the path
-    result_path = get_file_path(dir_path, file_name)
+    result_path = get_file_path(str(dir_path), file_name)
 
     # Check if the result matches the expected path
     assert result_path == str(expected_path)

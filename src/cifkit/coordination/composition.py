@@ -4,7 +4,9 @@ from cifkit.utils import bond_pair
 
 
 def get_bond_counts(
-    elements: set[str], connections: dict[str, list], sorted_by_mendeleev=False
+    elements: list[str],
+    connections: dict[str, list],
+    sorted_by_mendeleev=False,
 ) -> dict:
     """
     Return a dictionary containing bond pairs and counts per label site.

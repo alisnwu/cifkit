@@ -110,7 +110,7 @@ def test_get_atom_site_mixing_dict_1():
 
 
 @pytest.mark.fast
-def test_get_atom_site_mixing_dict_1():
+def test_get_atom_site_mixing_dict_1_sorted_by_mendeleev():
     cif = Cif("tests/data/cif/occupancy/300160.cif")
 
     atom_site_pair_dict = get_mixing_type_per_pair_dict(
@@ -131,7 +131,7 @@ def test_get_atom_site_mixing_dict_1():
 
 
 @pytest.mark.fast
-def test_get_atom_site_mixing_dict_2():
+def test_get_atom_site_mixing_dict_2_sorted_by_mendeleev():
     """
     Pair: Rh2-Si 2.28 Å - deficiency_no_atomic_mixing
     Pair: Rh1-Rh1 2.524 Å - full_occupancy
@@ -155,7 +155,7 @@ def test_get_atom_site_mixing_dict_2():
 
 
 @pytest.mark.fast
-def test_get_atom_site_mixing_dict_3():
+def test_get_atom_site_mixing_dict_3_sorted_by_mendeleev():
     """
     Mendeleev # - Fe 55, Ge 79
     1831432.cif

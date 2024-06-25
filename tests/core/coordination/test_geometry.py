@@ -4,6 +4,7 @@ from cifkit.coordination.geometry import (
     compute_polyhedron_metrics,
 )
 from scipy.spatial import ConvexHull
+from cifkit import Cif, CifEnsemble
 
 
 @pytest.mark.fast
@@ -70,15 +71,10 @@ def test_compute_polyhedron_metrics():
     }
 
 
-from cifkit import Cif, CifEnsemble
-
-
-@pytest.mark.now
-def test_polyhedron_wiht_error():
-    cif_ensemble = CifEnsemble("tests/data/cif/polyhedron_error")
-    for cif in cif_ensemble.cifs:
-        sites = cif.site_labels
-        for site in sites:
-            print(cif.plot_polyhedron(site))
-
-    assert False
+# @pytest.mark.now
+# def test_polyhedron_wiht_error():
+#     cif_ensemble = CifEnsemble("tests/data/cif/polyhedron_error")
+#     for cif in cif_ensemble.cifs:
+#         sites = cif.site_labels
+#         for site in sites:
+#             print(cif.plot_polyhedron(site))

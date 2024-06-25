@@ -5,12 +5,16 @@ from itertools import combinations
 from itertools import product
 
 
-def get_bond_pairs(labels: set[str]) -> set[tuple[str, str]]:
+def get_bond_pairs(labels: list[str]) -> set[tuple]:
     """
-    Generate all possible unique pairs, each tuple sorted alphabetically.
+    Generate all possible unique pairs, each tuple sorted alphabetically,
+    including pairs with identical elements.
     """
-    possible_pairs = list(product(labels, repeat=2))
-    sorted_pairs = [tuple(sorted(pair)) for pair in possible_pairs]
+    # Generate all combinations of two labels (this time including identical pairs)
+    possible_pairs = product(labels, repeat=2)
+
+    sorted_pairs = [tuple(sorted((a, b))) for a, b in possible_pairs]
+
     return set(sorted_pairs)
 
 

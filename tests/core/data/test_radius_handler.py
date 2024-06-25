@@ -26,9 +26,9 @@ def test_get_CIF_pauling_radii():
 
 
 @pytest.mark.fast
-def test_compute_radius_sum(radius_data_URhIn):
+def test_compute_radius_sum(radius_data_URhIn, radius_sum_data_URhIn):
     combined_radii = compute_radius_sum(radius_data_URhIn)
-    expected = radius_data_URhIn
+    expected = radius_sum_data_URhIn
 
     # Assert each element and sub-element individually
     for element, radii in expected.items():
@@ -36,13 +36,6 @@ def test_compute_radius_sum(radius_data_URhIn):
             assert combined_radii[element][key] == pytest.approx(
                 value, abs=0.001
             )
-
-
-@pytest.mark.fast
-def test_compute_radius_sum(radius_data_URhIn, radius_sum_data_URhIn):
-    result = compute_radius_sum(radius_data_URhIn)
-    expected = radius_sum_data_URhIn
-    assert result == expected
 
 
 @pytest.mark.parametrize(

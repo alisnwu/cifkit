@@ -28,14 +28,14 @@ def find_best_polyhedron(max_gaps_per_label, connections):
                     polyhedron_points.append(connection[3])
             else:
                 continue
-            
+
             # Add the central atom as the last element
             polyhedron_points.append(connection_data[0][2])
 
             # Try to make a polyhedron
             try:
                 hull = ConvexHull(polyhedron_points)
-                
+
             except Exception as e:
                 # print(
                 #     f"Error in determining polyhedron for {label} using {method} - skipped"
@@ -55,7 +55,7 @@ def find_best_polyhedron(max_gaps_per_label, connections):
                 ]
                 best_polyhedron_metrics = polyhedron_metrics
                 best_method_used = method
-                
+
         if best_polyhedron_metrics:
             best_polyhedron_metrics["method_used"] = (
                 best_method_used  # Add method information to the metrics

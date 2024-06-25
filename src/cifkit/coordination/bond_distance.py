@@ -3,7 +3,6 @@ def get_shortest_distance_per_bond_pair(
 ) -> dict[tuple[str, str], float]:
     """
     Determine the minimum distance for all possible unique pair of elements.
-    This is different from the site.
     """
 
     # Initialize the dictionary with a specific type
