@@ -6,7 +6,7 @@ from cifkit.coordination.geometry import compute_polyhedron_metrics
 def find_best_polyhedron(max_gaps_per_label, connections):
     """
     Find the best polyhedron for each label based on the minimum
-    distance between the reference atom to the avg. position of
+    distance between the reference atom to the average position of
     connected atoms.
     """
     best_polyhedrons = {}

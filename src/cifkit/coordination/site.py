@@ -1,4 +1,4 @@
-from cifkit.utils import string_parser, bond_pair, sort
+from cifkit.utils import string_parser, sort
 
 
 def get_min_distance_pair(

@@ -18,13 +18,7 @@ from cifkit.utils.cif_parser import (
 
 class CifEnsemble:
     def __init__(self, cif_dir_path: str, add_nested_files=False) -> None:
-        print("hello world112312")
-        print("hello world112312")
-        print("hello world112312")
-        print("hello world112312")
-        print("hello world112312")
-        print("hello world112312")
-        print("hello world112312")
+
         # Process each file, handling exceptions that may occur
         for file_path in get_file_paths(
             cif_dir_path, add_nested_files=add_nested_files
@@ -341,5 +335,5 @@ class CifEnsemble:
         """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
 
-    def generate_stat_histograms(self, output_dir=None):
-        plot_histograms(self, output_dir)
+    def generate_stat_histograms(self, display=False, output_dir=None):
+        plot_histograms(self, display, output_dir)

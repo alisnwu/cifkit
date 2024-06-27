@@ -111,6 +111,35 @@ class Cif:
     def __init__(
         self, file_path: str, is_formatted=False, logging_enabled=False
     ) -> None:
+        """
+        Initialize ExampleClass with custom parameters.
+
+        Args:
+            file_path (str): Description of param1 that initializes property_one.
+            is_formatted (bool): Description of param2 that initializes property_two.
+            logging_enabled (bool): Whether to log
+
+        Attributes:
+            unitcell_lengths (str): hello
+            unitcell_angles (str): hello
+            site_labels (str): hello
+            unique_elements (str): hello
+            formula (str): hello
+            structure (str): hello
+            weight (str): hello
+            site_mixing_type (str): hello
+            space_group_number (str): hello
+            space_group_name (str): hello
+            composition_type (str): hello
+            tag (str): hello
+            atom_site_info (str): hello
+            bond_pairs    (str): hello
+            bond_pairs_sorted_by_mendeleev (str): hello
+            site_label_pairs (str): hello
+            site_label_pairs_sorted_by_mendeleev (str): hello
+            mixing_info_per_label_pair (str): hello
+            mixing_info_per_label_pair_sorted_by_mendeleev (str): hello
+        """
         self.file_path = file_path
         self.logging_enabled = logging_enabled
 
@@ -188,20 +217,26 @@ class Cif:
             )
         )
 
-    def _generate_supercell(self):
-        """Generate supercell information based on the unit cell data."""
+    def _generate_supercell(self)-> None:
+        """Generate supercell information based on the unit cell data.
+
+        This method calculates the supercell points and atom counts based on the unit cell data.
+        It uses the `get_supercell_points` and `get_cell_atom_count` functions to perform the calculations.
+
+        Returns:
+            None
+        """
+        # Method implementation goes here        
         self.unitcell_points = get_supercell_points(self._block, 1)
         self.supercell_points = get_supercell_points(self._block, 3)
         self.unitcell_atom_count = get_cell_atom_count(self.unitcell_points)
         self.supercell_atom_count = get_cell_atom_count(self.supercell_points)
 
-    """
-    Coordination number util
-    """
-
+    
     def compute_connections(self, cutoff_radius=10.0):
-        self._log_info(CifLog.COMPUTE_CONNECTIONS.value)
         """Compute nearest neighbor connections per site label."""
+        self._log_info(CifLog.COMPUTE_CONNECTIONS.value)
+        
         self.connections = get_site_connections(
             [
                 self.site_labels,
@@ -346,6 +381,7 @@ class Cif:
     @property
     @ensure_connections
     def connections_flattened(self):
+        """Property that combine site connections into a single array."""
         return self._connections_flattened
 
     @property
@@ -497,7 +533,16 @@ class Cif:
     @ensure_connections
     def plot_polyhedron(
         self, site_label, show_labels=True, is_displayed=False, output_dir=None
-    ):
+    ) -> None:
+        '''
+        Plots a polyhedron structure and optionally saves it.
+
+        Args:
+            site_label (str): Central site label for the polyhedron.
+            show_labels (bool, optional): Whether to display vertex labels. Defaults to True.
+            is_displayed (bool, optional): Display plot interactively. Defaults to False.
+            output_dir (str, optional): Directory to save the plot. Defaults to None.
+        '''
         coords, vertex_labels = get_polyhedron_coordinates_labels(
             self.CN_connections_by_best_methods, site_label
         )
@@ -510,3 +555,4 @@ class Cif:
             is_displayed,
             output_dir,
         )
+

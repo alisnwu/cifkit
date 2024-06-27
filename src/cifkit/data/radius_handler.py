@@ -53,12 +53,12 @@ def get_radius_values_per_element(elements, shortest_bond_distances) -> dict:
     return combined_radii
 
 
-def compute_radius_sum(radius_values) -> dict:
+def compute_radius_sum(radius_values):
     """
     Compute the sum of two radii.
     """
     elements = sorted(radius_values.keys())
-    pair_distances: dict = {
+    pair_distances: dict[str : dict[str, float]] = {
         "CIF_radius_sum": {},
         "CIF_radius_refined_sum": {},
         "Pauling_radius_sum": {},

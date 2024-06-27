@@ -1,17 +1,15 @@
 from cifkit.utils.string_parser import get_atom_type_from_label
-from cifkit.data.radius_handler import get_is_radius_data_available
 
 
 def compute_CN_max_gap_per_site(
-    radius_sum_data, all_labels_connections, site_mixing_type
+    radius_sum_data, all_labels_connections, site_mixing_type: str
 ):
     use_all_methods = False
-
     if site_mixing_type == "full_occupancy":
         use_all_methods = True
 
     if use_all_methods:
-        methods = {
+        methods: dict[str, list[float]] = {
             "dist_by_shortest_dist": [],
             "dist_by_CIF_radius_sum": [],
             "dist_by_CIF_radius_refined_sum": [],
@@ -22,8 +20,8 @@ def compute_CN_max_gap_per_site(
             "dist_by_shortest_dist": [],
         }
 
-    norm_dists_per_label = {}
-    max_gaps_per_label = {}
+    norm_dists_per_label: dict = {}
+    max_gaps_per_label: dict = {}
 
     for ref_label, connection_data in all_labels_connections.items():
         # Initialize each label
@@ -34,7 +32,7 @@ def compute_CN_max_gap_per_site(
         # Limit to 20 connection data points
         connection_data = connection_data[:20]
         shortest_dist = connection_data[0][1]
-        previous_values = {method: None for method in methods}
+        previous_values: dict[str, float] = {method: 0.0 for method in methods}
 
         for i, connection in enumerate(connection_data):
             pair_dist = connection[1]
@@ -90,7 +88,7 @@ def compute_CN_max_gap_per_site(
                 norm_dists_per_label[ref_label][method].append(norm_distance)
 
                 # Calculate and update max gaps
-                if previous_values[method] is not None:
+                if previous_values[method]:
                     current_gap = round(
                         abs(norm_distance - previous_values[method]),
                         3,
@@ -109,11 +107,13 @@ def compute_CN_max_gap_per_site(
     return max_gaps_per_label
 
 
-def compute_normalized_value(number, ref_number):
+def compute_normalized_value(number: float, ref_number: float) -> float:
     return round((number / ref_number), 5)
 
 
-def get_rad_sum_value(rad_sum_data, method_name, ref_label, other_label):
+def get_rad_sum_value(
+    rad_sum_data, method_name: str, ref_label: str, other_label: str
+) -> float:
     """
     Return the sum of radii value for a given pair of elements,
     ensuring the pair is alphabetically sorted.

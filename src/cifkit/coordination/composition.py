@@ -81,7 +81,7 @@ def get_bond_fractions(bond_pair_data: dict) -> dict[tuple[str, str], float]:
     return bond_fractions
 
 
-def count_connections_per_site(connections: dict) -> dict:
+def count_connections_per_site(connections: dict) -> dict[str, int]:
     """
     Calculate the coordination number for each atom site.
     """
@@ -93,6 +93,9 @@ def count_connections_per_site(connections: dict) -> dict:
 
 
 def compute_avg_CN(connections: dict[str, int]) -> float:
+    """
+    Calculate the average coordination number across all sites.
+    """
     coordination_numbers = count_connections_per_site(connections)
     total = 0
     for _, value in coordination_numbers.items():
@@ -100,7 +103,10 @@ def compute_avg_CN(connections: dict[str, int]) -> float:
     return np.round(total / len(coordination_numbers), 3)
 
 
-def get_unique_CN_values(connections: dict) -> set:
+def get_unique_CN_values(connections: dict) -> set[int]:
+    """
+    Return unique coordination numbers from all sites.
+    """
     coordination_numbers = count_connections_per_site(connections)
     unique_numbers = set(coordination_numbers.values())
     return unique_numbers

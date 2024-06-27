@@ -17,11 +17,10 @@
 
 ## `CifEnsemble`
 
-- Preprocess format and move files based on error.
+- Preprocess format and move files based on errors.
 - Copy files based on tags, symmetry group, symmetry name, supercell size, elements, structure, and formula.
 - Move `.cif` files based on tags, symmetry group, symmetry name, supercell size, elements, structure distance, and coordination number.
 - Generate histograms based on tags, symmetry group, symmetry name, supercell size, elements, structure, and formula.
 - Get the minimum distance from each `.cif` file.
 - Get all unique elements in all `.cif` files.
-
 

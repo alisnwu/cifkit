@@ -6,7 +6,7 @@ from scipy.spatial import ConvexHull
 from scipy.spatial import Delaunay
 
 
-def generate_contrasting_colors():
+def generate_contrasting_colors() -> list[str]:
     """Return a list of manually selected contrasting colors."""
     return [
         "#00FFFF",  # Cyan

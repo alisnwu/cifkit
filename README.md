@@ -1,6 +1,11 @@
 # cifkit: Python toolkit for high-throughput analysis of CIF files
 
-cifkit is designed for the high-throughput analysis of Crystallographic Information File (.cif) formats. In just 2-4 lines of code, cifkit allows users to (1) automatically format files, filter files based on a comprehensive set of attributes, (2) determine nearest neighbor and coordination environments at each site, (3) facilitate the plotting of polyhedrons.
+cifkit is designed for the high-throughput analysis of Crystallographic Information File (.cif) formats. In just 2-4 lines of code,
+
+- preprocess .cif files for high-throuhgput processing
+- move, copy, filter files based on a comprehensive set of attributes such as coordination number, elements, tags
+- determine nearest neighbor and coordination environments at each site
+- facilitate the plotting of polyhedrons and 
 
 ## Overview
 
@@ -12,14 +17,10 @@ cifkit provides two primary objects: `Cif` and `CifEnsemble`.
 
 ## Motivation
 
-- I build high-throughput analysis tools using `.cif` files for research. The tools analyze bonding distances, site analysis, and coordination numbers.
+- High throughput analysis tools using `.cif` files for research. The tools analyze bonding distances, site analysis, and coordination numbers.
 - Each tool requires preprocesing, formatting, copying, moving, and sorting .cif files.
 - To streamline the above tasks, I developed `CifPy` that can be easily imported for the above tasks.
 
-
-## Principle
-
-I believe that the best product is intuitive. Therefore, I have limited to the use of two objects only so that this can be easily imported and used without the need to look up the documentation.
 
 ## Documentation
 
@@ -33,26 +34,16 @@ To run locally:
 pip install -e .
 ```
 
-## Progerss
-
-- 20240619: Implement logging, 
-- 20240618: Draw polyhedron from each site
-
-
-
-## Tasks
-
-- CifEnsemble: generate histograms on cif attributes
-- Test: include coverage percent
-- Test: include supported Python versions
-- Test: include requirements.txt
-- Test: include GitHub integration test
-- GitHub: include contribution
-- GitHub: include GitHub pull request/issue template
-- Doc: write features/tutorials
-- Doc: host the documentation
-
-
 ## Developer
 
 Sangjoon Bob Lee (@bobleesj)
+
+### MkDocs
+
+```bash
+pip install mkdocstrings
+pip install mkdocstrings-python
+pip install mkdocs         
+pip install mkdocs-material
+mkdocs serve
+```

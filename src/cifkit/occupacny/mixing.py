@@ -11,13 +11,14 @@ def frac_coordinates(atom_site_info: dict, label: str) -> tuple[str, str, str]:
     return (x_frac, y_frac, z_frac)
 
 
-def compute_coord_occupancy_sum(site_labels, atom_site_info):
+def compute_coord_occupancy_sum(
+    site_labels: list[str], atom_site_info: dict
+) -> dict[tuple[str, str, str], float]:
     """
     Compute sum of occupancy per each coordinate
     """
-    coord_occupancy_sum = {}
+    coord_occupancy_sum: dict[tuple[str, str, str], float] = {}
     for label in site_labels:
-
         occupancy = round(
             atom_site_info[label]["site_occupancy"], 6
         )  # Round occupancy to 6 decimal places
@@ -63,7 +64,7 @@ def get_site_mixing_type(site_labels: list[str], atom_site_info: dict) -> str:
 
 
 def get_mixing_type_per_pair_dict(
-    site_labels: list[str], label_pairs, atom_site_info: dict
+    site_labels: list[str], label_pairs: list[str], atom_site_info: dict
 ):
     """
     Return a dictionary, alphabetically sorted pair
@@ -81,10 +82,6 @@ def get_mixing_type_per_pair_dict(
         second_label_coord = frac_coordinates(atom_site_info, second_label)
         first_label_occ = atom_site_info[first_label]["site_occupancy"]
         second_label_occ = atom_site_info[second_label]["site_occupancy"]
-
-        first_label_coord_sum = coord_occupancy_sum[first_label_coord]
-        second_label_coord_sum = coord_occupancy_sum[second_label_coord]
-
         # Step 1. "full_occupancy"
         if first_label_occ == 1 and second_label_occ == 1:
             atom_site_pair_dict[pair] = "full_occupancy"
@@ -148,12 +145,4 @@ def get_mixing_type_per_pair_dict(
         ):
             atom_site_pair_dict[pair] = "deficiency_with_atomic_mixing"
 
-    """
-    categories_mapping = {
-      "1": "Deficiency with atomic mixing",
-      "2": "Full occupancy with atomic mixing",
-      "3": "Deficiency without atomic mixing",
-      "4": "Full occupancy",
-    }
-    """
     return atom_site_pair_dict

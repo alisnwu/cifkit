@@ -8,7 +8,7 @@ from matplotlib.ticker import MaxNLocator
 from cifkit.utils import folder, prompt
 
 
-def plot_histograms(cif_ensemble, output_dir=None) -> None:
+def plot_histograms(cif_ensemble, display, output_dir=None) -> None:
     histograms = [
         {
             "data": cif_ensemble.structure_stats,
@@ -118,51 +118,47 @@ def plot_histograms(cif_ensemble, output_dir=None) -> None:
 
     for histogram in histograms:
         generate_histogram(
-            histogram["data"], histogram["settings"], output_dir
+            histogram["data"], histogram["settings"], display, output_dir
         )
-
-
-def generate_histogram(data: dict, settings: dict, output_dir: str) -> None:
+    
+def generate_histogram(data, settings, display, output_dir: str) -> None:
     """
     Generate a histogram from a dictionary of data and save
     it to a specified directory.
     """
+    
+    plt.figure(figsize=(10, 6))  # Create a new figure for each histogram
 
     if settings.get("key_data_type") == "string":
-        # Assuming all keys can be converted to integers for sorting purposes
-        # Sorting is needed for for composition types, order from 1, 2, 3, etc.
+        # Sorting keys if they are string representations of integers
         data = {str(key): data[key] for key in sorted(data.keys(), key=int)}
 
-    if not settings.get("key_data_type") == "float":
+    if settings.get("key_data_type") != "float":
         plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
 
     keys = list(data.keys())
-    values = [
-        data[key] for key in keys
-    ]  # Align values with keys after potential conversion
+    values = [data[key] for key in keys]
 
-    plt.figure(figsize=(10, 6))
     plt.bar(
         keys,
         values,
         color=settings.get("color", "blue"),
-        edgecolor=settings.get("edgecolor", "black"),
+        edgecolor=settings.get("edgecolor", "black")
     )
     plt.title(settings["title"])
     plt.xlabel(settings["xlabel"])
     plt.ylabel("Count")
-    plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.xticks(rotation=settings.get("rotation", 45), ha="right")
     plt.grid(True, linestyle="--", linewidth=0.5)
     plt.tight_layout()
 
-    # File name
     output_file_path = folder.get_file_path(output_dir, settings["file_name"])
-
-    # Ensure the output directory exists
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     plt.savefig(output_file_path, dpi=300)
-    plt.close()
+    if display:
+        plt.show()  # Display the plot if requested
+        plt.close()  # Close the plot after saving and optionally displaying
+
     prompt.log_save_file_message("Histograms", output_file_path)

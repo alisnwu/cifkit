@@ -1,8 +1,7 @@
 import numpy as np
 import gemmi
 from gemmi.cif import Block
-from cifkit.utils import cif_parser, string_parser
-from cifkit.utils import error_messages
+from cifkit.utils import cif_parser
 
 
 def get_supercell_points(

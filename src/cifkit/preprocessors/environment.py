@@ -1,10 +1,5 @@
 import numpy as np
-from cifkit.preprocessors import supercell
-from cifkit.utils import unit, distance, cif_parser
-from cifkit.preprocessors.environment_util import (
-    calculate_normalized_dist_diffs,
-    calculate_normalized_distances,
-)
+from cifkit.utils import unit, distance
 
 
 def get_site_connections(
@@ -12,7 +7,7 @@ def get_site_connections(
     unitcell_points,
     supercell_points,
     cutoff_radius: float,
-):
+) -> dict:
     """
     Compute all pair distances per site label.
     """
@@ -47,7 +42,7 @@ def get_site_connections(
 def get_nearest_dists_per_site(
     filtered_unitcell_points,
     supercell_points,
-    cutoff_radius,
+    cutoff_radius: float,
     lengths,
     angles_rad,
 ):
@@ -103,7 +98,9 @@ def get_nearest_dists_per_site(
     return dist_dict, dist_set
 
 
-def get_most_connected_point_per_site(label, dist_dict, dist_set):
+def get_most_connected_point_per_site(
+    label: str, dist_dict: dict, dist_set: set
+):
     """
     Identify the reference point with the highest number of connections
     within the 50 shortest distances from a set of distances.

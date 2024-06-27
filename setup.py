@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="cifkit",
-    version="0.23",
+    version="0.24",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     install_requires=[],  # List your dependencies here
@@ -12,6 +12,4 @@ setup(
 """
 python setup.py sdist bdist_wheel
 twine upload dist/*   
-
-      
 """
