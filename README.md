@@ -45,5 +45,6 @@ pip install mkdocstrings
 pip install mkdocstrings-python
 pip install mkdocs         
 pip install mkdocs-material
+pip install mkdocs-jupyter
 mkdocs serve
-```
+```ls

@@ -44,10 +44,12 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 
 plugins:
-- search
-- mkdocstrings:
-    handlers:
-      python:
-        paths: [src]
-        options:
-          show_source: false
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+
+  - mkdocs-jupyter

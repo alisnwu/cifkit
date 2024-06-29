@@ -5,11 +5,12 @@ from cifkit.utils import folder
 
 cif_ensemble = CifEnsemble("tests/data/cif/ensemble_test")
 
-# for cif in cif_ensemble.cifs:
-#     site_labels = cif.site_labels
+for cif in cif_ensemble.cifs:
+    site_labels = cif.site_labels
 
-#     print("Procesing", cif.formula, cif.file_name)
-#     for label in site_labels:
+    print("Procesing", cif.formula, cif.file_name)
+    for label in site_labels:
+        cif.plot_polyhedron(label, is_displayed=True)
         
 
-cif_ensemble.generate_stat_histograms(display=True)
+# cif_ensemble.generate_stat_histograms(display=True)
