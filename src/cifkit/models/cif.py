@@ -217,7 +217,7 @@ class Cif:
             )
         )
 
-    def _generate_supercell(self)-> None:
+    def _generate_supercell(self) -> None:
         """Generate supercell information based on the unit cell data.
 
         This method calculates the supercell points and atom counts based on the unit cell data.
@@ -226,17 +226,16 @@ class Cif:
         Returns:
             None
         """
-        # Method implementation goes here        
+        # Method implementation goes here
         self.unitcell_points = get_supercell_points(self._block, 1)
         self.supercell_points = get_supercell_points(self._block, 3)
         self.unitcell_atom_count = get_cell_atom_count(self.unitcell_points)
         self.supercell_atom_count = get_cell_atom_count(self.supercell_points)
 
-    
     def compute_connections(self, cutoff_radius=10.0):
         """Compute nearest neighbor connections per site label."""
         self._log_info(CifLog.COMPUTE_CONNECTIONS.value)
-        
+
         self.connections = get_site_connections(
             [
                 self.site_labels,
@@ -270,11 +269,16 @@ class Cif:
                 self.unique_elements, self.shortest_bond_pair_distance
             )
         )
-        self._radius_sum = compute_radius_sum(self.radius_values)
+        self._radius_sum = compute_radius_sum(
+            self.radius_values, self.is_radius_data_available
+        )
 
         # CN max gap per site
         self._CN_max_gap_per_site = compute_CN_max_gap_per_site(
-            self.radius_sum, self.connections, self.site_mixing_type
+            self.radius_sum,
+            self.connections,
+            self.is_radius_data_available,
+            self.site_mixing_type,
         )
 
         # Find the best methods
@@ -534,7 +538,7 @@ class Cif:
     def plot_polyhedron(
         self, site_label, show_labels=True, is_displayed=False, output_dir=None
     ) -> None:
-        '''
+        """
         Plots a polyhedron structure and optionally saves it.
 
         Args:
@@ -542,7 +546,7 @@ class Cif:
             show_labels (bool, optional): Whether to display vertex labels. Defaults to True.
             is_displayed (bool, optional): Display plot interactively. Defaults to False.
             output_dir (str, optional): Directory to save the plot. Defaults to None.
-        '''
+        """
         coords, vertex_labels = get_polyhedron_coordinates_labels(
             self.CN_connections_by_best_methods, site_label
         )
@@ -556,3 +560,5 @@ class Cif:
             output_dir,
         )
 
+
+#

@@ -51,6 +51,7 @@ def get_refined_CIF_radius(
     original_radii = np.array(
         [radii_data[label]["CIF_radius"] for label in sorted_elements]
     )
+
     label_to_pair = generate_adjacent_pairs(sorted_elements)
 
     # Constraints setup

@@ -11,6 +11,7 @@ def test_compute_CN_max_gap_per_site(
     result = compute_CN_max_gap_per_site(
         radius_sum_data_URhIn,
         connections_URhIn,
+        True,
         "full_occupancy",
     )
 
@@ -31,6 +32,7 @@ def test_compute_CN_max_gap_per_site_dist_min_method_only(
     CN_max_gap_per_site = compute_CN_max_gap_per_site(
         radius_sum_data_URhIn,
         connections_URhIn,
+        True,
         "full_occupancy_with_atomic_mixing",
     )
 

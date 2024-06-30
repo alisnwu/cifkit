@@ -120,13 +120,14 @@ def plot_histograms(cif_ensemble, display, output_dir=None) -> None:
         generate_histogram(
             histogram["data"], histogram["settings"], display, output_dir
         )
-    
+
+
 def generate_histogram(data, settings, display, output_dir: str) -> None:
     """
     Generate a histogram from a dictionary of data and save
     it to a specified directory.
     """
-    
+
     plt.figure(figsize=(10, 6))  # Create a new figure for each histogram
 
     if settings.get("key_data_type") == "string":
@@ -143,7 +144,7 @@ def generate_histogram(data, settings, display, output_dir: str) -> None:
         keys,
         values,
         color=settings.get("color", "blue"),
-        edgecolor=settings.get("edgecolor", "black")
+        edgecolor=settings.get("edgecolor", "black"),
     )
     plt.title(settings["title"])
     plt.xlabel(settings["xlabel"])

@@ -2,7 +2,6 @@ import pytest
 from cifkit.data.radius_handler import (
     get_CIF_pauling_radius,
     compute_radius_sum,
-    compute_radius_sum,
     get_is_radius_data_available,
 )
 
@@ -27,7 +26,7 @@ def test_get_CIF_pauling_radii():
 
 @pytest.mark.fast
 def test_compute_radius_sum(radius_data_URhIn, radius_sum_data_URhIn):
-    combined_radii = compute_radius_sum(radius_data_URhIn)
+    combined_radii = compute_radius_sum(radius_data_URhIn, True)
     expected = radius_sum_data_URhIn
 
     # Assert each element and sub-element individually

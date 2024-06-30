@@ -67,6 +67,8 @@ def fractional_to_cartesian(
 
 
 def round_dict_values(dict, precision=3):
+    if dict is None:
+        return None
     rounded_dict = {
         k: round(v, precision) if isinstance(v, float) else v
         for k, v in dict.items()

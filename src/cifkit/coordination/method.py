@@ -2,10 +2,14 @@ from cifkit.utils.string_parser import get_atom_type_from_label
 
 
 def compute_CN_max_gap_per_site(
-    radius_sum_data, all_labels_connections, site_mixing_type: str
+    radius_sum_data,
+    all_labels_connections,
+    is_radius_data_available: bool,
+    site_mixing_type: str,
 ):
     use_all_methods = False
-    if site_mixing_type == "full_occupancy":
+
+    if is_radius_data_available and site_mixing_type == "full_occupancy":
         use_all_methods = True
 
     if use_all_methods:

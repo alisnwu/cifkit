@@ -549,3 +549,21 @@ def test_init_error_coord_missing():
         Cif(file_path)
     expected_error_message = CifParserError.WRONG_LOOP_VALUE_COUNT.value
     assert expected_error_message == str(e.value)
+
+
+"""
+Test files without radius values
+"""
+
+
+@pytest.mark.fast
+def test_init_without_radius_data():
+    file_path = "tests/data/cif/no_radius_data/EuO.cif"
+    cif = Cif(file_path)
+    assert cif.is_radius_data_available == False
+    assert cif.radius_sum == None
+    assert cif.radius_values == None
+    assert cif.CN_bond_count_by_best_methods == {
+        "Eu": {("Eu", "O"): 6},
+        "O": {("Eu", "O"): 6},
+    }
