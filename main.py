@@ -3,7 +3,7 @@ from cifkit.utils import folder
 
 # Example usage
 
-cif_ensemble = CifEnsemble("tests/data/cif/no_radius_data")
+cif_ensemble = CifEnsemble("alex-test")
 
 for cif in cif_ensemble.cifs:
     site_labels = cif.site_labels
