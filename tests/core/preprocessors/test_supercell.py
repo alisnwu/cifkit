@@ -1,6 +1,3 @@
-import cifkit
-import numpy as np
-from cifkit.utils import unit
 import pytest
 
 
@@ -170,9 +167,7 @@ def test_get_unit_cell_coordinates(cif_block_URhIn, unitcell_points_URhIn):
     coordinates = get_unitcell_coords_for_all_labels(cif_block_URhIn)
 
     # Flatten the coordinates for comparision with the expected
-    coordinates_set = set(
-        tuple(coord) for sublist in coordinates for coord in sublist
-    )
+    coordinates_set = set(tuple(coord) for sublist in coordinates for coord in sublist)
 
     # Compare the two sets
     assert coordinates_set == unitcell_points_URhIn

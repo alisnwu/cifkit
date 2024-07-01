@@ -24,27 +24,21 @@ def test_full_occupancy(cif_URhIn):
 @pytest.mark.fast
 def test_deficiency_without_atomic_mixing():
     cif = Cif("tests/data/cif/occupancy/527000.cif")
-    file_mixing_type = get_site_mixing_type(
-        cif.site_labels, cif.atom_site_info
-    )
+    file_mixing_type = get_site_mixing_type(cif.site_labels, cif.atom_site_info)
     assert file_mixing_type == "deficiency_without_atomic_mixing"
 
 
 @pytest.mark.fast
 def test_full_occupancy_atomic_mixing():
     cif = Cif("tests/data/cif/occupancy/529848.cif")
-    file_mixing_type = get_site_mixing_type(
-        cif.site_labels, cif.atom_site_info
-    )
+    file_mixing_type = get_site_mixing_type(cif.site_labels, cif.atom_site_info)
     assert file_mixing_type == "full_occupancy_atomic_mixing"
 
 
 @pytest.mark.fast
 def test_deficiency_and_atomic_mixing():
     cif = Cif("tests/data/cif/occupancy/554324.cif")
-    file_mixing_type = get_site_mixing_type(
-        cif.site_labels, cif.atom_site_info
-    )
+    file_mixing_type = get_site_mixing_type(cif.site_labels, cif.atom_site_info)
     assert file_mixing_type == "deficiency_atomic_mixing"
 
 
@@ -212,7 +206,6 @@ def test_get_atom_site_mixing_dict_4():
 
 @pytest.mark.fast
 def test_get_atom_site_mixing_dict_5():
-
     cif = Cif("tests/data/cif/occupancy/1617211.cif")
 
     data = get_mixing_type_per_pair_dict(

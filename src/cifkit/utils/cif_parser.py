@@ -38,8 +38,7 @@ def get_unitcell_lengths(
     ]
 
     lengths = [
-        get_string_to_formatted_float(block.find_value(key))
-        for key in keys_lengths
+        get_string_to_formatted_float(block.find_value(key)) for key in keys_lengths
     ]
 
     return lengths
@@ -59,8 +58,7 @@ def get_unitcell_angles_rad(
     ]
 
     angles = [
-        get_string_to_formatted_float(block.find_value(key))
-        for key in keys_angles
+        get_string_to_formatted_float(block.find_value(key)) for key in keys_angles
     ]
 
     return unit.get_radians_from_degrees(angles)
@@ -168,9 +166,7 @@ def get_loop_value_dict(
     return loop_value_dict
 
 
-def get_start_end_line_indexes(
-    file_path: str, start_keyword: str
-) -> tuple[int, int]:
+def get_start_end_line_indexes(file_path: str, start_keyword: str) -> tuple[int, int]:
     """
     Find the starting and ending indexes of the lines in atom_site_loop
     """
@@ -200,9 +196,7 @@ def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
     """
     Returns a list containing file content with starting keyword.
     """
-    start_index, end_index = get_start_end_line_indexes(
-        file_path, start_keyword
-    )
+    start_index, end_index = get_start_end_line_indexes(file_path, start_keyword)
 
     if start_index is None or end_index is None:
         return None
@@ -302,9 +296,7 @@ def get_tag_from_third_line(file_path: str) -> str:
 def parse_atom_site_occupancy_info(file_path: str) -> dict:
     """Parse atom site loop information including element, occupancy,
     fractional coordinates, multiplicity, and wyckoff symbol."""
-    content_lines = get_line_content_from_tag(
-        file_path, "_atom_site_occupancy"
-    )
+    content_lines = get_line_content_from_tag(file_path, "_atom_site_occupancy")
 
     parsed_data = {}
 
@@ -334,9 +326,7 @@ def parse_atom_site_occupancy_info(file_path: str) -> dict:
 
 def check_unique_atom_site_labels(file_path: str):
     """Check whether all parsed atom site labels are unique."""
-    content_lines = get_line_content_from_tag(
-        file_path, "_atom_site_occupancy"
-    )
+    content_lines = get_line_content_from_tag(file_path, "_atom_site_occupancy")
 
     site_labels = set()
     for line in content_lines:

@@ -13,9 +13,7 @@ def test_get_polyhedron_coordinates_labels(
     (
         polyhedron_points,
         vertex_labels,
-    ) = get_polyhedron_coordinates_labels(
-        CN_connections_by_min_dist_URhIn, "U1"
-    )
+    ) = get_polyhedron_coordinates_labels(CN_connections_by_min_dist_URhIn, "U1")
 
     assert vertex_labels == [
         "Rh1",

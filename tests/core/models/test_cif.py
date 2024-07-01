@@ -150,10 +150,7 @@ def test_init_log(caplog):
     cif = Cif(file_path, logging_enabled=True)
 
     with caplog.at_level(logging.INFO):
-        assert (
-            CifLog.PREPROCESSING.value.format(file_path=file_path)
-            in caplog.text
-        )
+        assert CifLog.PREPROCESSING.value.format(file_path=file_path) in caplog.text
 
         assert CifLog.LOADING_DATA.value in caplog.text
 
@@ -560,9 +557,9 @@ Test files without radius values
 def test_init_without_radius_data():
     file_path = "tests/data/cif/no_radius_data/EuO.cif"
     cif = Cif(file_path)
-    assert cif.is_radius_data_available == False
-    assert cif.radius_sum == None
-    assert cif.radius_values == None
+    assert not cif.is_radius_data_available
+    assert not cif.radius_sum
+    assert not cif.radius_values
     assert cif.CN_bond_count_by_best_methods == {
         "Eu": {("Eu", "O"): 6},
         "O": {("Eu", "O"): 6},
@@ -579,12 +576,12 @@ def test_init_atomic_mixing_deficiency_without_atomic_mixing():
     assert Cif(file_path).CN_unique_values_by_best_methods == {11, 14, 15}
 
 
-@pytest.mark.now
-def test_init_atomic_mixing_full_occupancy_():
-    file_path = "tests/data/cif_CN_init/ErCo2.68In0.32.cif"
-    # file_path = "tests/data/cif_CN_init/1956508.cif"
-    cif = Cif(file_path)
-    print(cif.site_mixing_type)  # full_occupancy_atomic_mixing
-    print(cif.CN_best_methods)
+# @pytest.mark.now
+# def test_init_atomic_mixing_full_occupancy_():
+#     file_path = "tests/data/cif_CN_init/ErCo2.68In0.32.cif"
+#     # file_path = "tests/data/cif_CN_init/1956508.cif"
+#     cif = Cif(file_path)
+#     print(cif.site_mixing_type)  # full_occupancy_atomic_mixing
+#     print(cif.CN_best_methods)
 
-    # assert False
+# assert False

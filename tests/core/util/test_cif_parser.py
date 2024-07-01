@@ -1,6 +1,6 @@
 import pytest
 
-from cifkit.utils.error_messages import GeneralError, CifParserError
+from cifkit.utils.error_messages import CifParserError
 from cifkit.utils import folder
 from cifkit.utils.cif_parser import (
     get_cif_block,
@@ -47,9 +47,7 @@ def test_get_loop_tags():
         "_atom_site_occupancy",
     ]
 
-    assert (
-        get_loop_tags() == expected_tags
-    ), CifParserError.INVALID_LOOP_TAGS.value
+    assert get_loop_tags() == expected_tags, CifParserError.INVALID_LOOP_TAGS.value
 
 
 def test_get_loop_values(cif_block_URhIn):
@@ -134,9 +132,7 @@ def test_get_start_end_line_indexes():
 
 
 def test_get_line_content_from_tag(file_path_URhIn):
-    content_lines = get_line_content_from_tag(
-        file_path_URhIn, "_atom_site_occupancy"
-    )
+    content_lines = get_line_content_from_tag(file_path_URhIn, "_atom_site_occupancy")
 
     assert len(content_lines) == 4
     assert content_lines[0].strip() == "In1 In 3 g 0.2505 0 0.5 1"

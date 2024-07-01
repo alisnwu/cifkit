@@ -1,4 +1,3 @@
-import numpy as np
 from scipy.spatial import ConvexHull
 from cifkit.coordination.geometry import compute_polyhedron_metrics
 
@@ -36,7 +35,7 @@ def find_best_polyhedron(max_gaps_per_label, connections):
             try:
                 hull = ConvexHull(polyhedron_points)
 
-            except Exception as e:
+            except Exception:
                 # print(
                 #     f"Error in determining polyhedron for {label} using {method} - skipped"
                 # )
@@ -47,9 +46,7 @@ def find_best_polyhedron(max_gaps_per_label, connections):
             """
             # Consider Er1 dist_by_shortest_dist
 
-            polyhedron_metrics = compute_polyhedron_metrics(
-                polyhedron_points, hull
-            )
+            polyhedron_metrics = compute_polyhedron_metrics(polyhedron_points, hull)
             # Check if the polyhedron has the lowest distance to center.
             if (
                 polyhedron_metrics["distance_from_avg_point_to_center"]
@@ -73,9 +70,7 @@ def get_CN_connections_by_min_dist_method(max_gaps_per_label, connections):
     CN_by_shortest_dist = {}
     for label, methods_info in max_gaps_per_label.items():
         # Access the 'dist_by_shortest_dist' method and get the 'CN' value
-        CN_by_shortest_dist[label] = methods_info["dist_by_shortest_dist"][
-            "CN"
-        ]
+        CN_by_shortest_dist[label] = methods_info["dist_by_shortest_dist"]["CN"]
 
     CN_connections: dict = {}
     # Iterate through each label and number of connections

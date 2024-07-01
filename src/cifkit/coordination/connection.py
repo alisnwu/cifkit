@@ -1,9 +1,4 @@
-import numpy as np
-
-
-def get_CN_connections_by_best_methods(
-    best_methods, conncetions: dict
-) -> dict:
+def get_CN_connections_by_best_methods(best_methods, conncetions: dict) -> dict:
     """
     Retrieve connections limited by the number of vertices (CN_value)
     for each label.

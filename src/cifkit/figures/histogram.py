@@ -112,9 +112,7 @@ def plot_histograms(cif_ensemble, display, output_dir=None) -> None:
 
     # Make a deafult folder if the output folder is not provided=
     if not output_dir:
-        output_dir = folder.make_output_folder(
-            cif_ensemble.dir_path, "histograms"
-        )
+        output_dir = folder.make_output_folder(cif_ensemble.dir_path, "histograms")
 
     for histogram in histograms:
         generate_histogram(

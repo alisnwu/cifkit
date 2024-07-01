@@ -1,6 +1,5 @@
 from cifkit.utils.unit import round_dict_values
 import numpy as np
-import numpy as np
 
 
 def get_polyhedron_coordinates_labels(
@@ -54,9 +53,7 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
         number_of_vertices = len(polyhedron_points)
 
         face_centers = np.mean(polyhedron_points[hull.simplices], axis=1)
-        distances_to_faces = np.linalg.norm(
-            face_centers - central_atom_coord, axis=1
-        )
+        distances_to_faces = np.linalg.norm(face_centers - central_atom_coord, axis=1)
         shortest_distance_to_face = np.min(distances_to_faces)
 
         edge_centers = np.array(
@@ -65,16 +62,12 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
                 for edge in edges
             ]
         )
-        distances_to_edges = np.linalg.norm(
-            edge_centers - central_atom_coord, axis=1
-        )
+        distances_to_edges = np.linalg.norm(edge_centers - central_atom_coord, axis=1)
         shortest_distance_to_edge = np.min(distances_to_edges)
 
         radius_of_inscribed_sphere = shortest_distance_to_face
 
-        volume_of_inscribed_sphere = (
-            4 / 3 * np.pi * radius_of_inscribed_sphere**3
-        )
+        volume_of_inscribed_sphere = 4 / 3 * np.pi * radius_of_inscribed_sphere**3
 
         packing_efficiency = volume_of_inscribed_sphere / hull.volume
 
@@ -97,9 +90,7 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
         return None
 
 
-def compute_center_of_mass_and_distance(
-    polyhedron_points, hull, central_atom_coord
-):
+def compute_center_of_mass_and_distance(polyhedron_points, hull, central_atom_coord):
     """
     Calculate the center of mass of a polyhedron and the distance
     from the center of mass to a given point.

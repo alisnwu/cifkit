@@ -1,5 +1,4 @@
 import re
-import logging
 from cifkit.utils import formula
 from cifkit.utils.error_messages import GeneralError
 
@@ -31,11 +30,7 @@ def get_string_to_formatted_float(str_value: str) -> float:
     """
     str_value = str_value.strip()
 
-    return (
-        float(str_value.split("(")[0])
-        if "(" in str_value
-        else float(str_value)
-    )
+    return float(str_value.split("(")[0]) if "(" in str_value else float(str_value)
 
 
 def trim_string(formula: str) -> str:

@@ -98,9 +98,7 @@ def get_nearest_dists_per_site(
     return dist_dict, dist_set
 
 
-def get_most_connected_point_per_site(
-    label: str, dist_dict: dict, dist_set: set
-):
+def get_most_connected_point_per_site(label: str, dist_dict: dict, dist_set: set):
     """
     Identify the reference point with the highest number of connections
     within the 50 shortest distances from a set of distances.
