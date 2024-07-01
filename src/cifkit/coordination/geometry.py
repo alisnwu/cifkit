@@ -26,6 +26,9 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
     """
     Compute various metrics related to a given polyhedron.
     """
+    print(polyhedron_points)
+    for points in polyhedron_points:
+        print(points)
     try:
         central_atom_coord = np.array(polyhedron_points[-1])
 

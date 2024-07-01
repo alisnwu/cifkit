@@ -107,7 +107,7 @@ def compute_CN_max_gap_per_site(
                         max_gaps_per_label[ref_label][method]["CN"] = i
 
                 previous_values[method] = norm_distance
-
+    print(max_gaps_per_label)
     return max_gaps_per_label
 
 

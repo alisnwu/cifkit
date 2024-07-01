@@ -41,6 +41,11 @@ def find_best_polyhedron(max_gaps_per_label, connections):
                 #     f"Error in determining polyhedron for {label} using {method} - skipped"
                 # )
                 continue  # Move to the next method
+            print("Consider", label, method)
+            """
+            'Er1': {'dist_by_shortest_dist': {'max_gap': 0.026, 'CN': 12}}
+            """
+            # Consider Er1 dist_by_shortest_dist
 
             polyhedron_metrics = compute_polyhedron_metrics(
                 polyhedron_points, hull

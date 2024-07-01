@@ -21,7 +21,6 @@ def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.site_labels == ["In1", "U1", "Rh1", "Rh2"]
     assert cif_URhIn.space_group_name == "P-62m"
     assert cif_URhIn.space_group_number == 189
-
     assert cif_URhIn.tag == "rt"
 
     assert cif_URhIn.bond_pairs == {
@@ -556,6 +555,7 @@ Test files without radius values
 """
 
 
+# File without radius data
 @pytest.mark.fast
 def test_init_without_radius_data():
     file_path = "tests/data/cif/no_radius_data/EuO.cif"
@@ -567,3 +567,24 @@ def test_init_without_radius_data():
         "Eu": {("Eu", "O"): 6},
         "O": {("Eu", "O"): 6},
     }
+
+
+"""
+Test files that is not full occupacny
+"""
+
+
+def test_init_atomic_mixing_deficiency_without_atomic_mixing():
+    file_path = "tests/data/cif_CN_init/1956508.cif"
+    assert Cif(file_path).CN_unique_values_by_best_methods == {11, 14, 15}
+
+
+@pytest.mark.now
+def test_init_atomic_mixing_full_occupancy_():
+    file_path = "tests/data/cif_CN_init/ErCo2.68In0.32.cif"
+    # file_path = "tests/data/cif_CN_init/1956508.cif"
+    cif = Cif(file_path)
+    print(cif.site_mixing_type)  # full_occupancy_atomic_mixing
+    print(cif.CN_best_methods)
+
+    # assert False

@@ -69,3 +69,4 @@ def move_files_based_on_errors(dir_path):
     print("\nSUMMARY")
     for error_type, count in num_files_moved.items():
         print(f"# of files moved to '{error_type}' folder: {count}")
+    print()

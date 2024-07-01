@@ -1,17 +1,10 @@
 # Getting Started
 
-The purpose of this guide is to illustrate some of the main features that `cifkit` provides. It assumes a very basic knowledge of Python. The documentation is inspried by `scikit-learn.org`.
+The purpose of this guide is to illustrate some of the main features that `cifkit` provides. It assumes a very basic knowledge of Python.
 
-`cifkit` is an open source CIF library that supports supercell generation and visualization of files for high-throuhgput analysis. It also provides various tools for determining coordination numbers, plotting polyhedrons from each site based on the coordination numbers, bond fractions, move and copy .cif files based on a set of attributes, and determine atomic mixing information within 2-3 lines of code.
+`cifkit` is an open source CIF library that supports supercell generation and provide tools for high-throuhgput analysis. It also provides various tools for determining coordination numbers, plotting polyhedrons from each site based on the coordination numbers, bond fractions, move and copy `.cif` files based on a set of attributes, and determine atomic mixing information in 2-3 lines of code.
 
-Some of the tools that built using `cifkit` are provided in 
-
-### Projects based on `cifkit`
-
-CIF Bond Analyzer (CBA) - extract and visualzie bnoding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
-
-
-## Insllation
+## Installation
 
 ```bash
 pip install cifkit
@@ -20,9 +13,9 @@ pip install cifkit
 ## Start with CifEnsemble
 
 ```python
-from cifkit import Cif, CifEnsemble
-cif_enmsemble = CifEnsemble("tests/data/cif/ensemble_test")
-cif_enmsemble = CifEnsemble("tests/data/cif/ensemble_test", add_nested_files=True)
+from cifkit import CifEnsemble
+ensemble = CifEnsemble("tests/data/cif/ensemble_test")
+ensemble = CifEnsemble("tests/data/cif/ensemble_test", add_nested_files=True)
 ```
 
 ### Get unique attributes
@@ -60,7 +53,7 @@ cif_ensemble_test.supercell_atom_counts
 # ("tests/data/cif/ensemble_test/300170.cif", 360)]
 ```
 
-### Filter files
+### Filter files by attributes
 
 ```python
 # By formulas
@@ -78,67 +71,32 @@ cif_ensemble_test.filter_by_space_group_names("Im-3m")
 cif_ensemble_test.filter_by_space_group_numbers([139])
 ```
 
-### Move/copy
+## Features
 
+### `Cif`
 
+- Get site pairs with atomic mixing information.
+- Compute the coordination number using the d_min method.
+- Identify homogeneous, heterogeneous, and all possible bond pairs.
+- Parse tags from the third line, if provided.
+- Compute the shortest distance.
+- Preprocess symbolic labels with atomic mixing in CIF data.
+- Remove author loop content.
+- Generate a 2x2x2 supercell.
+- Compute distances between element sites in CIF structures.
+- Compute the coordination number.
+- Extract unique tags, symmetry groups, symmetry names, supercell sizes, elements, structures, and formulas from CIF files.
 
-### Format
+### `CifEnsemble`
 
+- Preprocess format and move files based on errors.
+- Copy files based on tags, symmetry group, symmetry name, supercell size, elements, structure, and formula.
+- Move `.cif` files based on tags, symmetry group, symmetry name, supercell size, elements, structure distance, and coordination number.
+- Generate histograms based on tags, symmetry group, symmetry name, supercell size, elements, structure, and formula.
+- Get the minimum distance from each `.cif` file.
+- Get all unique elements in all `.cif` files.
 
-The following is an example with `Cif`
+### Projects based on `cifkit`
 
-```python
-from cifkit.models.cif import Cif
+- CIF Bond Analyzer (CBA) - extract and visualzie bnoding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
 
-file_paths = folder.get_file_path_list("tests/data/cif/folder")
-
-for file_path in file_paths:
-    cif = Cif(file_path)
-    print("Formula:", cif.formula)
-    print("Unique element:", cif.unique_elements)
-    print("Structure:", cif.structure)
-    print("Site labels:", cif.site_labels)
-    print("Space group:", cif.space_group_name)
-
-    # Set the cut-off radius
-    cut_off_radius = 4
-    
-    # Get all neartest neighbors from each site
-    cif.compute_connections(cut_off_radius)
-```
-
-```python
-filter_by_formulas
-filter_by_structures
-filter_by_space_group_names
-filter_by_space_group_numbers
-filter_by_site_mixing_types
-filter_by_tags
-filter_by_composition_types
-filter_by_elements_containing
-filter_by_elements_exact_matching
-
-
-filter_by_CN_dist_method_containing
-filter_by_CN_dist_method_exact_matching
-filter_by_CN_best_methods_containing
-filter_by_CN_best_methods_exact_matching
-filter_by_min_distance
-filter_by_supercell_count
-```
-
-## Generate stats
-def move_cif_files(
-    self, file_paths: set[str], to_directory_path: str
-) -> None:
-    """Move a set of CIF files to a destination directory."""
-    move_files(to_directory_path, list(file_paths))
-
-def copy_cif_files(
-    self, file_paths: set[str], to_directory_path: str
-) -> None:
-    """Copy a set of CIF files to a destination directory."""
-    copy_files(to_directory_path, list(file_paths))
-
-def generate_stat_histograms(self, output_dir=None):
-    plot_histograms(self, output_dir)

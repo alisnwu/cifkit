@@ -1,11 +1,12 @@
 import pytest
-from cifkit.data.example import Example
+from cifkit import Example
 from cifkit import Cif, CifEnsemble
 
 
 @pytest.mark.fast
 def test_ErCoIn_folder_path():
     assert CifEnsemble(Example.ErCoIn_folder_path).file_count == 3
+    assert CifEnsemble(Example.ErCoIn_big_folder_path).file_count == 16
     assert Cif(Example.Er10Co9In20_file_path).file_name == "Er10Co9In20.cif"
     assert (
         Cif(Example.ErCo2_68In0_32_file_path).file_name == "ErCo2.68In0.32.cif"
