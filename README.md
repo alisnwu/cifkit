@@ -1,11 +1,11 @@
-# cifkit: Python toolkit for high-throughput analysis of CIF files
+# cifkit
 
 ![logo-black](https://github.com/bobleesj/cifkit/assets/14892262/4ec3a308-35fd-43e5-8268-af261356ec9a)
 
 - preprocess .cif files for high-throuhgput processing
 - move, copy, filter files based on a comprehensive set of attributes such as coordination number, elements, tags
 - determine nearest neighbor and coordination environments at each site
-- facilitate the plotting of polyhedrons and 
+- facilitate the plotting of polyhedrons and
 
 ## Overview
 
@@ -19,7 +19,7 @@ cifkit provides two primary objects: `Cif` and `CifEnsemble`.
 
 - High throughput analysis tools using `.cif` files for research. The tools analyze bonding distances, site analysis, and coordination numbers.
 - Each tool requires preprocesing, formatting, copying, moving, and sorting .cif files.
-- To streamline the above tasks, I developed `CifPy` that can be easily imported for the above tasks.
+- To streamline the above tasks, I developed `cifkit` that can be easily imported for the above tasks.
 
 
 ## Documentation
@@ -43,7 +43,7 @@ Sangjoon Bob Lee (@bobleesj)
 ```bash
 pip install mkdocstrings
 pip install mkdocstrings-python
-pip install mkdocs         
+pip install mkdocs
 pip install mkdocs-material
 pip install mkdocs-jupyter
 mkdocs serve
