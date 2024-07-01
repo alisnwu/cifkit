@@ -1,6 +1,6 @@
 # cifkit: Python toolkit for high-throughput analysis of CIF files
 
-cifkit is designed for the high-throughput analysis of Crystallographic Information File (.cif) formats. In just 2-4 lines of code,
+![logo-black](https://github.com/bobleesj/cifkit/assets/14892262/4ec3a308-35fd-43e5-8268-af261356ec9a)
 
 - preprocess .cif files for high-throuhgput processing
 - move, copy, filter files based on a comprehensive set of attributes such as coordination number, elements, tags
