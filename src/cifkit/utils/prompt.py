@@ -1,5 +1,4 @@
 import logging
-from click import echo, style
 
 
 def log_connected_points(all_labels_connections):

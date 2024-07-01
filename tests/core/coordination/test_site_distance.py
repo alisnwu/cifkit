@@ -1,5 +1,4 @@
 import pytest
-from cifkit.utils.prompt import log_connected_points
 from cifkit.coordination.site_distance import (
     get_shortest_distance,
     get_shortest_distance_per_site,

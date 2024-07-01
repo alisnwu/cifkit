@@ -1,10 +1,5 @@
 import numpy as np
 
-from cifkit.preprocessors.environment import (
-    get_site_connections,
-)
-from deepdiff import DeepDiff
-
 
 def assert_minimum_distance(label, connections_dict, expected_min_distance):
     """

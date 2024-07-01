@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 from cifkit.data.radius_optimization import (
     get_refined_CIF_radius,

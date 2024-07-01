@@ -1,5 +1,4 @@
-from cifkit import Cif, CifEnsemble
-from cifkit.utils import folder
+from cifkit import CifEnsemble
 
 # Example usage
 

@@ -1,4 +1,3 @@
-import numpy as np
 from cifkit.coordination.geometry import (
     get_polyhedron_coordinates_labels,
 )

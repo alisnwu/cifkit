@@ -1,7 +1,4 @@
-from cifkit.utils import formula
-from cifkit.utils.string_parser import get_atom_type_from_label
 from cifkit.data.mendeleeve_handler import get_mendeleev_nums_from_pair_tuple
-from itertools import combinations
 from itertools import product
 
 
