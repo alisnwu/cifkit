@@ -138,7 +138,7 @@ ensemble.copy_cif_files(file_paths, dest_dir_path)
 
 ## Are you ready?
 
-Now, if you are interested in working with individual `.cif` files and learn more about all features in `cifkit`, let's visit the `Example notebooks` section!
+Now, if you are interested in working with individual `.cif` files and learn more about all features in `cifkit`, let's visit the `Example notebooks` section [here](https://bobleesj.github.io/cifkit/notebooks/00_Intro/)!
 
 ## Research projects using `cifkit`
 
