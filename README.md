@@ -7,7 +7,10 @@
 [![PyPi version](https://img.shields.io/pypi/v/cifkit.svg)](https://pypi.python.org/pypi/cifkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[![Open In Colab](https://img.shields.io/badge/Google%20Colab-Open-blue.svg)](https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq)
+<!-- Open Codelab with a new tab -->
+<a href="https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq" target="_blank">
+    <img src="https://img.shields.io/badge/Google%20Colab-Open-blue.svg" alt="Open In Colab">
+</a>
 
 <!-- [![codecov](https://codecov.io/gh/luigibonati/mlcolvar/branch/main/graph/badge.svg?token=H01H68KNNG)](https://codecov.io/gh/luigibonati/mlcolvar) -->
 
