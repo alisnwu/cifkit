@@ -66,12 +66,3 @@ def test_compute_polyhedron_metrics():
         "volume_of_inscribed_sphere": 34.961,
         "packing_efficiency": 0.577,
     }
-
-
-# @pytest.mark.slow
-# def test_polyhedron_wiht_error():
-#     cif_ensemble = CifEnsemble("tests/data/cif/polyhedron_error")
-#     for cif in cif_ensemble.cifs:
-#         sites = cif.site_labels
-#         for site in sites:
-#             print(cif.plot_polyhedron(site))

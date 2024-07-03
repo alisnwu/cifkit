@@ -478,6 +478,7 @@ polyhedron
 """
 
 
+@pytest.mark.pyvista
 def test_plot_polyhedron_default_output_folder(cif_URhIn):
     # Define the directory to store the output
     expected_output_dir = "tests/data/cif/polyhedrons"
@@ -491,6 +492,7 @@ def test_plot_polyhedron_default_output_folder(cif_URhIn):
     shutil.rmtree(expected_output_dir)
 
 
+@pytest.mark.pyvista
 def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
     # Define the directory to store the output
     expected_output_dir = "tests/data/cif/polyhedrons_user"
@@ -507,6 +509,7 @@ def test_plot_polyhedron_with_output_folder_given(cif_URhIn):
     shutil.rmtree(expected_output_dir)
 
 
+@pytest.mark.pyvista
 def test_plot_polyhedrons(cif_ensemble_test):
     # Define the directory to store the output
     expected_output_dir = "tests/data/cif/ensemble_test/polyhedrons"
