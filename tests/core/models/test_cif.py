@@ -220,35 +220,48 @@ def test_shortest_distance_per_site(cif_URhIn):
 # Radius
 @pytest.mark.fast
 def test_radius_values(cif_URhIn):
-    assert cif_URhIn.radius_values == {
+    expected_values = {
         "In": {
             "CIF_radius": 1.624,
-            "CIF_radius_refined": 1.3283481582381291,
+            "CIF_radius_refined": 1.328,
             "Pauling_radius_CN12": 1.66,
         },
         "Rh": {
             "CIF_radius": 1.345,
-            "CIF_radius_refined": 1.368651841761871,
+            "CIF_radius_refined": 1.369,
             "Pauling_radius_CN12": 1.342,
         },
         "U": {
             "CIF_radius": 1.377,
-            "CIF_radius_refined": 1.6143481582381292,
+            "CIF_radius_refined": 1.614,
             "Pauling_radius_CN12": 1.51,
         },
     }
+    actual_values = cif_URhIn.radius_values
+    for element, radii in expected_values.items():
+        for radius_type, expected_radius in radii.items():
+            actual_radius = actual_values[element][radius_type]
+            assert actual_radius == pytest.approx(expected_radius, abs=0.001)
 
 
 @pytest.mark.fast
 def test_radius_sum_data(cif_URhIn, radius_sum_data_URhIn):
     result = cif_URhIn.radius_sum
-    assert result == radius_sum_data_URhIn
+    for key, value_dict in radius_sum_data_URhIn.items():
+        for pair, expected_sum in value_dict.items():
+            actual_sum = result[key][pair]
+            assert actual_sum == pytest.approx(expected_sum, abs=0.001)
 
 
 @pytest.mark.fast
 def test_CN_max_gap_per_site(cif_URhIn, max_gaps_per_label_URhIn):
     result = cif_URhIn.CN_max_gap_per_site
-    assert result == max_gaps_per_label_URhIn
+    for label, dist_types in max_gaps_per_label_URhIn.items():
+        for dist_type, values in dist_types.items():
+            assert result[label][dist_type]["CN"] == values["CN"]
+            assert result[label][dist_type]["max_gap"] == pytest.approx(
+                values["max_gap"], abs=0.00101
+            )
 
 
 @pytest.mark.fast

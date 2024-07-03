@@ -1,3 +1,4 @@
+import numpy as np
 from cifkit.data.radius import get_radius_data
 from cifkit.data.radius_optimization import get_refined_CIF_radius
 
@@ -46,7 +47,7 @@ def get_radius_values_per_element(elements, shortest_bond_distances) -> dict:
     for element in elements:
         combined_radii[element] = {
             "CIF_radius": CIF_pauling_rad[element]["CIF_radius"],
-            "CIF_radius_refined": CIF_refined_rad.get(element),
+            "CIF_radius_refined": float(np.round(CIF_refined_rad.get(element), 3)),
             "Pauling_radius_CN12": CIF_pauling_rad[element]["Pauling_radius_CN12"],
         }
 
