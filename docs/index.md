@@ -22,7 +22,7 @@ pip install cifkit pyvista gemmi
 
 ## Start with CifEnsemble
 
- `cifkit` offers a class called `CifEnsemble` which handles many `.cif` files in a high-throuhgput way. You can initialize the object using the folder path containing `.cif` files shown below.
+`cifkit` offers a class called `CifEnsemble` which handles many `.cif` files in a high-throuhgput way. You can initialize the object using the folder path containing `.cif` files shown below.
 
 ```python
 from cifkit import CifEnsemble
@@ -134,7 +134,6 @@ ensemble.move_cif_files(file_paths, dest_dir_path)
 # To copy files
 ensemble.copy_cif_files(file_paths, dest_dir_path)
 ```
-
 
 ## Are you ready?
 

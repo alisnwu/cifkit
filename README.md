@@ -18,11 +18,8 @@
 
 The documentation is available here: https://bobleesj.github.io/cifkit
 
-
-
 ![Logo light mode](assets/img/logo-black.png#gh-light-mode-only "cifkit logo light")
 ![Logo dark mode](assets/img/logo-color.png#gh-dark-mode-only "cifkit logo dark")
-
 
 `cifkit` is designed to provide a set of well-organized and fully-tested utility functions for handling a large set on the order of ten of thousands of `.cif` files.
 
@@ -61,8 +58,7 @@ print("Unique element:", cif.unique_elements)
 
 **`CifEnsemble`** is initialized with a folder path containing `.cif` files. It identifies unique attributes, such as space groups and elements, across the `.cif` files, moves and copies files based on these attributes. It generates histograms for all attributes.
 
-
- ```python
+```python
 from cifkit import CifEnsemble
 from cifkit import Example
 
@@ -88,13 +84,13 @@ I provide example `.cif` files that can be easily imported, and you can visit th
 
 To install
 
-```
+```bash
 pip install cifkit
 ```
 
 You may need to download other dependencies:
 
-```
+```bash
 pip install cifkit pyvista gemmi
 ```
 
@@ -133,16 +129,14 @@ By structures:
 
 ![Histogram](assets/img/histogram-structure.png)
 
-
 ## Project using cifkit
 
 - CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
 
-
 ## How to ask for help or contribute
 
-`cifkit` is also designed for experimental materials scientists and chemists. If you encounter any issues or have questions, please feel free to reach out via the email listed on my GitHub profile. My goal is to ensure `cifkit` is accessible and easy to use for everyone.
+`cifkit` is designed for experimental materials scientists and chemists. If you encounter any issues or have questions, please feel free to reach out via the email listed on my GitHub profile. My goal is to ensure that cifkit is accessible and easy to use for everyone.
 
 ## Asking for feedback
 
-If `cifkit` has been useful in your research, you could help me by taking 2-3 seconds to "star" this repository. This help me identify whether this project is useful for the community and let others know as well.
+If `cifkit` has been useful in your research, you could help me by taking 2-3 seconds to "star" this repository. This helps me identify whether this project is useful for the community and lets others make informed decision.
