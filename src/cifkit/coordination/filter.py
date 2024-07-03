@@ -31,21 +31,26 @@ def find_best_polyhedron(max_gaps_per_label, connections):
             # Add the central atom as the last element
             polyhedron_points.append(connection_data[0][2])
 
+            # print("Consider label:", label)
+            # print("Total points in polyhedron including the center:")
+            # print(len(polyhedron_points))
+
+            # for point in polyhedron_points:
+            #     print(point)
+
             # Try to make a polyhedron
             try:
                 hull = ConvexHull(polyhedron_points)
 
             except Exception:
-                # print(
-                #     f"Error in determining polyhedron for {label} using {method} - skipped"
-                # )
+                print(
+                    f"Error in determining polyhedron for {label} using {method} - skipped"
+                )
                 continue  # Move to the next method
-            print("Consider", label, method)
             """
             'Er1': {'dist_by_shortest_dist': {'max_gap': 0.026, 'CN': 12}}
             """
             # Consider Er1 dist_by_shortest_dist
-
             polyhedron_metrics = compute_polyhedron_metrics(polyhedron_points, hull)
             # Check if the polyhedron has the lowest distance to center.
             if (

@@ -186,7 +186,7 @@ def test_filter_by_CN_dist_method_containing(
     # "tests/data/cif/ensemble_test/300170.cif" - min dist method
     # {16, 12, 5}
 
-    assert cif_ensemble_test.filter_by_CN_dist_method_containing([5]) == {
+    assert cif_ensemble_test.filter_by_CN_min_dist_method_containing([5]) == {
         "tests/data/cif/ensemble_test/300170.cif",
         "tests/data/cif/ensemble_test/300169.cif",
     }
@@ -196,7 +196,7 @@ def test_filter_by_CN_dist_method_containing(
 def test_filter_by_CN_dist_method_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert cif_ensemble_test.filter_by_CN_dist_method_exact_matching([14]) == {
+    assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching([14]) == {
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250709.cif",
         "tests/data/cif/ensemble_test/250697.cif",

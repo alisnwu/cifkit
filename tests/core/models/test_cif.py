@@ -286,7 +286,7 @@ by (1) min_dist method and (2) best method
 """Test bond counts"""
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_CN_bond_counts_by_min_dist_method(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_min_dist_method
 
@@ -298,7 +298,7 @@ def test_CN_bond_counts_by_min_dist_method(cif_URhIn):
     }
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_CN_bond_counts_by_best_methods(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_best_methods
     assert result == {
@@ -313,7 +313,7 @@ def test_CN_bond_counts_by_best_methods(cif_URhIn):
     }
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_CN_bond_counts_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_min_dist_method_sorted_by_mendeleev
     assert result == {
@@ -324,7 +324,7 @@ def test_CN_bond_counts_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
     }
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_CN_bond_counts_by_best_methods_sorted_by_mendeleev(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_best_methods_sorted_by_mendeleev
     print(result)
@@ -372,7 +372,7 @@ def test_CN_bond_fractions_by_best_methods(cif_URhIn):
         assert result[key] == pytest.approx(expected_value, abs=1e-3)
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
     result = cif_URhIn.CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev
 
@@ -389,7 +389,7 @@ def test_CN_bond_fractions_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
         assert result[key] == pytest.approx(expected_value, abs=1e-3)
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_CN_bond_fractions_by_best_methods_sorted_by_mendeleeve(cif_URhIn):
     result = cif_URhIn.CN_bond_fractions_by_best_methods_sorted_by_mendeleev
 
@@ -576,12 +576,33 @@ def test_init_atomic_mixing_deficiency_without_atomic_mixing():
     assert Cif(file_path).CN_unique_values_by_best_methods == {11, 14, 15}
 
 
-# @pytest.mark.now
-# def test_init_atomic_mixing_full_occupancy_():
-#     file_path = "tests/data/cif_CN_init/ErCo2.68In0.32.cif"
-#     # file_path = "tests/data/cif_CN_init/1956508.cif"
-#     cif = Cif(file_path)
-#     print(cif.site_mixing_type)  # full_occupancy_atomic_mixing
-#     print(cif.CN_best_methods)
+"""
+Test files with error in geoemtry
+"""
 
-# assert False
+
+def print_connected_points(all_labels_connections):
+    """
+    Utility function for printing connections per site label
+    """
+    for label, connections in all_labels_connections.items():
+        print(f"\nAtom site {label}:")
+        for (
+            label,
+            dist,
+            coords_1,
+            coords_2,
+        ) in connections:
+            print(f"{label} {dist} {coords_1}, {coords_2}")
+
+
+@pytest.mark.now
+def test_init_atomic_mixing_full_occupancy_():
+    file_path = "tests/data/cif_CN_init/ErCo2.68In0.32.cif"
+    # file_path = "tests/data/cif_CN_init/1956508.cif"
+    cif = Cif(file_path)
+    cif.compute_connections()
+    print_connected_points(cif.connections)
+    assert False
+    # Error computing polyhedron metrics: index 12 is out of bounds for axis 0 with size 12
+    # Problem with Er1

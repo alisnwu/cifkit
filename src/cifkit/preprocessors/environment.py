@@ -70,7 +70,7 @@ def get_nearest_dists_per_site(
 
             # Calculate the dist between two points
             dist = distance.calc_dist_two_cart_points(cart_1, cart_2)
-            dist = np.round(dist, 3)
+            dist = float(np.round(dist, 3))
 
             # Check the dist
             if dist < cutoff_radius and dist > 0.1:
@@ -79,14 +79,14 @@ def get_nearest_dists_per_site(
                         point_2[3],  # site label
                         dist,
                         [
-                            np.round(cart_1[0], 3),  # x
-                            np.round(cart_1[1], 3),  # y
-                            np.round(cart_1[2], 3),  # z
+                            float(np.round(cart_1[0], 3)),  # x
+                            float(np.round(cart_1[1], 3)),  # y
+                            float(np.round(cart_1[2], 3)),  # z
                         ],
                         [
-                            np.round(cart_2[0], 3),  # x
-                            np.round(cart_2[1], 3),  # y
-                            np.round(cart_2[2], 3),  # z
+                            float(np.round(cart_2[0], 3)),  # x
+                            float(np.round(cart_2[1], 3)),  # y
+                            float(np.round(cart_2[2], 3)),  # z
                         ],
                     )
                 )

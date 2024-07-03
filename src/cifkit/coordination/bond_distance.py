@@ -15,5 +15,4 @@ def get_shortest_distance_per_bond_pair(
             or distance < min_dist_per_element_pair[element_pair]
         ):
             min_dist_per_element_pair[element_pair] = distance
-
     return min_dist_per_element_pair

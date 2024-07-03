@@ -261,10 +261,12 @@ class CifEnsemble:
     Filter by CN
     """
 
-    def filter_by_CN_dist_method_containing(self, values: list[int]) -> set[str]:
+    def filter_by_CN_min_dist_method_containing(self, values: list[int]) -> set[str]:
         return self._filter_contains_any("CN_unique_values_by_min_dist_method", values)
 
-    def filter_by_CN_dist_method_exact_matching(self, values: list[int]) -> set[str]:
+    def filter_by_CN_min_dist_method_exact_matching(
+        self, values: list[int]
+    ) -> set[str]:
         return self._filter_exact_match("CN_unique_values_by_min_dist_method", values)
 
     def filter_by_CN_best_methods_containing(self, values: list[int]) -> set[str]:

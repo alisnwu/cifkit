@@ -5,7 +5,7 @@ def get_radians_from_degrees(angles: list[float]) -> list[float]:
     """
     Convert angles from degrees to radians and round to 5 decimal places.
     """
-    radians = [round(np.radians(angle), 5) for angle in angles]
+    radians = [round(float(np.radians(angle)), 5) for angle in angles]
     return radians
 
 

@@ -31,7 +31,7 @@ def calculate_normalized_distances(connections):
     """
     min_dist = connections[0][1]
     normalized_distances = [
-        np.round(dist / min_dist, 3) for _, dist, _, _ in connections
+        float(np.round(dist / min_dist, 3)) for _, dist, _, _ in connections
     ]
     return normalized_distances
 

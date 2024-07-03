@@ -1,4 +1,4 @@
-# Getting Started
+# Getting started
 
 The purpose of this guide is to illustrate some of the main features that `cifkit` provides. It assumes a very basic knowledge of Python.
 
@@ -6,48 +6,92 @@ The purpose of this guide is to illustrate some of the main features that `cifki
 
 ## Installation
 
+Install `cifkit` via:
+
 ```bash
 pip install cifkit
 ```
 
+You may need to download other dependencies:
+
+```bash
+pip install cifkit pyvista gemmi
+```
+
+`gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting polyhedrons.
+
 ## Start with CifEnsemble
+
+ `cifkit` offers a class called `CifEnsemble` which handles many `.cif` files in a high-throuhgput way. You can initialize the object using the folder path containing `.cif` files shown below.
 
 ```python
 from cifkit import CifEnsemble
+
+# Initialize
 ensemble = CifEnsemble("tests/data/cif/ensemble_test")
+
+# Initialize including nested files
 ensemble = CifEnsemble("tests/data/cif/ensemble_test", add_nested_files=True)
+
+# Folder path
+ensemble.cif_folder_path
+# "tests/data/cif/ensemble_test"
+
+```
+
+If you do not have `.cif` files for testing, `cifkit` also provides a set of `.cif` files accessible.
+
+```python
+from cifkit import CifEnsemble, Example
+from cifkit import Example
+
+# Initalize with the file path
+ensemble = CifEnsemble(Example.ErCoIn_big_folder_path)
 ```
 
 ### Get unique attributes
 
-```
-cif_ensemble.cif_folder_path
-# "tests/data/cif/ensemble_test"
+Use the `ensemble` object to get unique attributes such as elements, formulas, etc.
 
-cif_ensemble.unique_formulas
+```python
+# Unique formulas
+ensemble.unique_formulas
 # {"EuIr2Ge2", "CeRu2Ge2", "LaRu2Ge2", "Mo"}
 
-cif_ensemble.unique_structures
+# Unique structures
+ensemble.unique_structures
 # {"CeAl2Ga2", "W"}
 
-cif_ensemble.unique_elements
+# Unique elements
+ensemble.unique_elements
 # {"La", "Ru", "Ge", "Ir", "Eu", "Ce", "Mo"}
 
-cif_ensemble.unique_space_group_names
-# { "I4/mmm", "Im-3m"}
+# Unique space group names
+ensemble.unique_space_group_names
+# {"I4/mmm", "Im-3m"}
 
-cif_ensemble.unique_space_group_numbers
+# Unique space group numbers
+ensemble.unique_space_group_numbers
 # {139, 229}
 
-cif_ensemble.unique_tags
+# Unique tags
+ensemble.unique_tags
 # {"hex", "rt", "rt_hex", ""}
+```
 
-cif_ensemble.minimum_distances
+### Get distances and supercell size per file
+
+The following computes the size of each supercell and the minimum distance per file.
+
+```python
+# Get min distance per file
+ensemble.minimum_distances
 # [("tests/data/cif/ensemble_test/250709.cif", 2.725),
 # ("tests/data/cif/ensemble_test/300171.cif", 2.383),
 # ("tests/data/cif/ensemble_test/300170.cif", 2.28)]
 
-cif_ensemble_test.supercell_atom_counts
+# Get supercell size per file
+ensemble_test.supercell_atom_counts
 # [("tests/data/cif/ensemble_test/250709.cif", 54),
 # ("tests/data/cif/ensemble_test/300171.cif", 360),
 # ("tests/data/cif/ensemble_test/300170.cif", 360)]
@@ -55,48 +99,48 @@ cif_ensemble_test.supercell_atom_counts
 
 ### Filter files by attributes
 
+The following returns a set of file paths to each `.cif` file.
+
 ```python
 # By formulas
-cif_ensemble_test.filter_by_formulas(["LaRu2Ge2"]) 
-cif_ensemble_test.filter_by_formulas(["LaRu2Ge2", "Mo"]) 
+ensemble_test.filter_by_formulas(["LaRu2Ge2"])
+ensemble_test.filter_by_formulas(["LaRu2Ge2", "Mo"])
 
 # By structures
-cif_ensemble_test.filter_by_structures(["W"]) 
-cif_ensemble_test.filter_by_structures("CeAl2Ga2") 
+ensemble_test.filter_by_structures(["W"])
+ensemble_test.filter_by_structures("CeAl2Ga2")
 
 # By space group
-cif_ensemble_test.filter_by_space_group_names("Im-3m")
+ensemble_test.filter_by_space_group_names("Im-3m")
 
 # By space group numbers
-cif_ensemble_test.filter_by_space_group_numbers([139])
+ensemble_test.filter_by_space_group_numbers([139])
 ```
 
-## Features
+### Move and copy files
 
-### `Cif`
+Now you have a set of file paths with example below, you can copy and move files to a specific directroy. For high-throuhgout analysis, you might be interested in separating files based on tags, elements, coordination numbers, etc.
 
-- Get site pairs with atomic mixing information.
-- Compute the coordination number using the d_min method.
-- Identify homogeneous, heterogeneous, and all possible bond pairs.
-- Parse tags from the third line, if provided.
-- Compute the shortest distance.
-- Preprocess symbolic labels with atomic mixing in CIF data.
-- Remove author loop content.
-- Generate a 2x2x2 supercell.
-- Compute distances between element sites in CIF structures.
-- Compute the coordination number.
-- Extract unique tags, symmetry groups, symmetry names, supercell sizes, elements, structures, and formulas from CIF files.
+```python
+file_paths = {
+    "tests/data/cif/ensemble_test/300169.cif",
+    "tests/data/cif/ensemble_test/300171.cif",
+    "tests/data/cif/ensemble_test/300170.cif",
+}
 
-### `CifEnsemble`
+# To move files
+ensemble.move_cif_files(file_paths, dest_dir_path)
 
-- Preprocess format and move files based on errors.
-- Copy files based on tags, symmetry group, symmetry name, supercell size, elements, structure, and formula.
-- Move `.cif` files based on tags, symmetry group, symmetry name, supercell size, elements, structure distance, and coordination number.
-- Generate histograms based on tags, symmetry group, symmetry name, supercell size, elements, structure, and formula.
-- Get the minimum distance from each `.cif` file.
-- Get all unique elements in all `.cif` files.
+# To copy files
+ensemble.copy_cif_files(file_paths, dest_dir_path)
+```
 
-### Projects based on `cifkit`
 
-- CIF Bond Analyzer (CBA) - extract and visualzie bnoding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
+## Are you ready?
 
+Now, if you are interested in working with individual `.cif` files and learn more about all features in `cifkit`, let's visit the `Example notebooks` section!
+
+## Research projects using `cifkit`
+
+- CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
+- Structure Analysis/Featurizer (SAF) - build geometric features for binary, ternary compounds - [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)

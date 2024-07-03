@@ -21,6 +21,11 @@ cifkit provides two primary objects: `Cif` and `CifEnsemble`.
 - Each tool requires preprocesing, formatting, copying, moving, and sorting .cif files.
 - To streamline the above tasks, I developed `cifkit` that can be easily imported for the above tasks.
 
+## Projects using cikfit
+
+- CIF Bond Analyzer (CBA)
+- Structure Analysis Featurizer (SAF)
+- CIF Cleaner
 
 ## Documentation
 

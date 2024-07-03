@@ -9,5 +9,5 @@ class Example(str, Enum):
     ErCoIn_folder_path = get_path("ErCoIn")
     ErCoIn_big_folder_path = get_path("ErCoIn_big")
     Er10Co9In20_file_path = get_path("ErCoIn", "Er10Co9In20.cif")
-    ErCo2_68In0_32_file_path = get_path("ErCoIn", "ErCo2.68In0.32.cif")
+    Er5In3_file_path = get_path("ErCoIn", "Er5In3.cif")
     ErCoIn5_file_path = get_path("ErCoIn", "ErCoIn5.cif")
