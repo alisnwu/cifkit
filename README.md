@@ -6,13 +6,13 @@
 
 `cifkit` is designed to provide a set of well-organized and fully-tested utility functions for handling a large set on the order of ten of thousands of `.cif` files.
 
-> The current codebase and documentation are actively improved.
+> The current codebase and documentation are actively improved. July 3, 2024
 
 ## Motivation
 
-I have been building interactive tools that analyze `.cif` files. I have noticed the following needs:
+Since Summer 2023, I have been building interactive tools that analyze `.cif` files. I have noticed the following needs:
 
-- **Format files at once:** In my research, I noticed that `.cif` files parsed from databases often have ill-formatted files. We need a tool to standardize, preprocess, and filter bad files. I also need to copy, move, and sort `.cif` files based on specific attributes.
+- **Format files at once:** `.cif` files parsed from databases often have ill-formatted files. We need a tool to standardize, preprocess, and filter bad files. I also need to copy, move, and sort `.cif` files based on specific attributes.
 - **Visualize coordination geometry:** We are interested in determining the coordination geometry and the best site in the supercell for analysis in a high-throughput manner. We need to identify the best site for each site label.
 - **Visualize distribution of files:** We want to easily identify and categorize a distribution of underlying `.cif` files based on supercell size, tags, coordination numbers, elements, etc.
 
@@ -79,15 +79,48 @@ pip install cifkit pyvista gemmi
 `gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting polyhedrons.
 
 
-## Developer
-
-Sangjoon Bob Lee ([@bobleesj](https://github.com/bobleesj))
-
 ## Project using cifkit
 
 - CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
 
 
-## Images
+## How to Ask for Help or Contribute
+
+`Cifkit` is also designed for experimental materials scientists and chemists. If you encounter any issues or have questions, please feel free to reach out via the email listed on my GitHub profile. My goal is to ensure `cifkit` is accessible and easy to use for everyone.
+
+## Asking for Support
+
+This is my first open-source project. If `cifkit` has been useful in your research, you could help me by taking 2-3 seconds to "star" this repository.
+
+## Visuals
+
+### Polyhedron
+
+You can visualize the polyhedron generated from each atomic site based on the coordination number geoemtry. In our research, the goal is to map the structure and coordination number with the physical property.
+
+```python
+from cifkit import Cif
+
+# Example usage
+cif = Cif("your_cif_file_path")
+site_labels = cif.site_labels
+
+# Loop through each site
+for label in site_labels:
+    # Dipslay each polyhedron, a file saved for each
+    cif.plot_polyhedron(label, is_displayed=True)
+```
 
 ![Polyhedron generation](assets/img/ErCoIn_polyhedron.png)
+
+### Histograms
+
+You can use `CifEnsemble` to visualize distributions of file counts based on specific attributes, etc. Learn all features from the documentation provided [here](https://bobleesj.github.io/cifkit/).
+
+By formulas:
+
+![Histogram](assets/img/histogram-formula.png)
+
+By structures:
+
+![Histogram](assets/img/histogram-structure.png)
