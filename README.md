@@ -1,5 +1,25 @@
 # cifkit
 
+<a href="https://pypi.python.org/pypi/cifkit" target="_blank">
+  <img src="https://img.shields.io/pypi/v/cifkit.svg" alt="PyPi">
+</a>
+
+<a href="https://opensource.org/licenses/MIT" target="_blank">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+</a>
+
+<a href="https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq" target="_blank">
+  <img src="https://img.shields.io/badge/Google%20Colab-Open-blue.svg" alt="Open In Colab">
+</a>
+
+[![codecov](https://codecov.io/gh/luigibonati/mlcolvar/branch/main/graph/badge.svg?token=H01H68KNNG)](https://codecov.io/gh/luigibonati/mlcolvar)
+
+<!-- [![license](https://img.shields.io/github/license/bobleesj/cifkit)](https://github.com/bobleesj/cifkit/blob/main/LICENSE) -->
+
+The documentation is available here: https://bobleesj.github.io/cifkit
+
+
+
 ![Logo light mode](assets/img/logo-black.png#gh-light-mode-only "cifkit logo light")
 ![Logo dark mode](assets/img/logo-color.png#gh-dark-mode-only "cifkit logo dark")
 
@@ -18,11 +38,11 @@ Since Summer 2023, I have been building interactive tools that analyze `.cif` fi
 
 ## Overview
 
-Designed for people with minimal programming experience, cifkit provides two primary objects: `Cif` and `CifEnsemble`.
+Designed for people with minimal programming experience, `cifkit` provides two primary objects: `Cif` and `CifEnsemble`.
 
 ### Cif
 
-**`Cif`** is Initialized with a `.cif` file path. It parses the .cif file, preprocesses ill-formatted files, generates supercells, and computes nearest neighbors. It also determines coordination numbers using four different methods and generates polyhedrons for each site.
+**`Cif`** is initialized with a `.cif` file path. It parses the .cif file, preprocesses ill-formatted files, generates supercells, and computes nearest neighbors. It also determines coordination numbers using four different methods and generates polyhedrons for each site.
 
 ```python
 from cifkit import Cif
@@ -47,7 +67,9 @@ from cifkit import CifEnsemble
 from cifkit import Example
 
 # Initialize
-ensemble = CifEnsemble("tests/data/cif/ensemble_test")
+ensemble = CifEnsemble(Example.ErCoIn_folder_path)
+
+# Get unique attributes
 ensemble.unique_formulas
 ensemble.unique_structures
 ensemble.unique_elements
@@ -60,7 +82,7 @@ ensemble_test.supercell_atom_counts
 
 ## Tutorial and documentation
 
-I provide example `.cif` files that can be easily imported, and you can visit the documentation page [here](https://bobleesj.github.io/cifkit/)!
+I provide example `.cif` files that can be easily imported, and you can visit the documentation page [here](https://bobleesj.github.io/cifkit/).
 
 ## Installation
 
@@ -77,20 +99,6 @@ pip install cifkit pyvista gemmi
 ```
 
 `gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting polyhedrons.
-
-
-## Project using cifkit
-
-- CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
-
-
-## How to Ask for Help or Contribute
-
-`Cifkit` is also designed for experimental materials scientists and chemists. If you encounter any issues or have questions, please feel free to reach out via the email listed on my GitHub profile. My goal is to ensure `cifkit` is accessible and easy to use for everyone.
-
-## Asking for Support
-
-This is my first open-source project. If `cifkit` has been useful in your research, you could help me by taking 2-3 seconds to "star" this repository.
 
 ## Visuals
 
@@ -124,3 +132,17 @@ By formulas:
 By structures:
 
 ![Histogram](assets/img/histogram-structure.png)
+
+
+## Project using cifkit
+
+- CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
+
+
+## How to ask for help or contribute
+
+`cifkit` is also designed for experimental materials scientists and chemists. If you encounter any issues or have questions, please feel free to reach out via the email listed on my GitHub profile. My goal is to ensure `cifkit` is accessible and easy to use for everyone.
+
+## Asking for feedback
+
+If `cifkit` has been useful in your research, you could help me by taking 2-3 seconds to "star" this repository. This help me identify whether this project is useful for the community and let others know as well.
