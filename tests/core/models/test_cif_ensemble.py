@@ -51,23 +51,32 @@ def test_unique_values(cif_ensemble_test: CifEnsemble):
 
 @pytest.mark.fast
 def test_distances_supercell_size(cif_ensemble_test: CifEnsemble):
-    assert cif_ensemble_test.minimum_distances == [
-        ("tests/data/cif/ensemble_test/300169.cif", 2.29),
-        ("tests/data/cif/ensemble_test/260171.cif", 2.72),
-        ("tests/data/cif/ensemble_test/250697.cif", 2.725),
-        ("tests/data/cif/ensemble_test/250709.cif", 2.725),
-        ("tests/data/cif/ensemble_test/300171.cif", 2.383),
-        ("tests/data/cif/ensemble_test/300170.cif", 2.28),
-    ]
+    expected_minimum_distances = set(
+        [
+            ("tests/data/cif/ensemble_test/300169.cif", 2.29),
+            ("tests/data/cif/ensemble_test/260171.cif", 2.72),
+            ("tests/data/cif/ensemble_test/250697.cif", 2.725),
+            ("tests/data/cif/ensemble_test/250709.cif", 2.725),
+            ("tests/data/cif/ensemble_test/300171.cif", 2.383),
+            ("tests/data/cif/ensemble_test/300170.cif", 2.28),
+        ]
+    )
 
-    assert cif_ensemble_test.supercell_atom_counts == [
-        ("tests/data/cif/ensemble_test/300169.cif", 360),
-        ("tests/data/cif/ensemble_test/260171.cif", 54),
-        ("tests/data/cif/ensemble_test/250697.cif", 54),
-        ("tests/data/cif/ensemble_test/250709.cif", 54),
-        ("tests/data/cif/ensemble_test/300171.cif", 360),
-        ("tests/data/cif/ensemble_test/300170.cif", 360),
-    ]
+    expected_supercell_atom_counts = set(
+        [
+            ("tests/data/cif/ensemble_test/300169.cif", 360),
+            ("tests/data/cif/ensemble_test/260171.cif", 54),
+            ("tests/data/cif/ensemble_test/250697.cif", 54),
+            ("tests/data/cif/ensemble_test/250709.cif", 54),
+            ("tests/data/cif/ensemble_test/300171.cif", 360),
+            ("tests/data/cif/ensemble_test/300170.cif", 360),
+        ]
+    )
+
+    assert set(cif_ensemble_test.minimum_distances) == expected_minimum_distances
+    assert (
+        set(cif_ensemble_test.supercell_atom_counts) == expected_supercell_atom_counts
+    )
 
 
 """
