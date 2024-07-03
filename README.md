@@ -1,22 +1,19 @@
 # cifkit
 
-<a href="https://pypi.python.org/pypi/cifkit" target="_blank">
-  <img src="https://img.shields.io/pypi/v/cifkit.svg" alt="PyPi">
-</a>
+![Integration Tests](https://github.com/bobleesj/cifkit/actions/workflows/python-run-pytest.yml/badge.svg)
+![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)
+![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)
+![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)
 
-<a href="https://opensource.org/licenses/MIT" target="_blank">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
-</a>
-
-<a href="https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq" target="_blank">
-  <img src="https://img.shields.io/badge/Google%20Colab-Open-blue.svg" alt="Open In Colab">
-</a>
+[![PyPi version](https://img.shields.io/pypi/v/cifkit.svg)](https://pypi.python.org/pypi/cifkit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Open In Colab](https://img.shields.io/badge/Google%20Colab-Open-blue.svg)](https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq)
 
 [![codecov](https://codecov.io/gh/luigibonati/mlcolvar/branch/main/graph/badge.svg?token=H01H68KNNG)](https://codecov.io/gh/luigibonati/mlcolvar)
 
-<!-- [![license](https://img.shields.io/github/license/bobleesj/cifkit)](https://github.com/bobleesj/cifkit/blob/main/LICENSE) -->
-
 The documentation is available here: https://bobleesj.github.io/cifkit
+
+The full interactice Google Codelab link is available here: https://shorturl.at/CZbt6
 
 ![Logo light mode](assets/img/logo-black.png#gh-light-mode-only "cifkit logo light")
 ![Logo dark mode](assets/img/logo-color.png#gh-dark-mode-only "cifkit logo dark")
