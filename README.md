@@ -1,12 +1,13 @@
 # cifkit
 
+Add codecov info:
+
 ![Integration Tests](https://github.com/bobleesj/cifkit/actions/workflows/python-run-pytest.yml/badge.svg)
+[![codecov](https://codecov.io/gh/bobleesj/cifkit/graph/badge.svg?token=AN2YAC337A)](https://codecov.io/gh/bobleesj/cifkit)
 ![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)
 ![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)
 [![PyPi version](https://img.shields.io/pypi/v/cifkit.svg)](https://pypi.python.org/pypi/cifkit)
-[![codecov](https://codecov.io/gh/bobleesj/bobleesj/graph/badge.svg?token=3KDQ4344V5)](https://codecov.io/gh/bobleesj/cif-cleaner)
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/bobleesj/cifkit/blob/main/LICENSE)
 
 <!-- Open Codelab with a new tab -->
