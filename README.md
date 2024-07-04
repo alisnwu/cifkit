@@ -1,7 +1,5 @@
 # cifkit
 
-Add codecov info:
-
 ![Integration Tests](https://github.com/bobleesj/cifkit/actions/workflows/python-run-pytest.yml/badge.svg)
 [![codecov](https://codecov.io/gh/bobleesj/cifkit/graph/badge.svg?token=AN2YAC337A)](https://codecov.io/gh/bobleesj/cifkit)
 ![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)
@@ -15,28 +13,26 @@ Add codecov info:
     <img src="https://img.shields.io/badge/Google%20Colab-Open-blue.svg" alt="Open In Colab">
 </a>
 
-<!-- [![codecov](https://codecov.io/gh/luigibonati/mlcolvar/branch/main/graph/badge.svg?token=H01H68KNNG)](https://codecov.io/gh/luigibonati/mlcolvar) -->
-
 The documentation is available here: https://bobleesj.github.io/cifkit
 
 ![Logo light mode](assets/img/logo-black.png#gh-light-mode-only "cifkit logo light")
 ![Logo dark mode](assets/img/logo-color.png#gh-dark-mode-only "cifkit logo dark")
 
-`cifkit` is designed to provide a set of well-organized and fully-tested utility functions for handling a large set on the order of ten of thousands of `.cif` files.
+`cifkit` is designed to provide a set of well-organized and fully-tested utility functions for handling large datasets, on the order of tens of thousands, of `.cif` files.
 
-> The current codebase and documentation are actively improved. July 3, 2024
+> The current codebase and documentation are actively being improved as of July 3, 2024.
 
 ## Motivation
 
-Since Summer 2023, I have been building interactive tools that analyze `.cif` files. I have noticed the following needs:
+Since Summer 2023, I have been developing interactive tools that analyze `.cif` files. I have identified the following needs:
 
-- **Format files at once:** `.cif` files parsed from databases often have ill-formatted files. We need a tool to standardize, preprocess, and filter bad files. I also need to copy, move, and sort `.cif` files based on specific attributes.
+- **Format files at once:** `.cif` files parsed from databases often contain ill-formatted files. We need a tool to standardize, preprocess, and filter out bad files. I also need to copy, move, and sort `.cif` files based on specific attributes.
 - **Visualize coordination geometry:** We are interested in determining the coordination geometry and the best site in the supercell for analysis in a high-throughput manner. We need to identify the best site for each site label.
 - **Visualize distribution of files:** We want to easily identify and categorize a distribution of underlying `.cif` files based on supercell size, tags, coordination numbers, elements, etc.
 
 ## Overview
 
-Designed for people with minimal programming experience, `cifkit` provides two primary objects: `Cif` and `CifEnsemble`.
+Designed for individuals with minimal programming experience, `cifkit` provides two primary objects: `Cif` and `CifEnsemble`.
 
 ### Cif
 
