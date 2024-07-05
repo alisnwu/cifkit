@@ -36,7 +36,7 @@ def get_site_connections(
 
         all_labels_connections[label] = connections
 
-    return all_labels_connections
+    return remove_duplicate_connections(all_labels_connections)
 
 
 def get_nearest_dists_per_site(
@@ -136,3 +136,19 @@ def get_most_connected_point_per_site(label: str, dist_dict: dict, dist_set: set
             (other_label, dist, cart_1, cart_2)
             for other_label, dist, cart_1, cart_2 in max_connections
         ]
+
+
+def remove_duplicate_connections(connections):
+    """Remove duplicate connections based on the last set of coordinates."""
+    unique_connections = {}
+    for key, value in connections.items():
+        seen = set()
+        unique_list = []
+        for item in value:
+            # The tuple representing the endpoint coordinates is item[3]
+            coords = tuple(item[3])  # Need to convert list to tuple to use it in a set
+            if coords not in seen:
+                seen.add(coords)
+                unique_list.append(item)
+        unique_connections[key] = unique_list
+    return unique_connections

@@ -113,6 +113,7 @@ class Cif:
     ) -> None:
         """
         Initialize ExampleClass with custom parameters.
+        TODO: Add more details about the class.
 
         Args:
             file_path (str): Description of param1 that initializes property_one.
@@ -541,6 +542,3 @@ class Cif:
             is_displayed,
             output_dir,
         )
-
-
-#
