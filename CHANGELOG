@@ -1,4 +1,4 @@
 cifkit-0.32 (2024-07-04)
 
-  * Fixed #7: Polyhedron bug with atomic mixing
+  * Fixed https://github.com/bobleesj/cifkit/issues/7: Remove duplicate connected points in connections
   * Added issue and pull request templates
