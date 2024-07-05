@@ -66,23 +66,3 @@ def test_compute_polyhedron_metrics():
         "volume_of_inscribed_sphere": 34.961,
         "packing_efficiency": 0.577,
     }
-
-
-# from cifkit import CifEnsemble
-
-
-# @pytest.mark.now
-# def test_polyhedron_coordinates_labels_with_atomic_mixing():
-#     ensemble = CifEnsemble("tests/data/cif/polyhedron_mixing")
-#     for cif in ensemble.cifs:
-#         print("Consider:", cif.file_name_without_ext)
-#         print(cif.site_mixing_type)
-#         for label in cif.site_labels:
-#             polyhedron_points, vertex_label = (
-#                 cif.get_polyhedron_labels_by_CN_best_methods(label)
-#             )
-#             for point in polyhedron_points:
-#                 print(point)
-#             print(vertex_label)
-#             cif.plot_polyhedron(label, is_displayed=True)
-#     assert False
