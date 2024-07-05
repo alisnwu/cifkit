@@ -30,6 +30,11 @@ Since Summer 2023, I have been developing interactive tools that analyze `.cif` 
 - **Visualize coordination geometry:** We are interested in determining the coordination geometry and the best site in the supercell for analysis in a high-throughput manner. We need to identify the best site for each site label.
 - **Visualize distribution of files:** We want to easily identify and categorize a distribution of underlying `.cif` files based on supercell size, tags, coordination numbers, elements, etc.
 
+## Value provided
+
+> "cifkit seems to do the trick for preprocessing, getting the troublesome CIF to show up, parsing issues with CIF files using `cifkit`" - Student Alex Vtorov
+
+
 ## Overview
 
 Designed for individuals with minimal programming experience, `cifkit` provides two primary objects: `Cif` and `CifEnsemble`.
@@ -144,6 +149,7 @@ If `cifkit` has been useful in your research, you could help me by taking 2-3 se
 
 - Anton Oliynyk: original ideation
 - Alex Vtorov: polyhedron, testing
-- Emil Jaffal: orginal testing
 - Danila Shiryaev: testing, bug report
-- Fabian Zills (@PythonFZ): tooling recommendation
+- Fabian Zills ([@PythonFZ](https://github.com/PythonFZ)): Tooling recommendations
+- Emil Jaffal ([@EmilJaffal](https://github.com/EmilJaffal)): original testing, bug report
+- Nikhil Kumar Barua: initial development
