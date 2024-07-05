@@ -19,9 +19,8 @@ from cifkit.utils.cif_parser import (
 class CifEnsemble:
     def __init__(self, cif_dir_path: str, add_nested_files=False) -> None:
         # Process each file, handling exceptions that may occur
-        for file_path in get_file_paths(
-            cif_dir_path, add_nested_files=add_nested_files
-        ):
+        file_paths = get_file_paths(cif_dir_path, add_nested_files=add_nested_files)
+        for file_path in file_paths:
             try:
                 remove_author_loop(file_path)
                 preprocess_label_element_loop_values(file_path)
@@ -30,7 +29,7 @@ class CifEnsemble:
                 print(f"Error processing {file_path}: {e}")
 
         # Move ill-formatted files after processing
-        move_files_based_on_errors(cif_dir_path)
+        move_files_based_on_errors(cif_dir_path, file_paths)
 
         # Initialize after sorted
         self.file_paths = get_file_paths(

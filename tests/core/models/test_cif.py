@@ -612,13 +612,21 @@ def print_connected_points(all_labels_connections):
             print(f"{label} {dist} {coords_1}, {coords_2}")
 
 
-# @pytest.mark.now
-# def test_init_atomic_mixing_full_occupancy_():
-#     file_path = "tests/data/cif_CN_init/ErCo2.68In0.32.cif"
-#     # file_path = "tests/data/cif_CN_init/1956508.cif"
-#     cif = Cif(file_path)
-#     cif.compute_connections()
-#     print_connected_points(cif.connections)
-#     assert False
-#     # Error computing polyhedron metrics: index 12 is out of bounds for axis 0 with size 12
-#     # Problem with Er1
+@pytest.mark.pyvista
+def test_init_atomic_mixing():
+    file_path = "tests/data/cif/atomic_mixing/261241.cif"
+    cif = Cif(file_path)
+    polyhedron_points, vertex_labels = cif.get_polyhedron_labels_by_CN_best_methods(
+        "CoM1"
+    )
+    assert len(polyhedron_points) == 13
+    assert len(vertex_labels) == 13
+
+
+@pytest.mark.now
+def test_polyhedron_out_of_bounds():
+    file_path = "tests/data/cif/polyhedron_error/index_out_bound/261629.cif"
+    cif = Cif(file_path)
+    assert cif.CN_best_methods["Co1"]["number_of_vertices"] == 15
+    assert cif.CN_best_methods["In1"]["number_of_vertices"] == 10
+    assert cif.CN_best_methods["Co2"]["number_of_vertices"] == 15

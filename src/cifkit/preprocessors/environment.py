@@ -35,7 +35,6 @@ def get_site_connections(
         ) = get_most_connected_point_per_site(site_label, dist_dict, dist_set)
 
         all_labels_connections[label] = connections
-
     return remove_duplicate_connections(all_labels_connections)
 
 

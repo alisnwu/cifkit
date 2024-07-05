@@ -1,5 +1,4 @@
 import os
-from cifkit.utils import folder
 from cifkit.models.cif import Cif
 from pathlib import Path
 
@@ -13,7 +12,7 @@ def make_directory_and_move(file_path, dir_path, new_file_path):
     os.rename(file_path, new_file_path)
 
 
-def move_files_based_on_errors(dir_path):
+def move_files_based_on_errors(dir_path, file_paths):
     print(f"\nCIF Preprocessing in {dir_path} begun...\n")
 
     # Ensure dir_path is a Path object
@@ -30,9 +29,7 @@ def move_files_based_on_errors(dir_path):
     }
 
     # Ensure all direct
-    file_paths = list(dir_path.glob("*.cif"))
     num_files_moved = {key: 0 for key in error_directories.keys()}
-    file_paths = folder.get_file_paths(str(dir_path))
 
     for i, file_path in enumerate(file_paths, start=1):
         filename = os.path.basename(file_path)

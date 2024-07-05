@@ -456,3 +456,8 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
     for file_name in expected_files:
         file_path = output_dir / file_name
         assert file_path.exists()
+
+
+"""
+Test ErCoIn
+"""

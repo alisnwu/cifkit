@@ -18,6 +18,7 @@ def get_polyhedron_coordinates_labels(
     central_atom_label = label
     polyhedron_points.append(central_atom_coord)
     vertex_labels.append(central_atom_label)
+
     return polyhedron_points, vertex_labels
 
 
