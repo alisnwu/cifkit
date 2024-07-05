@@ -461,3 +461,23 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
 """
 Test ErCoIn
 """
+
+
+@pytest.mark.now
+def test_ErCoIn_test_CN():
+    ensemble = CifEnsemble("tests/data/cif/ErCoIn_test", add_nested_files=True)
+    assert ensemble.unique_CN_values_by_method_methods_stat == {
+        10: 3,
+        12: 11,
+        13: 6,
+        14: 10,
+        16: 6,
+        17: 4,
+        7: 2,
+        11: 5,
+        15: 6,
+        6: 2,
+        8: 3,
+        18: 1,
+        9: 3,
+    }
