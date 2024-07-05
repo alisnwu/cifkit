@@ -137,3 +137,13 @@ By structures:
 ## Asking for feedback
 
 If `cifkit` has been useful in your research, you could help me by taking 2-3 seconds to "star" this repository. This helps me identify whether this project is useful for the community and lets others make informed decision.
+
+## Contributors
+
+`cifkit` is made possible with contributions and support from the following individuals:
+
+- Anton Oliynyk: original ideation
+- Alex Vtorov: polyhedron, testing
+- Emil Jaffal: orginal testing
+- Danila Shiryaev: testing, bug report
+- Fabian Zills (@PythonFZ): tooling recommendation

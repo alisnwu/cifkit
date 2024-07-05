@@ -1,0 +1,4 @@
+cifkit-0.32 (2024-07-04)
+
+  * Fixed #7: Polyhedron bug with atomic mixing
+  * Added issue and pull request templates
