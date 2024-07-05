@@ -612,7 +612,7 @@ def print_connected_points(all_labels_connections):
             print(f"{label} {dist} {coords_1}, {coords_2}")
 
 
-@pytest.mark.now
+@pytest.mark.plot
 def test_init_atomic_mixing():
     file_path = "tests/data/cif/atomic_mixing/261241.cif"
     cif = Cif(file_path)
