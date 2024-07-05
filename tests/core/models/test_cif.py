@@ -612,13 +612,12 @@ def print_connected_points(all_labels_connections):
             print(f"{label} {dist} {coords_1}, {coords_2}")
 
 
-@pytest.mark.plot
+@pytest.mark.pyvista
 def test_init_atomic_mixing():
     file_path = "tests/data/cif/atomic_mixing/261241.cif"
     cif = Cif(file_path)
     polyhedron_points, vertex_labels = cif.get_polyhedron_labels_by_CN_best_methods(
         "CoM1"
     )
-    cif.plot_polyhedron("CoM1")
     assert len(polyhedron_points) == 13
     assert len(vertex_labels) == 13
