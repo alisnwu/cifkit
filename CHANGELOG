@@ -1,4 +1,9 @@
-cifkit-0.32 (2024-07-04)
+## [0.32] - 2024-07-04
 
-  * Fixed https://github.com/bobleesj/cifkit/issues/7: Remove duplicate connected points in connections
-  * Added issue and pull request templates
+### Added
+
+- Issue and pull request templates.
+
+### Fixed
+
+- Duplicate connected points in connections, see [Issue #7](https://github.com/bobleesj/cifkit/issues/7).
