@@ -142,4 +142,5 @@ Now, if you are interested in working with individual `.cif` files and learn mor
 ## Research projects using `cifkit`
 
 - CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
+- CIF Cleaner - move, copy .cif files based on attributes - [GitHub](https://github.com/bobleesj/cif-cleaner)
 - Structure Analysis/Featurizer (SAF) - build geometric features for binary, ternary compounds - [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)
