@@ -11,11 +11,12 @@ keywords = ["cif", "solid-state", "high-throughput", "crystallography"]
 
 dependencies = [
     "gemmi==0.6.6",
-    "matplotlib==3.8.3",
-    "numpy==1.26.4",
-    "pyvista==0.43.9",
-    "scipy==1.13.1",
-    "setuptools==67.8.0"
+    "matplotlib==3.9.1",
+    "numpy==2.0.0",
+    "pyvista==0.43.10",
+    "scipy==1.14.0",
+    "setuptools==67.8.0",
+    "click==8.1.7"
 ]
 
 [build-system]
