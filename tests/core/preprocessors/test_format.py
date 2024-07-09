@@ -1,3 +1,4 @@
+import pytest
 import shutil
 import tempfile
 import os
@@ -34,46 +35,60 @@ def run_preprocess_test_on_cif_files(cif_dir):
     shutil.rmtree(temp_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_1():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_1"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_2():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_2"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_3():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_3"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_4():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_4"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_5():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_5"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_6():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_6"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_7():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_7"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_8():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_8"
     run_preprocess_test_on_cif_files(cif_dir)
 
 
+@pytest.mark.now
+def test_remove_non_number_alphabets():
+    pass
+
+
+@pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_mixed():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_mixed"
 

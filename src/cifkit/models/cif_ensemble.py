@@ -13,9 +13,6 @@ from cifkit.preprocessors.format import (
 )
 from cifkit.utils.cif_editor import remove_author_loop
 from cifkit.preprocessors.error import move_files_based_on_errors
-from cifkit.utils.cif_parser import (
-    check_unique_atom_site_labels,
-)
 
 
 class CifEnsemble:
@@ -39,7 +36,6 @@ class CifEnsemble:
                 try:
                     remove_author_loop(file_path)
                     preprocess_label_element_loop_values(file_path)
-                    check_unique_atom_site_labels(file_path)
                 except Exception as e:
                     print(f"Error processing {file_path}: {e}")
 

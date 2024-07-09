@@ -34,3 +34,4 @@ def test_move_files_based_on_errors(tmp_path):
     # Assert the number of files in each directory
     assert get_file_count(expected_dirs["error_wrong_loop_value"]) == 1
     assert get_file_count(expected_dirs["error_duplicate_labels"]) == 1
+    assert get_file_count(expected_dirs["error_invalid_label"]) == 1

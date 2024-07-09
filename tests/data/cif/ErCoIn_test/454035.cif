@@ -103,7 +103,6 @@ ErII Er 6 h 0.515 0.136 0.25 1
 CoII Co 2 c 0.333333 0.666667 0.25 1
 CoIII Co 2 b 0 0 0 0.5
 
-
 _exptl_crystal_colour                    ?
 _exptl_crystal_density_meas              ?
 _exptl_crystal_density_diffrn            9.49

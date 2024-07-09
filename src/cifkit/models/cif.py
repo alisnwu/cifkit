@@ -20,7 +20,6 @@ from cifkit.utils.cif_parser import (
     get_formula_structure_weight_s_group,
     get_tag_from_third_line,
     parse_atom_site_occupancy_info,
-    check_unique_atom_site_labels,
 )
 
 # Edit .cif file
@@ -152,7 +151,6 @@ class Cif:
 
         # If it is not previously formatted
         if not is_formatted:
-            check_unique_atom_site_labels(self.file_path)
             self._preprocess()
 
         self._load_data()
