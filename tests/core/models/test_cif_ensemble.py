@@ -1,5 +1,6 @@
 import os
 import shutil
+import logging
 import pytest
 from pathlib import Path
 from cifkit import CifEnsemble
@@ -511,3 +512,30 @@ def test_ErCoIn_test_CN():
         18: 1,
         9: 3,
     }
+
+
+"""
+Test init
+"""
+
+
+@pytest.mark.now
+def test_init_with_preprocessing(
+    caplog,
+    cif_folder_path_test,
+):
+    CifEnsemble(cif_folder_path_test, logging_enabled=True)
+
+    with caplog.at_level(logging.INFO):
+        assert "Preprocessing tests/data/cif/folder" in caplog.text
+
+
+@pytest.mark.now
+def test_init_without_preprocessing(
+    caplog,
+    cif_folder_path_test,
+):
+    CifEnsemble(cif_folder_path_test, preprocess=False, logging_enabled=True)
+
+    with caplog.at_level(logging.INFO):
+        assert "Preprocessing tests/data/cif/folder" not in caplog.text

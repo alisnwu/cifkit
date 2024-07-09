@@ -1,9 +1,11 @@
+import logging
 from cifkit import Cif
 from cifkit.utils.folder import (
     move_files,
     copy_files,
     get_file_paths,
 )
+from cifkit.utils.log_messages import CifEnsembleLog
 from cifkit.figures.histogram import plot_histogram
 from collections import Counter
 from cifkit.preprocessors.format import (
@@ -18,28 +20,36 @@ from cifkit.utils.cif_parser import (
 
 class CifEnsemble:
     def __init__(
-        self, cif_dir_path: str, add_nested_files=False, logging_enabled=False
+        self,
+        cif_dir_path: str,
+        add_nested_files=False,
+        preprocess=True,
+        logging_enabled=False,
     ) -> None:
         # Process each file, handling exceptions that may occur
+        self.logging_enabled = logging_enabled
         file_paths = get_file_paths(
             cif_dir_path, add_nested_files=add_nested_files
         )
-        for file_path in file_paths:
-            try:
-                remove_author_loop(file_path)
-                preprocess_label_element_loop_values(file_path)
-                check_unique_atom_site_labels(file_path)
-            except Exception as e:
-                print(f"Error processing {file_path}: {e}")
+        self.dir_path = cif_dir_path
 
-        # Move ill-formatted files after processing
-        move_files_based_on_errors(cif_dir_path, file_paths)
+        if preprocess:
+            self._log_info(CifEnsembleLog.PREPROCESSING.value)
+            for file_path in file_paths:
+                try:
+                    remove_author_loop(file_path)
+                    preprocess_label_element_loop_values(file_path)
+                    check_unique_atom_site_labels(file_path)
+                except Exception as e:
+                    print(f"Error processing {file_path}: {e}")
+
+            # Move ill-formatted files after processing
+            move_files_based_on_errors(cif_dir_path, file_paths)
 
         # Initialize new files after ill-formatted files are moved
         self.file_paths = get_file_paths(
             cif_dir_path, add_nested_files=add_nested_files
         )
-        self.dir_path = cif_dir_path
         self.file_count = len(self.file_paths)
 
         if logging_enabled:
@@ -52,6 +62,12 @@ class CifEnsemble:
                 Cif(file_path, is_formatted=True)
                 for file_path in self.file_paths
             ]
+
+    def _log_info(self, message):
+        """Log a formatted message if logging is enabled."""
+        if self.logging_enabled:
+            formatted_message = message.format(dir_path=self.dir_path)
+            logging.info(formatted_message)
 
     def _get_unique_property_values(self, property_name: str):
         """Return unique values for a given property from cifs."""
