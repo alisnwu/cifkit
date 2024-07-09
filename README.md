@@ -26,7 +26,7 @@ functions for handling large datasets, on the order of tens of thousands, of
 
 ## Motivation
 
-In high-throuhgput analysis using `.cif` files, the research project has identified the folowing needs:
+In high-throughput analysis using `.cif` files, the research project has identified the folowing needs:
 
 - **Format files at once:** `.cif` files parsed from databases often contain
   ill-formatted files. We need a tool to standardize, preprocess, and filter out
@@ -116,7 +116,7 @@ polyhedrons.
 ### Polyhedron
 
 You can visualize the polyhedron generated from each atomic site based on the
-coordination number geoemtry. In our research, the goal is to map the structure
+coordination number geometry. In our research, the goal is to map the structure
 and coordination number with the physical property.
 
 ```python
@@ -158,30 +158,32 @@ By structures:
 
 ## How to ask for help
 
-`cifkit` is also designed for experimental materials scientists and chemists. If you
-encounter any issues or have questions, please feel free to reach out or leave an issue. [![Star GitHub repository](https://img.shields.io/github/issues/bobleesj/cifkit.svg?style=social)](https://github.com/bobleesj/cifkit/stargazers)
+`cifkit` is also designed for experimental materials scientists and chemists.
+
+- If you have any issues or questions, please feel free to reach out or [leave an issue](https://github.com/bobleesj/cifkit/issues).
+
 
 ## How to contribute
 
+Here is how you can contribute to the `cifkit` project if you found it helpful:
 
-- [![Star GitHub repository](https://img.shields.io/github/stars/bobleesj/cifkit.svg?style=social)](https://github.com/bobleesj/cifkit/stargazers)
-  the repository and recommend it to your colleagues who might find this
-  repository helpful.
-- [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members)
-  the repository and request a pull request for any changes.
-- If you have any questions or have any suggestions, feel free to reach out to
-  Sangjoon Bob Lee ([@bobleesj](https://github.com/bobleesj)) for any questions and feedback.
+- Star the repository on GitHub and recommend it to your colleagues who might find `cifkit` helpful as well. [![Star GitHub repository](https://img.shields.io/github/stars/bobleesj/cifkit.svg?style=social)](https://github.com/bobleesj/cifkit/stargazers)
+- Fork the repository and consider contributing changes via a pull request. [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members)
+- If you have any suggestions or need further clarification on how to use `cifkit`, please feel free to reach out to Sangjoon Bob Lee ([@bobleesj](https://github.com/bobleesj)).
+
 
 ## Contributors
 
 `cifkit` is made possible with contributions and support from the following
 individuals:
 
-- Anton Oliynyk: original ideation
-- Alex Vtorov: polyhedron, testing
-- Danila Shiryaev: testing, bug report
-- Fabian Zills ([@PythonFZ](https://github.com/PythonFZ)): Tooling
-  recommendations
-- Emil Jaffal ([@EmilJaffal](https://github.com/EmilJaffal)): original testing,
-  bug report
-- Nikhil Kumar Barua: initial development
+`cifkit` has been greatly enhanced thanks to the contributions from a diverse group of developers and researchers. Here are a few notable contributors:
+
+- **Anton Oliynyk**: provided original ideation with `.cif` files
+- **Alex Vtorov**: recommended tool for polyhedron visualization
+- **Danila Shiryaev**: tested features as beta user
+- **Fabian Zills** ([@PythonFZ](https://github.com/PythonFZ)): suggested tooling improvements
+- **Emil Jaffal** ([@EmilJaffal](https://github.com/EmilJaffal)): participated in initial testing and bug reporting
+- **Nikhil Kumar Barua**: participated in initial testing and bug reporting
+
+We welcome all forms of contributions from the community. Your ideas and improvements are valued and appreciated.
