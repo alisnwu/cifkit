@@ -406,13 +406,6 @@ def test_supercell_size_stats(cif_ensemble_test):
 
 
 @pytest.mark.fast
-def test_min_distance_stats(cif_ensemble_test):
-    result = cif_ensemble_test.min_distance_stats
-    expected = {2.28: 1, 2.29: 1, 2.383: 1, 2.725: 2, 2.72: 1}
-    assert result == expected
-
-
-@pytest.mark.fast
 def test_unique_elements_stats(cif_ensemble_test):
     result = cif_ensemble_test.unique_elements_stats
     expected = {
@@ -446,8 +439,8 @@ Test stat histograms
 """
 
 
-@pytest.mark.fast
-def test_generate_histogram(cif_ensemble_test, tmp_path):
+@pytest.mark.now
+def test_generate_histogram(cif_ensemble_test):
     output_dir = "tests/data/cif/ensemble_test/histograms"
 
     # List of expected file names
@@ -458,7 +451,6 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
         "space_group_number.png",
         "space_group_name.png",
         "supercell_size.png",
-        "min_distance.png",
         "elements.png",
         "CN_by_min_dist_method.png",
         "CN_by_best_methods.png",
@@ -473,7 +465,6 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
     cif_ensemble_test.generate_space_group_number_histogram()
     cif_ensemble_test.generate_space_group_name_histogram()
     cif_ensemble_test.generate_supercell_size_histogram()
-    cif_ensemble_test.generate_min_distance_histogram()
     cif_ensemble_test.generate_elements_histogram()
     cif_ensemble_test.generate_CN_by_min_dist_method_histogram()
     cif_ensemble_test.generate_CN_by_best_methods_histogram()

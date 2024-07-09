@@ -4,6 +4,7 @@ Histgoram for supercell size, minimum distances
 
 import os
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from cifkit.utils import folder, prompt
 
 
@@ -74,17 +75,6 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "title": "Supercell Sizes Distribution",
                 "xlabel": "Supercell Size",
                 "key_data_type": "int",
-            },
-        }
-
-    if attribute == "min_distance":
-        histogram = {
-            "data": stats,
-            "settings": {
-                "file_name": "min_distance.png",
-                "title": "Minimum Distances Distribution",
-                "xlabel": "Minimum Distance",
-                "key_data_type": "float",
             },
         }
 
@@ -161,7 +151,7 @@ def generate_histogram(data, settings, display, output_dir: str) -> None:
         data = {
             float(key): data[key] for key in sorted(data.keys(), key=float)
         }
-    elif settings.get("key_data_type") == "int":
+    if settings.get("key_data_type") == "int":
         data = {int(key): data[key] for key in sorted(data.keys(), key=int)}
 
     keys = list(data.keys())
@@ -173,14 +163,32 @@ def generate_histogram(data, settings, display, output_dir: str) -> None:
         color=settings.get("color", "blue"),
         edgecolor=settings.get("edgecolor", "black"),
     )
-    plt.title(settings["title"])
-    plt.xlabel(settings["xlabel"])
+    # Custom settings for specific histograms
+    file_name = settings.get("file_name")
+    if (
+        file_name == "CN_by_min_dist_method.png"
+        or file_name == "CN_by_best_methods.png"
+        or file_name == "composition_type.png"
+    ):
+        # Assuming keys can be cast to integers, sort and find the range for x-ticks
+        int_keys = sorted(map(int, keys))
+        plt.xticks(
+            range(min(int_keys), max(int_keys) + 1)
+        )  # Setting x-ticks to every integer within the range
+        plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+    else:
+        plt.xticks(rotation=settings.get("rotation", 45), ha="right")
+
+    # y-axis settings
+    plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.ylabel("Count")
-    plt.xticks(rotation=settings.get("rotation", 45), ha="right")
+    plt.xlabel(settings["xlabel"])
+
+    plt.title(settings["title"])
     plt.grid(True, linestyle="--", linewidth=0.5)
     plt.tight_layout()
 
-    output_file_path = folder.get_file_path(output_dir, settings["file_name"])
+    output_file_path = folder.get_file_path(output_dir, file_name)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

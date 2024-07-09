@@ -190,10 +190,6 @@ class CifEnsemble:
         return self._attribute_stats("supercell_points", len)
 
     @property
-    def min_distance_stats(self) -> dict[float, int]:
-        return self._attribute_stats("shortest_distance")
-
-    @property
     def unique_CN_values_by_min_dist_method_stat(
         self,
     ) -> dict[float, int]:
@@ -414,15 +410,6 @@ class CifEnsemble:
         plot_histogram(
             "supercell_size",
             self.supercell_size_stats,
-            self.dir_path,
-            display,
-            output_dir,
-        )
-
-    def generate_min_distance_histogram(self, display=False, output_dir=None):
-        plot_histogram(
-            "min_distance",
-            self.min_distance_stats,
             self.dir_path,
             display,
             output_dir,

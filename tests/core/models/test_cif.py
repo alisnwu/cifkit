@@ -596,7 +596,7 @@ Test files that is not full occupacny
 
 
 def test_init_atomic_mixing_deficiency_without_atomic_mixing():
-    file_path = "tests/data/cif_CN_init/1956508.cif"
+    file_path = "tests/data/cif/cif_CN_init/1956508.cif"
     assert Cif(file_path).CN_unique_values_by_best_methods == {11, 14, 15}
 
 

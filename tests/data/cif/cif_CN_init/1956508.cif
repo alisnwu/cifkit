@@ -39,7 +39,7 @@ _chemical_formula_weight                 1071.3
 # Bibliographic data
 
 _publ_section_title
-'Nature of magnetic properties in R~3~Co~1.87~In~4~ where R= Ho, Er and Tm'   
+'Nature of magnetic properties in R~3~Co~1.87~In~4~ where R= Ho, Er and Tm'
 _journal_coden_ASTM                      PHTRDP
 _journal_name_full                       'Phase Transitions'
 _journal_year                            2018
@@ -122,4 +122,3 @@ _pd_proc_ls_proof_wR_factor              0.132
 _refine_ls_R_I_factor                    0.077
 
 # End of data set 1956508
-
