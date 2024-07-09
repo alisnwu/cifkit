@@ -4,7 +4,7 @@ from cifkit.utils.folder import (
     copy_files,
     get_file_paths,
 )
-from cifkit.figures.histogram import plot_histograms
+from cifkit.figures.histogram import plot_histogram
 from collections import Counter
 from cifkit.preprocessors.format import (
     preprocess_label_element_loop_values,
@@ -344,5 +344,124 @@ class CifEnsemble:
         """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
 
-    def generate_stat_histograms(self, display=False, output_dir=None):
-        plot_histograms(self, display, output_dir)
+    def generate_structure_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "structure",
+            self.structure_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_formula_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "formula",
+            self.formula_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_tag_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "tag",
+            self.tag_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_space_group_number_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "space_group_number",
+            self.space_group_number_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_space_group_name_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "space_group_name",
+            self.space_group_name_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_supercell_size_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "supercell_size",
+            self.supercell_size_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_min_distance_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "min_distance",
+            self.min_distance_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_elements_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "elements",
+            self.unique_elements_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_CN_by_min_dist_method_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "CN_by_min_dist_method",
+            self.unique_CN_values_by_min_dist_method_stat,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_CN_by_best_methods_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "CN_by_best_methods",
+            self.unique_CN_values_by_method_methods_stat,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_composition_type_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "composition_type",
+            self.composition_type_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_site_mixing_type_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "site_mixing_type",
+            self.site_mixing_type_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )

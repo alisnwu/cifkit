@@ -9,8 +9,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/bobleesj/cifkit/blob/main/LICENSE)
 
 <!-- Open Codelab with a new tab -->
-[![Open Google Codelab](https://img.shields.io/badge/Google%20Colab-Open-blue.svg)](https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq)
 
+[![Open Google Codelab](https://img.shields.io/badge/Google%20Colab-Open-blue.svg)](https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=DlB6ZTVaOMpq)
 
 The documentation is available here: https://bobleesj.github.io/cifkit
 
@@ -26,7 +26,8 @@ functions for handling large datasets, on the order of tens of thousands, of
 
 ## Motivation
 
-In high-throughput analysis using `.cif` files, the research project has identified the folowing needs:
+In high-throughput analysis using `.cif` files, the research project has
+identified the folowing needs:
 
 - **Format files at once:** `.cif` files parsed from databases often contain
   ill-formatted files. We need a tool to standardize, preprocess, and filter out
@@ -160,30 +161,38 @@ By structures:
 
 `cifkit` is also designed for experimental materials scientists and chemists.
 
-- If you have any issues or questions, please feel free to reach out or [leave an issue](https://github.com/bobleesj/cifkit/issues).
-
+- If you have any issues or questions, please feel free to reach out or
+  [leave an issue](https://github.com/bobleesj/cifkit/issues).
 
 ## How to contribute
 
 Here is how you can contribute to the `cifkit` project if you found it helpful:
 
-- Star the repository on GitHub and recommend it to your colleagues who might find `cifkit` helpful as well. [![Star GitHub repository](https://img.shields.io/github/stars/bobleesj/cifkit.svg?style=social)](https://github.com/bobleesj/cifkit/stargazers)
-- Fork the repository and consider contributing changes via a pull request. [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members)
-- If you have any suggestions or need further clarification on how to use `cifkit`, please feel free to reach out to Sangjoon Bob Lee ([@bobleesj](https://github.com/bobleesj)).
-
+- Star the repository on GitHub and recommend it to your colleagues who might
+  find `cifkit` helpful as well.
+  [![Star GitHub repository](https://img.shields.io/github/stars/bobleesj/cifkit.svg?style=social)](https://github.com/bobleesj/cifkit/stargazers)
+- Fork the repository and consider contributing changes via a pull request.
+  [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members)
+- If you have any suggestions or need further clarification on how to use
+  `cifkit`, please feel free to reach out to Sangjoon Bob Lee
+  ([@bobleesj](https://github.com/bobleesj)).
 
 ## Contributors
 
 `cifkit` is made possible with contributions and support from the following
 individuals:
 
-`cifkit` has been greatly enhanced thanks to the contributions from a diverse group of developers and researchers. Here are a few notable contributors:
+`cifkit` has been greatly enhanced thanks to the contributions from a diverse
+group of developers and researchers. Here are a few notable contributors:
 
 - **Anton Oliynyk**: provided original ideation with `.cif` files
 - **Alex Vtorov**: recommended tool for polyhedron visualization
 - **Danila Shiryaev**: tested features as beta user
-- **Fabian Zills** ([@PythonFZ](https://github.com/PythonFZ)): suggested tooling improvements
-- **Emil Jaffal** ([@EmilJaffal](https://github.com/EmilJaffal)): participated in initial testing and bug reporting
+- **Fabian Zills** ([@PythonFZ](https://github.com/PythonFZ)): suggested tooling
+  improvements
+- **Emil Jaffal** ([@EmilJaffal](https://github.com/EmilJaffal)): participated
+  in initial testing and bug reporting
 - **Nikhil Kumar Barua**: participated in initial testing and bug reporting
 
-We welcome all forms of contributions from the community. Your ideas and improvements are valued and appreciated.
+We welcome all forms of contributions from the community. Your ideas and
+improvements are valued and appreciated.

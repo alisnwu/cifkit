@@ -8,118 +8,135 @@ from matplotlib.ticker import MaxNLocator
 from cifkit.utils import folder, prompt
 
 
-def plot_histograms(cif_ensemble, display, output_dir=None) -> None:
-    histograms = [
-        {
-            "data": cif_ensemble.structure_stats,
+def plot_histogram(attribute, stats, dir_path, display, output_dir):
+    if not output_dir:
+        output_dir = folder.make_output_folder(dir_path, "histograms")
+
+    if attribute == "structure":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "structures.png",
                 "title": "Structures Distribution",
                 "xlabel": "Structure",
             },
-        },
-        {
-            "data": cif_ensemble.formula_stats,
+        }
+
+    if attribute == "formula":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "formula.png",
                 "title": "Formulas Distribution",
                 "xlabel": "Formula",
             },
-        },
-        {
-            "data": cif_ensemble.tag_stats,
+        }
+
+    if attribute == "tag":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "tag.png",
                 "title": "Tags Distribution",
                 "xlabel": "Tag",
             },
-        },
-        {
-            "data": cif_ensemble.space_group_number_stats,
+        }
+
+    if attribute == "space_group_number":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "space_group_number.png",
                 "title": "Space Group Numbers Distribution",
                 "xlabel": "Space Group Number",
             },
-        },
-        {
-            "data": cif_ensemble.space_group_name_stats,
+        }
+
+    if attribute == "space_group_name":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "space_group_name.png",
                 "title": "Space Group Names Distribution",
                 "xlabel": "Space Group Name",
             },
-        },
-        {
-            "data": cif_ensemble.supercell_size_stats,
+        }
+
+    if attribute == "supercell_size":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "supercell_size.png",
                 "title": "Supercell Sizes Distribution",
                 "xlabel": "Supercell Size",
             },
-        },
-        {
-            "data": cif_ensemble.unique_CN_values_by_min_dist_method_stat,
-            "settings": {
-                "file_name": "CN_by_min_dist_method.png",
-                "title": "Coordination Numbers Distribution by Min Dist Method",
-                "xlabel": "Coordination Number",
-            },
-        },
-        {
-            "data": cif_ensemble.unique_CN_values_by_method_methods_stat,
-            "settings": {
-                "file_name": "CN_by_best_methods.png",
-                "title": "Coordination Numbers Distribution by Best Methods",
-                "xlabel": "Coordination Number",
-            },
-        },
-        {
-            "data": cif_ensemble.min_distance_stats,
+        }
+
+    if attribute == "min_distance":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "min_distance.png",
                 "title": "Minimum Distances Distribution",
                 "xlabel": "Minimum Distance",
                 "key_data_type": "float",
             },
-        },
-        {
-            "data": cif_ensemble.site_mixing_type_stats,
-            "settings": {
-                "file_name": "site_mixing_type.png",
-                "title": "Site Mixing Distribution",
-                "xlabel": "Site Mixing Type",
-            },
-        },
-        {
-            "data": cif_ensemble.unique_elements_stats,
+        }
+
+    if attribute == "elements":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "elements.png",
                 "title": "Unique Elements Distribution",
                 "xlabel": "Element",
             },
-        },
-        {
-            "data": cif_ensemble.composition_type_stats,
+        }
+    if attribute == "CN_by_min_dist_method":
+        histogram = {
+            "data": stats,
+            "settings": {
+                "file_name": "CN_by_min_dist_method.png",
+                "title": "Coordination Numbers Distribution by Min Dist Method",
+                "xlabel": "Coordination Number",
+            },
+        }
+
+    if attribute == "CN_by_best_methods":
+        histogram = {
+            "data": stats,
+            "settings": {
+                "file_name": "CN_by_best_methods.png",
+                "title": "Coordination Numbers Distribution by Best Methods",
+                "xlabel": "Coordination Number",
+            },
+        }
+
+    if attribute == "composition_type":
+        histogram = {
+            "data": stats,
             "settings": {
                 "file_name": "composition_type.png",
                 "title": "Unique Composition Types Distribution",
                 "xlabel": "Compositions (1: unary, 2: binary, 3: ternary, etc.)",
                 "key_data_type": "string",
             },
-        },
-    ]
+        }
+
+    if attribute == "site_mixing_type":
+        histogram = {
+            "data": stats,
+            "settings": {
+                "file_name": "site_mixing_type.png",
+                "title": "Site Mixing Distribution",
+                "xlabel": "Site Mixing Type",
+            },
+        }
+    generate_histogram(
+        histogram["data"], histogram["settings"], display, output_dir
+    )
 
     # Make a deafult folder if the output folder is not provided=
-    if not output_dir:
-        output_dir = folder.make_output_folder(
-            cif_ensemble.dir_path, "histograms"
-        )
-
-    for histogram in histograms:
-        generate_histogram(
-            histogram["data"], histogram["settings"], display, output_dir
-        )
 
 
 def generate_histogram(data, settings, display, output_dir: str) -> None:
