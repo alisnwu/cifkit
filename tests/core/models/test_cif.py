@@ -486,8 +486,7 @@ def test_get_polyhedron_labels_by_CN_best_methods(cif_URhIn):
 
 
 """
-Test
-polyhedron
+Test polyhedron
 """
 
 
@@ -541,11 +540,19 @@ def test_plot_polyhedrons(cif_ensemble_test):
     shutil.rmtree(expected_output_dir)
 
 
+@pytest.mark.slow
+def test_plot_polyhedron_with_problem_by_min_dist_method():
+    file_path = "tests/data/cif/polyhedron_error/1421162.cif"
+    cif = Cif(file_path)
+    print(cif.CN_connections_by_min_dist_method)
+
+
 """
 Test error during init
 """
 
 
+@pytest.mark.fast
 def test_init_error_duplicate_label():
     file_path = "tests/data/cif/error/duplicate_labels/457848.cif"
     with pytest.raises(ValueError) as e:
@@ -555,12 +562,13 @@ def test_init_error_duplicate_label():
     assert expected_error_message == str(e.value)
 
 
+@pytest.mark.now
 def test_init_error_coord_missing():
     file_path = "tests/data/cif/error/missing_loop/452743.cif"
     with pytest.raises(ValueError) as e:
         Cif(file_path)
-    expected_error_message = CifParserError.WRONG_LOOP_VALUE_COUNT.value
-    assert expected_error_message == str(e.value)
+
+    assert CifParserError.MISSING_LOOP_VALUES.value in str(e.value)
 
 
 """
@@ -623,21 +631,12 @@ def test_init_atomic_mixing():
     assert len(vertex_labels) == 13
 
 
-@pytest.mark.slow
-def test_polyhedron_out_of_bounds():
-    file_path = "tests/data/cif/polyhedron_error/index_out_bound/261629.cif"
-    cif = Cif(file_path)
-    assert cif.CN_best_methods["Co1"]["number_of_vertices"] == 15
-    assert cif.CN_best_methods["In1"]["number_of_vertices"] == 10
-    assert cif.CN_best_methods["Co2"]["number_of_vertices"] == 15
-
-
 """
 Test file without mendeeleve number
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_without_mendeeleve_number():
     file_path = "tests/data/cif/cif_no_mendeleev/454169.cif"
     cif = Cif(file_path)

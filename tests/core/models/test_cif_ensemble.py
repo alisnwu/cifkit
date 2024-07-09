@@ -446,7 +446,7 @@ Test stat histograms
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_generate_histogram(cif_ensemble_test, tmp_path):
     output_dir = "tests/data/cif/ensemble_test/histograms"
 
@@ -519,7 +519,7 @@ Test init
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_with_preprocessing(
     caplog,
     cif_folder_path_test,
@@ -530,7 +530,7 @@ def test_init_with_preprocessing(
         assert "Preprocessing tests/data/cif/folder" in caplog.text
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_without_preprocessing(
     caplog,
     cif_folder_path_test,

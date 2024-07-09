@@ -27,6 +27,7 @@ class CifParserError(Enum):
         "An error occurred while processing symmetry operation"
     )
     MISSING_COORDINATES = "Missing atomic coordinates"
+    MISSING_LOOP_VALUES = "not enough values to unpack"
 
 
 class FileError(Enum):

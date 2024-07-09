@@ -83,11 +83,6 @@ def test_preprocess_cif_file_on_label_element_type_8():
     run_preprocess_test_on_cif_files(cif_dir)
 
 
-@pytest.mark.now
-def test_remove_non_number_alphabets():
-    pass
-
-
 @pytest.mark.fast
 def test_preprocess_cif_file_on_label_element_type_mixed():
     cif_dir = "tests/data/cif/format_label/symbolic_atom_label_type_mixed"

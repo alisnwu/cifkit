@@ -21,8 +21,8 @@ def find_best_polyhedron(max_gaps_per_label, connections):
             connection_data = connections[label][: CN_data["CN"]]
             polyhedron_points = []
 
-            # Only if there are 5 or more points in the polyhedron
-            if len(connection_data) > 4:
+            # Only if there are 4 or more points in the polyhedron
+            if len(connection_data) > 3:
                 for connection in connection_data:
                     polyhedron_points.append(connection[3])
             else:
@@ -41,9 +41,15 @@ def find_best_polyhedron(max_gaps_per_label, connections):
                 )
                 continue  # Move to the next method
 
+            # Returns non if ther eis any error
             polyhedron_metrics = compute_polyhedron_metrics(
                 polyhedron_points, hull
             )
+
+            # If there is no metrics, then skip the mthod
+            if polyhedron_metrics is None:
+                continue
+
             if (
                 polyhedron_metrics["distance_from_avg_point_to_center"]
                 < min_distance_to_center

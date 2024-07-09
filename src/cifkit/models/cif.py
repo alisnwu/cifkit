@@ -27,6 +27,9 @@ from cifkit.preprocessors.format import (
     preprocess_label_element_loop_values,
 )
 from cifkit.utils.cif_editor import remove_author_loop
+from cifkit.utils.cif_parser import (
+    check_unique_atom_site_labels,
+)
 
 # Supercell generation
 from cifkit.preprocessors.supercell import get_supercell_points
@@ -168,6 +171,7 @@ class Cif:
         self._log_info(CifLog.PREPROCESSING.value)
         remove_author_loop(self.file_path)
         preprocess_label_element_loop_values(self.file_path)
+        check_unique_atom_site_labels(self.file_path)
 
     def _load_data(self):
         """Load data from the .cif file and process it."""
