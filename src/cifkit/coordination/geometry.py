@@ -89,8 +89,8 @@ def compute_polyhedron_metrics(polyhedron_points, hull):
 
         return round_dict_values(data)
 
-    except Exception as e:
-        print(f"Error computing polyhedron metrics: {e}")
+    except Exception:
+        # print(f"Error computing polyhedron metrics: {e}")
         return None
 
 
