@@ -4,7 +4,6 @@ Histgoram for supercell size, minimum distances
 
 import os
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
 from cifkit.utils import folder, prompt
 
 
@@ -19,6 +18,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "structures.png",
                 "title": "Structures Distribution",
                 "xlabel": "Structure",
+                "key_data_type": "string",
             },
         }
 
@@ -29,6 +29,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "formula.png",
                 "title": "Formulas Distribution",
                 "xlabel": "Formula",
+                "key_data_type": "string",
             },
         }
 
@@ -39,6 +40,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "tag.png",
                 "title": "Tags Distribution",
                 "xlabel": "Tag",
+                "key_data_type": "string",
             },
         }
 
@@ -49,6 +51,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "space_group_number.png",
                 "title": "Space Group Numbers Distribution",
                 "xlabel": "Space Group Number",
+                "key_data_type": "int",
             },
         }
 
@@ -59,6 +62,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "space_group_name.png",
                 "title": "Space Group Names Distribution",
                 "xlabel": "Space Group Name",
+                "key_data_type": "string",
             },
         }
 
@@ -69,6 +73,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "supercell_size.png",
                 "title": "Supercell Sizes Distribution",
                 "xlabel": "Supercell Size",
+                "key_data_type": "int",
             },
         }
 
@@ -90,6 +95,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "elements.png",
                 "title": "Unique Elements Distribution",
                 "xlabel": "Element",
+                "key_data_type": "string",
             },
         }
     if attribute == "CN_by_min_dist_method":
@@ -99,6 +105,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "CN_by_min_dist_method.png",
                 "title": "Coordination Numbers Distribution by Min Dist Method",
                 "xlabel": "Coordination Number",
+                "key_data_type": "int",
             },
         }
 
@@ -109,6 +116,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "CN_by_best_methods.png",
                 "title": "Coordination Numbers Distribution by Best Methods",
                 "xlabel": "Coordination Number",
+                "key_data_type": "int",
             },
         }
 
@@ -130,6 +138,7 @@ def plot_histogram(attribute, stats, dir_path, display, output_dir):
                 "file_name": "site_mixing_type.png",
                 "title": "Site Mixing Distribution",
                 "xlabel": "Site Mixing Type",
+                "key_data_type": "string",
             },
         }
     generate_histogram(
@@ -147,12 +156,13 @@ def generate_histogram(data, settings, display, output_dir: str) -> None:
 
     plt.figure(figsize=(10, 6))  # Create a new figure for each histogram
 
-    if settings.get("key_data_type") == "string":
-        # Sorting keys if they are string representations of integers
-        data = {str(key): data[key] for key in sorted(data.keys(), key=int)}
-
-    if settings.get("key_data_type") != "float":
-        plt.gca().yaxis.set_major_locator(MaxNLocator(integer=True))
+    if settings.get("key_data_type") == "float":
+        # If keys are supposed to be numeric but are strings, convert them
+        data = {
+            float(key): data[key] for key in sorted(data.keys(), key=float)
+        }
+    elif settings.get("key_data_type") == "int":
+        data = {int(key): data[key] for key in sorted(data.keys(), key=int)}
 
     keys = list(data.keys())
     values = [data[key] for key in keys]

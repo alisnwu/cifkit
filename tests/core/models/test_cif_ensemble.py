@@ -1,5 +1,7 @@
-from pathlib import Path
+import os
+import shutil
 import pytest
+from pathlib import Path
 from cifkit import CifEnsemble
 from cifkit.utils.folder import get_file_count, get_file_paths
 
@@ -443,94 +445,47 @@ Test stat histograms
 """
 
 
-# @pytest.mark.slow
-# def test_generate_histogram(cif_ensemble_test, tmp_path):
-#     output_dir = tmp_path / "histograms"
-#     cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
-
-#     # List of expected files
-#     expected_files = [
-#         "structures.png",
-#         "formula.png",
-#         "tag.png",
-#         "space_group_number.png",
-#         "space_group_name.png",
-#         "supercell_size.png",
-#         "min_distance.png",
-#         "elements.png",
-#         "CN_by_min_dist_method.png",
-#         "CN_by_best_methods.png",
-#         "composition_type.png",
-#         "site_mixing_type.png",
-#     ]
-
-#     # Check that all expected files are created
-#     for file_name in expected_files:
-#         file_path = output_dir / file_name
-#         assert file_path.exists()
-#     assert False
-
-
 @pytest.mark.now
-def test_generate_structure_histogram(cif_ensemble_test):
+def test_generate_histogram(cif_ensemble_test, tmp_path):
+    output_dir = "tests/data/cif/ensemble_test/histograms"
+
+    # List of expected file names
+    expected_files = [
+        "structures.png",
+        "formula.png",
+        "tag.png",
+        "space_group_number.png",
+        "space_group_name.png",
+        "supercell_size.png",
+        "min_distance.png",
+        "elements.png",
+        "CN_by_min_dist_method.png",
+        "CN_by_best_methods.png",
+        "composition_type.png",
+        "site_mixing_type.png",
+    ]
+
+    # Generate all histograms
     cif_ensemble_test.generate_structure_histogram()
-
-
-@pytest.mark.now
-def test_generate_formula_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_formula_histogram()
-
-
-@pytest.mark.now
-def test_generate_tag_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_tag_histogram()
-
-
-@pytest.mark.now
-def test_generate_space_group_number_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_space_group_number_histogram()
-
-
-@pytest.mark.now
-def test_generate_space_group_name_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_space_group_name_histogram()
-
-
-@pytest.mark.now
-def test_generate_supercell_size_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_supercell_size_histogram()
-
-
-@pytest.mark.now
-def test_generate_min_distance_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_min_distance_histogram()
-
-
-@pytest.mark.now
-def test_generate_elements_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_elements_histogram()
-
-
-@pytest.mark.now
-def test_generate_CN_by_min_dist_method_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_CN_by_min_dist_method_histogram()
-
-
-@pytest.mark.now
-def test_generate_CN_by_best_methods_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_CN_by_best_methods_histogram()
-    assert False
-
-
-@pytest.mark.now
-def test_generate_composition_type_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_composition_type_histogram()
-    assert False
-
-
-@pytest.mark.now
-def test_generate_site_mixing_type_histogram(cif_ensemble_test):
     cif_ensemble_test.generate_site_mixing_type_histogram()
+
+    # Check that all expected files are created
+    for file_name in expected_files:
+        file_path = os.path.join(output_dir, file_name)
+        assert os.path.exists(file_path)
+
+    # Remove the histogram
+    shutil.rmtree(output_dir)
 
 
 """
