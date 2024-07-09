@@ -160,7 +160,9 @@ class Cif:
     def _log_info(self, message):
         """Log a formatted message if logging is enabled."""
         if self.logging_enabled:
-            formatted_message = message.format(file_path=self.file_path)
+            formatted_message = message.format(
+                file_path=self.file_path, file_name=self.file_name
+            )
             logging.info(formatted_message)
 
     def _preprocess(self):
@@ -198,8 +200,8 @@ class Cif:
         self.bond_pairs_sorted_by_mendeleev = get_pairs_sorted_by_mendeleev(
             self.unique_elements
         )
-        self.site_label_pairs_sorted_by_mendeleev = get_pairs_sorted_by_mendeleev(
-            self.site_labels
+        self.site_label_pairs_sorted_by_mendeleev = (
+            get_pairs_sorted_by_mendeleev(self.site_labels)
         )
         self.site_mixing_type = get_site_mixing_type(
             self.site_labels, self.atom_site_info
@@ -236,7 +238,6 @@ class Cif:
     def compute_connections(self, cutoff_radius=10.0):
         """Compute nearest neighbor connections per site label."""
         self._log_info(CifLog.COMPUTE_CONNECTIONS.value)
-
         self.connections = get_site_connections(
             [
                 self.site_labels,
@@ -255,8 +256,8 @@ class Cif:
         self._shortest_distance = get_shortest_distance(self.connections)
 
         # Shortest distance per bond pair
-        self._shortest_bond_pair_distance = get_shortest_distance_per_bond_pair(
-            self.connections_flattened
+        self._shortest_bond_pair_distance = (
+            get_shortest_distance_per_bond_pair(self.connections_flattened)
         )
 
         # Shortest distance per site
@@ -288,13 +289,17 @@ class Cif:
         )
 
         # Get CN connections by the best methods
-        self._CN_connections_by_best_methods = get_CN_connections_by_best_methods(
-            self.CN_best_methods, self.connections
+        self._CN_connections_by_best_methods = (
+            get_CN_connections_by_best_methods(
+                self.CN_best_methods, self.connections
+            )
         )
 
         # Get CN connections by the best methods
-        self._CN_connections_by_min_dist_method = get_CN_connections_by_min_dist_method(
-            self.CN_max_gap_per_site, self.connections
+        self._CN_connections_by_min_dist_method = (
+            get_CN_connections_by_min_dist_method(
+                self.CN_max_gap_per_site, self.connections
+            )
         )
         # Bond counts
         self._CN_bond_count_by_min_dist_method = get_bond_counts(
@@ -305,15 +310,19 @@ class Cif:
         )
 
         # Bond counts sorted by mendeleev
-        self._CN_bond_count_by_min_dist_method_sorted_by_mendeleev = get_bond_counts(
-            self.unique_elements,
-            self.CN_connections_by_min_dist_method,
-            sorted_by_mendeleev=True,
+        self._CN_bond_count_by_min_dist_method_sorted_by_mendeleev = (
+            get_bond_counts(
+                self.unique_elements,
+                self.CN_connections_by_min_dist_method,
+                sorted_by_mendeleev=True,
+            )
         )
-        self._CN_bond_count_by_best_methods_sorted_by_mendeleev = get_bond_counts(
-            self.unique_elements,
-            self.CN_connections_by_best_methods,
-            sorted_by_mendeleev=True,
+        self._CN_bond_count_by_best_methods_sorted_by_mendeleev = (
+            get_bond_counts(
+                self.unique_elements,
+                self.CN_connections_by_best_methods,
+                sorted_by_mendeleev=True,
+            )
         )
 
         # Bond fractions
@@ -332,7 +341,9 @@ class Cif:
         )
 
         self._CN_bond_fractions_by_best_methods_sorted_by_mendeleev = (
-            get_bond_fractions(self.CN_bond_count_by_best_methods_sorted_by_mendeleev)
+            get_bond_fractions(
+                self.CN_bond_count_by_best_methods_sorted_by_mendeleev
+            )
         )
 
         # Unique CN
@@ -353,11 +364,19 @@ class Cif:
         )
 
         # Max CN
-        self._CN_max_by_min_dist_method = max(self.CN_unique_values_by_min_dist_method)
-        self._CN_max_by_best_methods = max(self.CN_unique_values_by_best_methods)
+        self._CN_max_by_min_dist_method = max(
+            self.CN_unique_values_by_min_dist_method
+        )
+        self._CN_max_by_best_methods = max(
+            self.CN_unique_values_by_best_methods
+        )
         # Min CN
-        self._CN_min_by_min_dist_method = min(self.CN_unique_values_by_min_dist_method)
-        self._CN_min_by_best_methods = min(self.CN_unique_values_by_best_methods)
+        self._CN_min_by_min_dist_method = min(
+            self.CN_unique_values_by_min_dist_method
+        )
+        self._CN_min_by_best_methods = min(
+            self.CN_unique_values_by_best_methods
+        )
 
     @property
     @ensure_connections

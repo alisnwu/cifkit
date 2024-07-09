@@ -73,9 +73,12 @@ def test_distances_supercell_size(cif_ensemble_test: CifEnsemble):
         ]
     )
 
-    assert set(cif_ensemble_test.minimum_distances) == expected_minimum_distances
     assert (
-        set(cif_ensemble_test.supercell_atom_counts) == expected_supercell_atom_counts
+        set(cif_ensemble_test.minimum_distances) == expected_minimum_distances
+    )
+    assert (
+        set(cif_ensemble_test.supercell_atom_counts)
+        == expected_supercell_atom_counts
     )
 
 
@@ -125,7 +128,9 @@ def test_filter_by_value(cif_ensemble_test: CifEnsemble):
     }
 
     # Site mixing types
-    assert cif_ensemble_test.filter_by_site_mixing_types(["full_occupancy"]) == {
+    assert cif_ensemble_test.filter_by_site_mixing_types(
+        ["full_occupancy"]
+    ) == {
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/300170.cif",
         "tests/data/cif/ensemble_test/260171.cif",
@@ -171,7 +176,9 @@ def test_filter_by_elements(cif_ensemble_test):
         "tests/data/cif/ensemble_test/300169.cif",
     }
 
-    assert cif_ensemble_test.filter_by_elements_exact_matching(["Ge", "Ru", "La"]) == {
+    assert cif_ensemble_test.filter_by_elements_exact_matching(
+        ["Ge", "Ru", "La"]
+    ) == {
         "tests/data/cif/ensemble_test/300169.cif",
     }
 
@@ -205,7 +212,9 @@ def test_filter_by_CN_dist_method_containing(
 def test_filter_by_CN_dist_method_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching([14]) == {
+    assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching(
+        [14]
+    ) == {
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250709.cif",
         "tests/data/cif/ensemble_test/250697.cif",
@@ -227,7 +236,10 @@ def test_filter_by_CN_best_methods_containing(
 def test_filter_by_CN_best_methods_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert cif_ensemble_test.filter_by_CN_best_methods_exact_matching([10]) == set()
+    assert (
+        cif_ensemble_test.filter_by_CN_best_methods_exact_matching([10])
+        == set()
+    )
 
 
 """#
@@ -463,7 +475,7 @@ Test ErCoIn
 """
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_ErCoIn_test_CN():
     ensemble = CifEnsemble("tests/data/cif/ErCoIn_test", add_nested_files=True)
     assert ensemble.unique_CN_values_by_method_methods_stat == {

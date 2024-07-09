@@ -98,7 +98,9 @@ def get_unitcell_coords_after_sym_operations_per_label(
     return list(all_coords)
 
 
-def flatten_original_coordinates(all_coords: list[tuple[float, float, float, str]]):
+def flatten_original_coordinates(
+    all_coords: list[tuple[float, float, float, str]],
+):
     points = np.array([list(map(float, coord[:-1])) for coord in all_coords])
     return points
 

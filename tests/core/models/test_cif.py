@@ -4,7 +4,6 @@ import pytest
 import logging
 from cifkit import Cif
 from cifkit.utils.error_messages import CifParserError
-from cifkit.utils.log_messages import CifLog
 from cifkit.utils import folder
 
 
@@ -145,27 +144,28 @@ Test log
 
 
 @pytest.mark.fast
-def test_init_log(caplog):
-    file_path = "tests/data/cif/URhIn.cif"
-    cif = Cif(file_path, logging_enabled=True)
-
-    with caplog.at_level(logging.INFO):
-        assert CifLog.PREPROCESSING.value.format(file_path=file_path) in caplog.text
-
-        assert CifLog.LOADING_DATA.value in caplog.text
-
-    cif.compute_connections()
-    with caplog.at_level(logging.INFO):
-        assert CifLog.COMPUTE_CONNECTIONS.value in caplog.text
-
-
-@pytest.mark.fast
 def test_init_no_log(caplog):
     file_path = "tests/data/cif/URhIn.cif"
     Cif(file_path)
 
     with caplog.at_level(logging.INFO):
         assert caplog.text == ""
+
+
+@pytest.mark.fast
+def test_init_with_log(caplog):
+    file_path = "tests/data/cif/URhIn.cif"
+
+    with caplog.at_level(logging.INFO):
+        cif = Cif(file_path, logging_enabled=True)
+        assert "Preprocessing tests/data/cif/URhIn.cif" in caplog.text
+        assert (
+            "Parsing .cif and generating supercell for URhIn.cif"
+            in caplog.text
+        )
+
+        cif.compute_connections()
+        assert "Computing pair distances for URhIn.cif" in caplog.text
 
 
 @pytest.mark.fast
@@ -616,17 +616,35 @@ def print_connected_points(all_labels_connections):
 def test_init_atomic_mixing():
     file_path = "tests/data/cif/atomic_mixing/261241.cif"
     cif = Cif(file_path)
-    polyhedron_points, vertex_labels = cif.get_polyhedron_labels_by_CN_best_methods(
-        "CoM1"
+    polyhedron_points, vertex_labels = (
+        cif.get_polyhedron_labels_by_CN_best_methods("CoM1")
     )
     assert len(polyhedron_points) == 13
     assert len(vertex_labels) == 13
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_polyhedron_out_of_bounds():
     file_path = "tests/data/cif/polyhedron_error/index_out_bound/261629.cif"
     cif = Cif(file_path)
     assert cif.CN_best_methods["Co1"]["number_of_vertices"] == 15
     assert cif.CN_best_methods["In1"]["number_of_vertices"] == 10
     assert cif.CN_best_methods["Co2"]["number_of_vertices"] == 15
+
+
+"""
+Test file without mendeeleve number
+"""
+
+
+@pytest.mark.now
+def test_init_without_mendeeleve_number():
+    file_path = "tests/data/cif/cif_no_mendeleev/454169.cif"
+    cif = Cif(file_path)
+    assert cif.unique_elements == {"Pu", "Ga"}
+    assert cif.bond_pairs == {("Pu", "Pu"), ("Ga", "Pu"), ("Ga", "Ga")}
+    assert cif.bond_pairs_sorted_by_mendeleev == {
+        ("Pu", "Pu"),
+        ("Pu", "Ga"),
+        ("Ga", "Ga"),
+    }
