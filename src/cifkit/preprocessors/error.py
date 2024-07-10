@@ -41,7 +41,7 @@ def move_files_based_on_errors(dir_path, file_paths):
             # Check the label before instantiating the Cif object to save time
             check_unique_atom_site_labels(file_path)
             # Instantiate the Cif object fully
-            Cif(file_path)
+            Cif(file_path, is_formatted=True)
         except Exception as e:
             error_message = str(e)
             # Example of handling specific errors, adjust as needed

@@ -29,16 +29,32 @@ functions for handling large datasets, on the order of tens of thousands, of
 In high-throughput analysis using `.cif` files, the research project has
 identified the folowing needs:
 
-- **Format files at once:** `.cif` files parsed from databases often contain
+- **Preprocess files at once:** `.cif` files parsed from databases often contain
   ill-formatted files. We need a tool to standardize, preprocess, and filter out
-  bad files. I also need to copy, move, and sort `.cif` files based on specific
+  bad files. We also need to copy, move, and sort `.cif` files based on specific
   attributes.
+
 - **Visualize coordination geometry:** We are interested in determining the
   coordination geometry and the best site in the supercell for analysis in a
   high-throughput manner. We need to identify the best site for each site label.
 - **Visualize distribution of files:** We want to easily identify and categorize
   a distribution of underlying `.cif` files based on supercell size, tags,
   coordination numbers, elements, etc.
+
+## Quotes
+
+Here is a quote illustrating how `cifkit` addresses one of the challenges mentioned above.
+
+> "I am building an X-Ray diffraction analysis (XRD) pattern visualization
+> script for my lab using `pymatgen`. I feel like `cifkit` integrated really
+> well into my existing stable of libraries, while surpassing some alternatives
+> in preprocessing and parsing. For example, it was often unclear at what stage
+> an error occurred—whether during pre-processing with `CifParser`, or XRD plot
+> generation with `diffraction.core` in `pymatgen`. The pre-processing logic in
+> `cifkit` was communicated clearly, both in documentation and in actual
+> outputs, allowing me to catch errors in my data before it was used in my
+> visualizations. I now use `cifkit` by default for processing CIFs before they
+> pass through the rest of my pipeline." - Alex Vtorov
 
 ## Overview
 
@@ -47,10 +63,10 @@ two primary objects: `Cif` and `CifEnsemble`.
 
 ### Cif
 
-**`Cif`** is initialized with a `.cif` file path. It parses the .cif file,
-preprocesses ill-formatted files, generates supercells, and computes nearest
-neighbors. It also determines coordination numbers using four different methods
-and generates polyhedrons for each site.
+**`Cif`** is initialized with a `.cif` file path. It parses the `.cif` file,
+generates supercells, and computes nearest neighbors. It also determines
+coordination numbers using four different methods and generates polyhedrons for
+each site.
 
 ```python
 from cifkit import Cif
@@ -179,11 +195,8 @@ Here is how you can contribute to the `cifkit` project if you found it helpful:
 
 ## Contributors
 
-`cifkit` is made possible with contributions and support from the following
-individuals:
-
 `cifkit` has been greatly enhanced thanks to the contributions from a diverse
-group of developers and researchers. Here are a few notable contributors:
+group of researchers:
 
 - **Anton Oliynyk**: provided original ideation with `.cif` files
 - **Alex Vtorov**: recommended tool for polyhedron visualization
@@ -196,3 +209,5 @@ group of developers and researchers. Here are a few notable contributors:
 
 We welcome all forms of contributions from the community. Your ideas and
 improvements are valued and appreciated.
+
+## Testimonial

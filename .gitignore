@@ -4,6 +4,10 @@ __pycache__/
 *$py.class
 .DS_Store
 
+
+# Test file
+test.ipynb
+
 # C extensions
 *.so
 
