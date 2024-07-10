@@ -1,5 +1,8 @@
-from pathlib import Path
+import os
+import shutil
+import logging
 import pytest
+from pathlib import Path
 from cifkit import CifEnsemble
 from cifkit.utils.folder import get_file_count, get_file_paths
 
@@ -73,9 +76,12 @@ def test_distances_supercell_size(cif_ensemble_test: CifEnsemble):
         ]
     )
 
-    assert set(cif_ensemble_test.minimum_distances) == expected_minimum_distances
     assert (
-        set(cif_ensemble_test.supercell_atom_counts) == expected_supercell_atom_counts
+        set(cif_ensemble_test.minimum_distances) == expected_minimum_distances
+    )
+    assert (
+        set(cif_ensemble_test.supercell_atom_counts)
+        == expected_supercell_atom_counts
     )
 
 
@@ -125,7 +131,9 @@ def test_filter_by_value(cif_ensemble_test: CifEnsemble):
     }
 
     # Site mixing types
-    assert cif_ensemble_test.filter_by_site_mixing_types(["full_occupancy"]) == {
+    assert cif_ensemble_test.filter_by_site_mixing_types(
+        ["full_occupancy"]
+    ) == {
         "tests/data/cif/ensemble_test/300169.cif",
         "tests/data/cif/ensemble_test/300170.cif",
         "tests/data/cif/ensemble_test/260171.cif",
@@ -171,7 +179,9 @@ def test_filter_by_elements(cif_ensemble_test):
         "tests/data/cif/ensemble_test/300169.cif",
     }
 
-    assert cif_ensemble_test.filter_by_elements_exact_matching(["Ge", "Ru", "La"]) == {
+    assert cif_ensemble_test.filter_by_elements_exact_matching(
+        ["Ge", "Ru", "La"]
+    ) == {
         "tests/data/cif/ensemble_test/300169.cif",
     }
 
@@ -205,7 +215,9 @@ def test_filter_by_CN_dist_method_containing(
 def test_filter_by_CN_dist_method_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching([14]) == {
+    assert cif_ensemble_test.filter_by_CN_min_dist_method_exact_matching(
+        [14]
+    ) == {
         "tests/data/cif/ensemble_test/260171.cif",
         "tests/data/cif/ensemble_test/250709.cif",
         "tests/data/cif/ensemble_test/250697.cif",
@@ -227,7 +239,10 @@ def test_filter_by_CN_best_methods_containing(
 def test_filter_by_CN_best_methods_exact_matching(
     cif_ensemble_test: CifEnsemble,
 ):
-    assert cif_ensemble_test.filter_by_CN_best_methods_exact_matching([10]) == set()
+    assert (
+        cif_ensemble_test.filter_by_CN_best_methods_exact_matching([10])
+        == set()
+    )
 
 
 """#
@@ -391,13 +406,6 @@ def test_supercell_size_stats(cif_ensemble_test):
 
 
 @pytest.mark.fast
-def test_min_distance_stats(cif_ensemble_test):
-    result = cif_ensemble_test.min_distance_stats
-    expected = {2.28: 1, 2.29: 1, 2.383: 1, 2.725: 2, 2.72: 1}
-    assert result == expected
-
-
-@pytest.mark.fast
 def test_unique_elements_stats(cif_ensemble_test):
     result = cif_ensemble_test.unique_elements_stats
     expected = {
@@ -431,12 +439,11 @@ Test stat histograms
 """
 
 
-@pytest.mark.slow
-def test_generate_histogram(cif_ensemble_test, tmp_path):
-    output_dir = tmp_path / "histograms"
-    cif_ensemble_test.generate_stat_histograms(output_dir=str(output_dir))
+@pytest.mark.now
+def test_generate_histogram(cif_ensemble_test):
+    output_dir = "tests/data/cif/ensemble_test/histograms"
 
-    # List of expected files
+    # List of expected file names
     expected_files = [
         "structures.png",
         "formula.png",
@@ -444,7 +451,6 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
         "space_group_number.png",
         "space_group_name.png",
         "supercell_size.png",
-        "min_distance.png",
         "elements.png",
         "CN_by_min_dist_method.png",
         "CN_by_best_methods.png",
@@ -452,10 +458,26 @@ def test_generate_histogram(cif_ensemble_test, tmp_path):
         "site_mixing_type.png",
     ]
 
+    # Generate all histograms
+    cif_ensemble_test.generate_structure_histogram()
+    cif_ensemble_test.generate_formula_histogram()
+    cif_ensemble_test.generate_tag_histogram()
+    cif_ensemble_test.generate_space_group_number_histogram()
+    cif_ensemble_test.generate_space_group_name_histogram()
+    cif_ensemble_test.generate_supercell_size_histogram()
+    cif_ensemble_test.generate_elements_histogram()
+    cif_ensemble_test.generate_CN_by_min_dist_method_histogram()
+    cif_ensemble_test.generate_CN_by_best_methods_histogram()
+    cif_ensemble_test.generate_composition_type_histogram()
+    cif_ensemble_test.generate_site_mixing_type_histogram()
+
     # Check that all expected files are created
     for file_name in expected_files:
-        file_path = output_dir / file_name
-        assert file_path.exists()
+        file_path = os.path.join(output_dir, file_name)
+        assert os.path.exists(file_path)
+
+    # Remove the histogram
+    shutil.rmtree(output_dir)
 
 
 """
@@ -463,7 +485,7 @@ Test ErCoIn
 """
 
 
-@pytest.mark.now
+@pytest.mark.slow
 def test_ErCoIn_test_CN():
     ensemble = CifEnsemble("tests/data/cif/ErCoIn_test", add_nested_files=True)
     assert ensemble.unique_CN_values_by_method_methods_stat == {
@@ -481,3 +503,30 @@ def test_ErCoIn_test_CN():
         18: 1,
         9: 3,
     }
+
+
+"""
+Test init
+"""
+
+
+@pytest.mark.fast
+def test_init_with_preprocessing(
+    caplog,
+    cif_folder_path_test,
+):
+    CifEnsemble(cif_folder_path_test, logging_enabled=True)
+
+    with caplog.at_level(logging.INFO):
+        assert "Preprocessing tests/data/cif/folder" in caplog.text
+
+
+@pytest.mark.fast
+def test_init_without_preprocessing(
+    caplog,
+    cif_folder_path_test,
+):
+    CifEnsemble(cif_folder_path_test, preprocess=False, logging_enabled=True)
+
+    with caplog.at_level(logging.INFO):
+        assert "Preprocessing tests/data/cif/folder" not in caplog.text

@@ -1,6 +1,9 @@
 import os
 from cifkit.models.cif import Cif
 from pathlib import Path
+from cifkit.utils.cif_parser import (
+    check_unique_atom_site_labels,
+)
 
 
 def make_directory_and_move(file_path, dir_path, new_file_path):
@@ -35,6 +38,9 @@ def move_files_based_on_errors(dir_path, file_paths):
         filename = os.path.basename(file_path)
         print(f"Preprocessing {file_path} ({i}/{len(file_paths)})")
         try:
+            # Check the label before instantiating the Cif object to save time
+            check_unique_atom_site_labels(file_path)
+            # Instantiate the Cif object fully
             Cif(file_path)
         except Exception as e:
             error_message = str(e)
@@ -47,14 +53,18 @@ def move_files_based_on_errors(dir_path, file_paths):
                 error_type = "error_wrong_loop_value"
             elif "missing atomic coordinates" in error_message:
                 error_type = "error_coords"
-            elif "incorrectly parsed element" in error_message:
+            elif "element was not correctly parsed" in error_message:
                 error_type = "error_invalid_label"
             else:
                 error_type = "error_others"
 
-            make_directory_and_move(file_path, error_directories[error_type], filename)
+            make_directory_and_move(
+                file_path, error_directories[error_type], filename
+            )
             num_files_moved[error_type] += 1
-            print(f"File {filename} moved to '{error_type}' due to: {error_message}")
+            print(
+                f"File {filename} moved to '{error_type}' due to: {error_message}"
+            )
 
     # Display the number of files moved to each folder
     print("\nSUMMARY")

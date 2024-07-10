@@ -1,46 +1,72 @@
+import logging
+from click import secho
 from cifkit import Cif
 from cifkit.utils.folder import (
     move_files,
     copy_files,
     get_file_paths,
 )
-from cifkit.figures.histogram import plot_histograms
+from cifkit.utils.log_messages import CifEnsembleLog
+from cifkit.figures.histogram import plot_histogram
 from collections import Counter
 from cifkit.preprocessors.format import (
     preprocess_label_element_loop_values,
 )
 from cifkit.utils.cif_editor import remove_author_loop
 from cifkit.preprocessors.error import move_files_based_on_errors
-from cifkit.utils.cif_parser import (
-    check_unique_atom_site_labels,
-)
 
 
 class CifEnsemble:
-    def __init__(self, cif_dir_path: str, add_nested_files=False) -> None:
+    def __init__(
+        self,
+        cif_dir_path: str,
+        add_nested_files=False,
+        preprocess=True,
+        logging_enabled=False,
+    ) -> None:
         # Process each file, handling exceptions that may occur
-        file_paths = get_file_paths(cif_dir_path, add_nested_files=add_nested_files)
-        for file_path in file_paths:
-            try:
-                remove_author_loop(file_path)
-                preprocess_label_element_loop_values(file_path)
-                check_unique_atom_site_labels(file_path)
-            except Exception as e:
-                print(f"Error processing {file_path}: {e}")
-
-        # Move ill-formatted files after processing
-        move_files_based_on_errors(cif_dir_path, file_paths)
-
-        # Initialize after sorted
-        self.file_paths = get_file_paths(
+        self.logging_enabled = logging_enabled
+        file_paths = get_file_paths(
             cif_dir_path, add_nested_files=add_nested_files
         )
         self.dir_path = cif_dir_path
-        self.file_count = len(self.file_paths)
 
-        self.cifs: list[Cif] = [
-            Cif(file_path, is_formatted=True) for file_path in self.file_paths
-        ]
+        if preprocess:
+            self._log_info(CifEnsembleLog.PREPROCESSING.value)
+            for file_path in file_paths:
+                try:
+                    remove_author_loop(file_path)
+                    preprocess_label_element_loop_values(file_path)
+                except Exception as e:
+                    print(f"Error processing {file_path}: {e}")
+
+            # Move ill-formatted files after processing
+            move_files_based_on_errors(cif_dir_path, file_paths)
+
+        # Initialize new files after ill-formatted files are moved
+        self.file_paths = get_file_paths(
+            cif_dir_path, add_nested_files=add_nested_files
+        )
+        self.file_count = len(self.file_paths)
+        secho(f"Initializing {self.file_count} Cif objects...", fg="yellow")
+
+        if logging_enabled:
+            self.cifs: list[Cif] = [
+                Cif(file_path, is_formatted=True, logging_enabled=True)
+                for file_path in self.file_paths
+            ]
+        else:
+            self.cifs: list[Cif] = [
+                Cif(file_path, is_formatted=True)
+                for file_path in self.file_paths
+            ]
+        secho("Finished initialization!", fg="green")
+
+    def _log_info(self, message):
+        """Log a formatted message if logging is enabled."""
+        if self.logging_enabled:
+            formatted_message = message.format(dir_path=self.dir_path)
+            logging.info(formatted_message)
 
     def _get_unique_property_values(self, property_name: str):
         """Return unique values for a given property from cifs."""
@@ -164,10 +190,6 @@ class CifEnsemble:
         return self._attribute_stats("supercell_points", len)
 
     @property
-    def min_distance_stats(self) -> dict[float, int]:
-        return self._attribute_stats("shortest_distance")
-
-    @property
     def unique_CN_values_by_min_dist_method_stat(
         self,
     ) -> dict[float, int]:
@@ -212,7 +234,9 @@ class CifEnsemble:
         return cif_file_paths
 
     # With sets
-    def _filter_contains_any(self, property_name: str, values: list) -> set[str]:
+    def _filter_contains_any(
+        self, property_name: str, values: list
+    ) -> set[str]:
         cif_file_paths = set()
         for cif in self.cifs:
             property_value: str = getattr(cif, property_name)
@@ -220,7 +244,9 @@ class CifEnsemble:
                 cif_file_paths.add(cif.file_path)
         return cif_file_paths
 
-    def _filter_exact_match(self, property_name: str, values: list) -> set[str]:
+    def _filter_exact_match(
+        self, property_name: str, values: list
+    ) -> set[str]:
         cif_file_paths = set()
         for cif in self.cifs:
             property_value: str = getattr(cif, property_name)
@@ -260,19 +286,33 @@ class CifEnsemble:
     Filter by CN
     """
 
-    def filter_by_CN_min_dist_method_containing(self, values: list[int]) -> set[str]:
-        return self._filter_contains_any("CN_unique_values_by_min_dist_method", values)
+    def filter_by_CN_min_dist_method_containing(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_contains_any(
+            "CN_unique_values_by_min_dist_method", values
+        )
 
     def filter_by_CN_min_dist_method_exact_matching(
         self, values: list[int]
     ) -> set[str]:
-        return self._filter_exact_match("CN_unique_values_by_min_dist_method", values)
+        return self._filter_exact_match(
+            "CN_unique_values_by_min_dist_method", values
+        )
 
-    def filter_by_CN_best_methods_containing(self, values: list[int]) -> set[str]:
-        return self._filter_contains_any("CN_unique_values_by_best_methods", values)
+    def filter_by_CN_best_methods_containing(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_contains_any(
+            "CN_unique_values_by_best_methods", values
+        )
 
-    def filter_by_CN_best_methods_exact_matching(self, values: list[int]) -> set[str]:
-        return self._filter_exact_match("CN_unique_values_by_best_methods", values)
+    def filter_by_CN_best_methods_exact_matching(
+        self, values: list[int]
+    ) -> set[str]:
+        return self._filter_exact_match(
+            "CN_unique_values_by_best_methods", values
+        )
 
     def _filter_by_range(
         self, property: str, min: float | int, max: float | int
@@ -290,22 +330,140 @@ class CifEnsemble:
     def filter_by_min_distance(
         self, min_distance: float, max_distance: float
     ) -> set[str]:
-        return self._filter_by_range("shortest_distance", min_distance, max_distance)
+        return self._filter_by_range(
+            "shortest_distance", min_distance, max_distance
+        )
 
-    def filter_by_supercell_count(self, min_count: int, max_count: int) -> set[str]:
+    def filter_by_supercell_count(
+        self, min_count: int, max_count: int
+    ) -> set[str]:
         return self._filter_by_range(
             "supercell_atom_count",
             min_count,
             max_count,
         )
 
-    def move_cif_files(self, file_paths: set[str], to_directory_path: str) -> None:
+    def move_cif_files(
+        self, file_paths: set[str], to_directory_path: str
+    ) -> None:
         """Move a set of CIF files to a destination directory."""
         move_files(to_directory_path, list(file_paths))
 
-    def copy_cif_files(self, file_paths: set[str], to_directory_path: str) -> None:
+    def copy_cif_files(
+        self, file_paths: set[str], to_directory_path: str
+    ) -> None:
         """Copy a set of CIF files to a destination directory."""
         copy_files(to_directory_path, list(file_paths))
 
-    def generate_stat_histograms(self, display=False, output_dir=None):
-        plot_histograms(self, display, output_dir)
+    def generate_structure_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "structure",
+            self.structure_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_formula_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "formula",
+            self.formula_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_tag_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "tag",
+            self.tag_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_space_group_number_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "space_group_number",
+            self.space_group_number_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_space_group_name_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "space_group_name",
+            self.space_group_name_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_supercell_size_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "supercell_size",
+            self.supercell_size_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_elements_histogram(self, display=False, output_dir=None):
+        plot_histogram(
+            "elements",
+            self.unique_elements_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_CN_by_min_dist_method_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "CN_by_min_dist_method",
+            self.unique_CN_values_by_min_dist_method_stat,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_CN_by_best_methods_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "CN_by_best_methods",
+            self.unique_CN_values_by_method_methods_stat,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_composition_type_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "composition_type",
+            self.composition_type_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )
+
+    def generate_site_mixing_type_histogram(
+        self, display=False, output_dir=None
+    ):
+        plot_histogram(
+            "site_mixing_type",
+            self.site_mixing_type_stats,
+            self.dir_path,
+            display,
+            output_dir,
+        )

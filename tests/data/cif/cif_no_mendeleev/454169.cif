@@ -1,6 +1,6 @@
 ##############################################################################
 #                                                                            #
-# Co-Er            # Er6Co4.5 rt                                   #  454035 #
+# Ga-Pu            # Pu3Ga ht                                      #  454169 #
 #                                                                            #
 ##############################################################################
 #                                                                            #
@@ -18,38 +18,37 @@
 #                                                                            #
 ##############################################################################
 
-data_454035
-_audit_creation_date                     2024-05-31
+data_454169
+_audit_creation_date                     2024-06-10
 _audit_creation_method
 ;
 Pearson's Crystal Data browser
 ;
-#_database_code_PCD                      454035
-_database_code_PDF                       04-003-3058
+#_database_code_PCD                      454169
+_database_code_PDF                       04-003-3186
 
 # Entry summary
 
-_chemical_formula_structural             'Er~6~ Co~4.5~'
-_chemical_formula_sum                    'Co4.50 Er6'
+_chemical_formula_structural             'Pu~3~ Ga'
+_chemical_formula_sum                    'Ga Pu3'
 _chemical_name_mineral                   ?
 _chemical_compound_source                ?
-_chemical_name_structure_type            Ho~6~Co~4.5~,hP22,176
-_chemical_formula_weight                 1268.8
+_chemical_name_structure_type            Cu~3~Au,cP4,221
+_chemical_formula_weight                 801.7
 
 # Bibliographic data
 
 _publ_section_title
 ;
-Magnetic Properties of R~4~Co~3~-Type Intermetallic Compounds of Cobalt with Rare-Earth Metals and Yttrium
+Observations sur la structure des composes intermetalliques des systemes binaires Pu-Ga et Pu-In
 ;
-_journal_coden_ASTM                      COBAAP
-_journal_name_full                       'Cobalt Engl. Ed.'
-_journal_year                            1968
-_journal_volume                          ?
-_journal_issue                           39
-_journal_page_first                      97
-_journal_page_last                       101
-_journal_language                        English
+_journal_coden_ASTM                      JNUMAM
+_journal_name_full                       'J. Nucl. Mater.'
+_journal_year                            1965
+_journal_volume                          15
+_journal_page_first                      241
+_journal_page_last                       244
+_journal_language                        French
 loop_
  _publ_author_name
  _publ_author_address
@@ -59,35 +58,71 @@ loop_
 
 # Standardized crystallographic data
 
-_cell_length_a                           11.36
-_cell_length_b                           11.36
-_cell_length_c                           3.975
+_cell_length_a                           4.5
+_cell_length_b                           4.5
+_cell_length_c                           4.5
 _cell_angle_alpha                        90
 _cell_angle_beta                         90
-_cell_angle_gamma                        120
-_cell_volume                             444.25
-_cell_formula_units_Z                    2
-_space_group_IT_number                   176
-_space_group_name_H-M_alt                'P 63/m'
+_cell_angle_gamma                        90
+_cell_volume                             91.13
+_cell_formula_units_Z                    1
+_space_group_IT_number                   221
+_space_group_name_H-M_alt                'P m -3 m'
 loop_
  _space_group_symop_id
  _space_group_symop_operation_xyz
  1 'x, y, z'
- 2 '-x+y, -x, 1/2-z'
- 3 '-x+y, -x, z'
- 4 '-x, -y, -z'
- 5 '-x, -y, 1/2+z'
- 6 '-y, x-y, 1/2-z'
- 7 '-y, x-y, z'
- 8 'x, y, 1/2-z'
- 9 'x-y, x, -z'
- 10 'x-y, x, 1/2+z'
- 11 'y, -x+y, -z'
- 12 'y, -x+y, 1/2+z'
+ 2 '-x, -y, -z'
+ 3 '-x, -y, z'
+ 4 '-x, -z, -y'
+ 5 '-x, -z, y'
+ 6 '-x, y, -z'
+ 7 '-x, y, z'
+ 8 '-x, z, -y'
+ 9 '-x, z, y'
+ 10 '-y, -x, -z'
+ 11 '-y, -x, z'
+ 12 '-y, -z, -x'
+ 13 '-y, -z, x'
+ 14 '-y, x, -z'
+ 15 '-y, x, z'
+ 16 '-y, z, -x'
+ 17 '-y, z, x'
+ 18 '-z, -x, -y'
+ 19 '-z, -x, y'
+ 20 '-z, -y, -x'
+ 21 '-z, -y, x'
+ 22 '-z, x, -y'
+ 23 '-z, x, y'
+ 24 '-z, y, -x'
+ 25 '-z, y, x'
+ 26 'x, -y, -z'
+ 27 'x, -y, z'
+ 28 'x, -z, -y'
+ 29 'x, -z, y'
+ 30 'x, y, -z'
+ 31 'x, z, -y'
+ 32 'x, z, y'
+ 33 'y, -x, -z'
+ 34 'y, -x, z'
+ 35 'y, -z, -x'
+ 36 'y, -z, x'
+ 37 'y, x, -z'
+ 38 'y, x, z'
+ 39 'y, z, -x'
+ 40 'y, z, x'
+ 41 'z, -x, -y'
+ 42 'z, -x, y'
+ 43 'z, -y, -x'
+ 44 'z, -y, x'
+ 45 'z, x, -y'
+ 46 'z, x, y'
+ 47 'z, y, -x'
+ 48 'z, y, x'
 loop_
  _atom_type_symbol
- Co
- Er
+ Pu
+ Ga
 loop_
  _atom_site_label
  _atom_site_type_symbol
@@ -97,23 +132,20 @@ loop_
  _atom_site_fract_y
  _atom_site_fract_z
  _atom_site_occupancy
-CoI Co 6 h 0.157 0.441 0.25 1
-ErI Er 6 h 0.246 0.225 0.25 1
-ErII Er 6 h 0.515 0.136 0.25 1
-CoII Co 2 c 0.333333 0.666667 0.25 1
-CoIII Co 2 b 0 0 0 0.5
+ Pu Pu 3 c 0 0.5 0.5 1
+ Ga Ga 1 a 0 0 0 1
 
 
 _exptl_crystal_colour                    ?
 _exptl_crystal_density_meas              ?
-_exptl_crystal_density_diffrn            9.49
+_exptl_crystal_density_diffrn            14.61
 _cell_measurement_temperature            ?
-_cell_measurement_radiation              X-rays
+_cell_measurement_radiation              'X-rays, Cu Ka'
 _cell_measurement_reflns_used            ?
 _diffrn_ambient_temperature              ?
-_diffrn_measurement_device               film
-_diffrn_measurement_device_type          ?
-_diffrn_radiation_type                   X-rays
+_diffrn_measurement_device               'automatic diffractometer'
+_diffrn_measurement_device_type          'Philips PW1010'
+_diffrn_radiation_type                   'X-rays, Cu Ka'
 _diffrn_reflns_number                    ?
 _exptl_absorpt_coefficient_mu            ?
 _exptl_absorpt_correction_type           ?
@@ -126,4 +158,4 @@ _pd_proc_ls_proof_R_factor               ?
 _pd_proc_ls_proof_wR_factor              ?
 _refine_ls_R_I_factor                    ?
 
-# End of data set 454035
+# End of data set 454169

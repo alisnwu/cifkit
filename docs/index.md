@@ -1,8 +1,13 @@
 # Getting started
 
-The purpose of this guide is to illustrate some of the main features that `cifkit` provides. It assumes a very basic knowledge of Python.
+The purpose of this guide is to illustrate some of the main features that
+`cifkit` provides. It assumes a very basic knowledge of Python.
 
-`cifkit` is an open source CIF library that supports supercell generation and provide tools for high-throuhgput analysis. It also provides various tools for determining coordination numbers, plotting polyhedrons from each site based on the coordination numbers, bond fractions, move and copy `.cif` files based on a set of attributes, and determine atomic mixing information in 2-3 lines of code.
+`cifkit` is an open source CIF library that supports supercell generation and
+provide tools for high-throuhgput analysis. It also provides various tools for
+determining coordination numbers, plotting polyhedrons from each site based on
+the coordination numbers, bond fractions, move and copy `.cif` files based on a
+set of attributes, and determine atomic mixing information in 2-3 lines of code.
 
 ## Installation
 
@@ -18,11 +23,14 @@ You may need to download other dependencies:
 pip install cifkit pyvista gemmi
 ```
 
-`gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting polyhedrons.
+`gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting
+polyhedrons.
 
 ## Start with CifEnsemble
 
-`cifkit` offers a class called `CifEnsemble` which handles many `.cif` files in a high-throuhgput way. You can initialize the object using the folder path containing `.cif` files shown below.
+`cifkit` offers a class called `CifEnsemble` which handles many `.cif` files in
+a high-throuhgput way. You can initialize the object using the folder path
+containing `.cif` files shown below.
 
 ```python
 from cifkit import CifEnsemble
@@ -39,7 +47,8 @@ ensemble.cif_folder_path
 
 ```
 
-If you do not have `.cif` files for testing, `cifkit` also provides a set of `.cif` files accessible.
+If you do not have `.cif` files for testing, `cifkit` also provides a set of
+`.cif` files accessible.
 
 ```python
 from cifkit import CifEnsemble, Example
@@ -51,7 +60,8 @@ ensemble = CifEnsemble(Example.ErCoIn_big_folder_path)
 
 ### Get unique attributes
 
-Use the `ensemble` object to get unique attributes such as elements, formulas, etc.
+Use the `ensemble` object to get unique attributes such as elements, formulas,
+etc.
 
 ```python
 # Unique formulas
@@ -81,7 +91,8 @@ ensemble.unique_tags
 
 ### Get distances and supercell size per file
 
-The following computes the size of each supercell and the minimum distance per file.
+The following computes the size of each supercell and the minimum distance per
+file.
 
 ```python
 # Get min distance per file
@@ -119,7 +130,9 @@ ensemble_test.filter_by_space_group_numbers([139])
 
 ### Move and copy files
 
-Now you have a set of file paths with example below, you can copy and move files to a specific directroy. For high-throuhgout analysis, you might be interested in separating files based on tags, elements, coordination numbers, etc.
+Now you have a set of file paths with example below, you can copy and move files
+to a specific directroy. For high-throuhgout analysis, you might be interested
+in separating files based on tags, elements, coordination numbers, etc.
 
 ```python
 file_paths = {
@@ -137,10 +150,17 @@ ensemble.copy_cif_files(file_paths, dest_dir_path)
 
 ## Are you ready?
 
-Now, if you are interested in working with individual `.cif` files and learn more about all features in `cifkit`, let's visit the `Example notebooks` section [here](https://bobleesj.github.io/cifkit/notebooks/00_Intro/)!
+Now, if you are interested in working with individual `.cif` files and learn
+more about all features in `cifkit`, let's visit the `Example notebooks` section
+[here](https://bobleesj.github.io/cifkit/notebooks/00_Intro/)!
 
 ## Research projects using `cifkit`
 
-- CIF Bond Analyzer (CBA) - extract and visualize bonding patterns - [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) | [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
-- CIF Cleaner - move, copy .cif files based on attributes - [GitHub](https://github.com/bobleesj/cif-cleaner)
-- Structure Analysis/Featurizer (SAF) - build geometric features for binary, ternary compounds - [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)
+- CIF Bond Analyzer (CBA) - extract and visualize bonding patterns -
+  [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) |
+  [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
+- CIF Cleaner - move, copy .cif files based on attributes -
+  [GitHub](https://github.com/bobleesj/cif-cleaner)
+- Structure Analysis/Featurizer (SAF) - build geometric features for binary,
+  ternary compounds -
+  [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)
