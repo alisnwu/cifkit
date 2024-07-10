@@ -2,37 +2,28 @@
 
 ### Added
 
-- Initializing progress statement for `CifEnsemble` to enhance user experience
-  [Issue #12](https://github.com/bobleesj/cifkit/issues/12)
-- Print option for `compute_connections` in CifEnsemble
-  [Issue #13](https://github.com/bobleesj/cifkit/issues/13)
-- Preprocessing option for `CifEnsemble` to handle input data more flexibly
-  [Issue #15](https://github.com/bobleesj/cifkit/issues/15)
+- initializing progress statement for `CifEnsemble` to enhance user experience (https://github.com/bobleesj/cifkit/issues/12)
+- print option for `compute_connections` in CifEnsemble (https://github.com/bobleesj/cifkit/issues/13)
+- preprocessing option for `CifEnsemble` to handle input data more flexibly (https://github.com/bobleesj/cifkit/issues/15)
 
 ### Fixed
 
-- Error computing polyhedron metrics: index 4 is out of bounds for axis 0 with
-  size 4 [Issue #10](https://github.com/bobleesj/cifkit/issues/10)
-- Warning for using categorical units to plot a list of strings for histogram
-  generation [Issue #11](https://github.com/bobleesj/cifkit/issues/11)
-- Misclassification issue during preprocessing: do not move to 'others' folder
-  if elements do not belong to Mendeleev table
-  [Issue #14](https://github.com/bobleesj/cifkit/issues/14)
+- error computing polyhedron metrics: index 4 is out of bounds for axis 0 with size 4 (https://github.com/bobleesj/cifkit/issues/10)
+- warning for using categorical units to plot a list of strings for histogram generation (https://github.com/bobleesj/cifkit/issues/11)
+- misclassification issue during preprocessing: do not move to 'others' folder if elements do not belong to Mendeleev table (https://github.com/bobleesj/cifkit/issues/14)
 
 ## [1.0.1] - 2024-07-05
 
 ### Fixed
 
-- Error computing polyhedron metrics: index 4 is out of bounds, see
-  [Issue #10](https://github.com/bobleesj/cifkit/issues/10).
+- error computing polyhedron metrics: index 4 is out of bounds (https://github.com/bobleesj/cifkit/issues/10)
 
 ## [1.0.0] - 2024-07-04
 
 ### Added
 
-- Issue and pull request templates.
+- issue and pull request templates.
 
 ### Fixed
 
-- Duplicate connected points in connections, see
-  [Issue #7](https://github.com/bobleesj/cifkit/issues/7).
+- duplicate connected points in connections with atomic mixing (https://github.com/bobleesj/cifkit/issues/7)
