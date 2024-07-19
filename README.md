@@ -209,3 +209,9 @@ group of researchers:
 
 We welcome all forms of contributions from the community. Your ideas and
 improvements are valued and appreciated.
+
+## Citation
+
+Please consider citing `cifkit` if it has been useful for your research:
+
+- cifkit – Python package for high-throughput .cif analysis, https://doi.org/10.5281/zenodo.12784259
