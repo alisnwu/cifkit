@@ -165,13 +165,15 @@ By structures:
 
 ![Histogram](assets/img/histogram-structure.png)
 
-## Project using cifkit
+## Open-source projects using cifkit
 
 - CIF Bond Analyzer (CBA) - extract and visualize bonding patterns -
   [DOI](https://doi.org/10.1016/j.jallcom.2023.173241) |
   [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
 - CIF Cleaner - move, copy .cif files based on attributes -
   [GitHub](https://github.com/bobleesj/cif-cleaner)
+- Structure Analyzer/Featurizer (SAF) - extract physics-based features from .cif files -
+  [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)
 
 ## How to ask for help
 
