@@ -207,8 +207,8 @@ group of researchers:
   improvements
 - Emil Jaffal ([@EmilJaffal](https://github.com/EmilJaffal)): initial testing and bug report
 - Nikhil Kumar Barua: initial testing and bug report
-- Nishant Yadav: initial testing and bug report
-- Siddha Sankalpa Sethi: initial testing and bug report
+- Nishant Yadav ([@sethisiddha1998](https://github.com/sethisiddha1998)): initial testing and bug report
+- Siddha Sankalpa Sethi ([@runzsh](https://github.com/runzsh)): initial testing and bug report
   in initial testing and initial testing and bug report
 
 We welcome all forms of contributions from the community. Your ideas and
