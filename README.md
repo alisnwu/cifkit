@@ -200,14 +200,16 @@ Here is how you can contribute to the `cifkit` project if you found it helpful:
 `cifkit` has been greatly enhanced thanks to the contributions from a diverse
 group of researchers:
 
-- **Anton Oliynyk**: provided original ideation with `.cif` files
-- **Alex Vtorov**: recommended tool for polyhedron visualization
-- **Danila Shiryaev**: tested features as beta user
-- **Fabian Zills** ([@PythonFZ](https://github.com/PythonFZ)): suggested tooling
+- Anton Oliynyk: original ideation with `.cif` files
+- Alex Vtorov: tool recommendation for polyhedron visualization
+- Danila Shiryaev: testing as beta user
+- Fabian Zills ([@PythonFZ](https://github.com/PythonFZ)): suggested tooling
   improvements
-- **Emil Jaffal** ([@EmilJaffal](https://github.com/EmilJaffal)): participated
-  in initial testing and bug reporting
-- **Nikhil Kumar Barua**: participated in initial testing and bug reporting
+- Emil Jaffal ([@EmilJaffal](https://github.com/EmilJaffal)): initial testing and bug report
+- Nikhil Kumar Barua: initial testing and bug report
+- Nishant Yadav: initial testing and bug report
+- Siddha Sankalpa Sethi: initial testing and bug report
+  in initial testing and initial testing and bug report
 
 We welcome all forms of contributions from the community. Your ideas and
 improvements are valued and appreciated.
