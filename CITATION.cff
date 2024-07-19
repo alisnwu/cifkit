@@ -1,0 +1,14 @@
+authors:
+  - affiliation: >-
+      Department of Applied Physics and Applied Mathematics, Columbia University
+    email: sl5400@columbia.edu
+    family-names: Lee
+    given-names: Sangjoon
+    orcid: "https://orcid.org/0000-0002-2367-3932"
+cff-version: 1.2.0
+doi: 10.5281/zenodo.12784260
+message: >-
+  If you use cifkit, please consider citing.
+title: >-
+  cifkit – Python package for high-throughput .cif analysis
+url: https://github.com/bobleesj/cifkit

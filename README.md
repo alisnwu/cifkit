@@ -209,5 +209,3 @@ group of researchers:
 
 We welcome all forms of contributions from the community. Your ideas and
 improvements are valued and appreciated.
-
-## Testimonial

@@ -60,6 +60,21 @@ def get_unitcell_coords_for_all_labels(
     return coords_list
 
 
+# Function to find and return the appropriate loop for symmetry operations
+def find_symmetry_operations(block):
+    # Try to find _space_group_symop_operation_xyz
+    try:
+        return block.find_loop("_space_group_symop_operation_xyz")
+    except ValueError:
+        # If not found, try _symmetry_equiv_pos_as_xyz
+        try:
+            return block.find_loop("_symmetry_equiv_pos_as_xyz")
+        except ValueError:
+            # If neither is found, handle the error or return None
+            print("No symmetry operation tags found.")
+            return None
+
+
 def get_unitcell_coords_after_sym_operations_per_label(
     block: Block,
     atom_site_fracs: tuple[float, float, float],
@@ -69,33 +84,34 @@ def get_unitcell_coords_after_sym_operations_per_label(
     Generate a list of coordinates for each atom
     site after applying symmetry operations.
     """
-
-    all_coords = set()
-    for operation in block.find_loop("_space_group_symop_operation_xyz"):
-        operation = operation.replace("'", "")
-        try:
-            op = gemmi.Op(operation)
-            new_x, new_y, new_z = op.apply_to_xyz(
-                [
-                    atom_site_fracs[0],
-                    atom_site_fracs[1],
-                    atom_site_fracs[2],
-                ]
-            )
-
-            all_coords.add(
-                (
-                    round(new_x, 5),
-                    round(new_y, 5),
-                    round(new_z, 5),
-                    atom_site_label,
+    symmetry_operations = find_symmetry_operations(block)
+    if symmetry_operations is not None:
+        all_coords = set()
+        for operation in symmetry_operations:
+            operation = operation.replace("'", "")
+            try:
+                op = gemmi.Op(operation)
+                new_x, new_y, new_z = op.apply_to_xyz(
+                    [
+                        atom_site_fracs[0],
+                        atom_site_fracs[1],
+                        atom_site_fracs[2],
+                    ]
                 )
-            )
 
-        except RuntimeError as e:
-            print(f"Skipping operation '{operation}': {str(e)}")
+                all_coords.add(
+                    (
+                        round(new_x, 5),
+                        round(new_y, 5),
+                        round(new_z, 5),
+                        atom_site_label,
+                    )
+                )
 
-    return list(all_coords)
+            except RuntimeError as e:
+                print(f"Skipping operation '{operation}': {str(e)}")
+
+        return list(all_coords)
 
 
 def flatten_original_coordinates(
