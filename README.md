@@ -128,6 +128,20 @@ pip install cifkit pyvista gemmi
 `gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting
 polyhedrons.
 
+Please check the `pyproject.toml` file for the full list of dependencies.
+
+## Testing
+
+To run test locally.
+
+```python
+# Install all dependencies in editable mode
+pip install -e .
+
+# Run test
+pytest
+```
+
 ## Visuals
 
 ### Polyhedron
