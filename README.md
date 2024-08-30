@@ -43,7 +43,8 @@ identified the folowing needs:
 
 ## Quotes
 
-Here is a quote illustrating how `cifkit` addresses one of the challenges mentioned above.
+Here is a quote illustrating how `cifkit` addresses one of the challenges
+mentioned above.
 
 > "I am building an X-Ray diffraction analysis (XRD) pattern visualization
 > script for my lab using `pymatgen`. I feel like `cifkit` integrated really
@@ -186,8 +187,8 @@ By structures:
   [GitHub](https://github.com/bobleesj/cif-bond-analyzer)
 - CIF Cleaner - move, copy .cif files based on attributes -
   [GitHub](https://github.com/bobleesj/cif-cleaner)
-- Structure Analyzer/Featurizer (SAF) - extract physics-based features from .cif files -
-  [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)
+- Structure Analyzer/Featurizer (SAF) - extract physics-based features from .cif
+  files - [GitHub](https://github.com/bobleesj/structure-analyzer-featurizer)
 
 ## How to ask for help
 
@@ -219,11 +220,13 @@ group of researchers:
 - Danila Shiryaev: testing as beta user
 - Fabian Zills ([@PythonFZ](https://github.com/PythonFZ)): suggested tooling
   improvements
-- Emil Jaffal ([@EmilJaffal](https://github.com/EmilJaffal)): initial testing and bug report
+- Emil Jaffal ([@EmilJaffal](https://github.com/EmilJaffal)): initial testing
+  and bug report
 - Nikhil Kumar Barua: initial testing and bug report
-- Nishant Yadav ([@sethisiddha1998](https://github.com/sethisiddha1998)): initial testing and bug report
-- Siddha Sankalpa Sethi ([@runzsh](https://github.com/runzsh)): initial testing and bug report
-  in initial testing and initial testing and bug report
+- Nishant Yadav ([@sethisiddha1998](https://github.com/sethisiddha1998)):
+  initial testing and bug report
+- Siddha Sankalpa Sethi ([@runzsh](https://github.com/runzsh)): initial testing
+  and bug report in initial testing and initial testing and bug report
 
 We welcome all forms of contributions from the community. Your ideas and
 improvements are valued and appreciated.
@@ -232,4 +235,5 @@ improvements are valued and appreciated.
 
 Please consider citing `cifkit` if it has been useful for your research:
 
-- cifkit – Python package for high-throughput .cif analysis, https://doi.org/10.5281/zenodo.12784259
+- cifkit – Python package for high-throughput .cif analysis,
+  https://doi.org/10.5281/zenodo.12784259
