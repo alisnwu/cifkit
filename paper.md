@@ -1,5 +1,5 @@
 ---
-title: "cifkit: A User-Friendly Python Package for High-throughput CIF Analysis"
+title: "cifkit: A user-friendly Python package for high-throughput CIF Analysis"
 tags:
   - Python
   - CIF
