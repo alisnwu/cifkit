@@ -18,7 +18,6 @@ class CifParserError(Enum):
     INVALID_LOOP_TAGS = (
         "The returned loop tags do not match the expected tags."
     )
-    WRONG_LOOP_VALUE_COUNT = "Wrong number of values in loop _atom_site_*"
     DUPLICATE_LABELS = "The file contains duplicate atom site labels."
     INVALID_PARSED_ELEMENT = (
         "The element was not correctly parsed from the site label."
@@ -27,7 +26,7 @@ class CifParserError(Enum):
         "An error occurred while processing symmetry operation"
     )
     MISSING_COORDINATES = "Missing atomic coordinates"
-    MISSING_LOOP_VALUES = "not enough values to unpack"
+    MISSING_LOOP_VALUES = "Wrong number of values in loop"
 
 
 class FileError(Enum):

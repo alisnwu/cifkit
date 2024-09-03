@@ -309,7 +309,7 @@ def get_tag_from_third_line(file_path: str, db_source="PCD") -> str:
         if len(parts) > 1:
             return "_".join(parts[1:])
         else:
-            return None
+            return ""
 
 
 def parse_atom_site_occupancy_info(file_path: str) -> dict:
@@ -373,6 +373,8 @@ def check_unique_atom_site_labels(file_path: str):
 
     # Check how many unique labels - use _atom_site_label of length 4
     label_count = len(loop_values[0])
+    if len(loop_values) == 0:
+        raise ValueError(CifParserError.MISSING_LOOP_VALUES.value)
 
     unique_site_labels = set()
 

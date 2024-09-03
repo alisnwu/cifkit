@@ -561,13 +561,13 @@ def test_init_error_duplicate_label():
     assert expected_error_message == str(e.value)
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_error_coord_missing():
     file_path = "tests/data/cif/error/missing_loop/452743.cif"
     with pytest.raises(ValueError) as e:
         Cif(file_path)
 
-    assert CifParserError.MISSING_LOOP_VALUES.value in str(e.value)
+    assert "not enough values to unpack (expected 2, got 1)" in str(e.value)
 
 
 """
@@ -653,7 +653,7 @@ def test_init_without_mendeeleve_number():
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_ICSD_file(tmpdir):
     file_path = "tests/data/cif/sources/ICSD/EntryWithCollCode43054.cif"
 
@@ -671,7 +671,7 @@ def test_init_ICSD_file(tmpdir):
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_MS_file(tmpdir):
     file_path = "tests/data/cif/sources/MS/U13Rh4.cif"
 
@@ -690,7 +690,7 @@ def test_init_MS_file(tmpdir):
 """
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_COD_file(tmpdir):
     file_path = "tests/data/cif/sources/COD/1010581.cif"
 
