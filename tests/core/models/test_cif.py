@@ -667,12 +667,12 @@ def test_init_ICSD_file(tmpdir):
 
 
 """
-2. Test COD file
+2. Test MS file
 """
 
 
 @pytest.mark.now
-def test_init_COD_file(tmpdir):
+def test_init_MS_file(tmpdir):
     file_path = "tests/data/cif/sources/MS/U13Rh4.cif"
 
     copied_file_path = os.path.join(tmpdir, "U13Rh4.cif")
@@ -680,4 +680,25 @@ def test_init_COD_file(tmpdir):
     shutil.copyfile(file_path, copied_file_path)
     cif_MS = Cif(copied_file_path)
 
-    assert cif_MS.db_source == "MP"
+    assert cif_MS.db_source == "MS"
+    assert cif_MS.unique_elements == {"U", "Fe"}
+    assert cif_MS.supercell_atom_count == 2988
+
+
+"""
+3. Test COD file
+"""
+
+
+@pytest.mark.now
+def test_init_COD_file(tmpdir):
+    file_path = "tests/data/cif/sources/COD/1010581.cif"
+
+    copied_file_path = os.path.join(tmpdir, "1010581.cif")
+
+    shutil.copyfile(file_path, copied_file_path)
+    cif_COD = Cif(copied_file_path)
+
+    assert cif_COD.db_source == "COD"
+    assert cif_COD.unique_elements == {"Cu", "Se"}
+    assert cif_COD.supercell_atom_count == 1383

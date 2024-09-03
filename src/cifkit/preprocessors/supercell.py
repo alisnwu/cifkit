@@ -14,8 +14,8 @@ def get_supercell_points(
     supercell_points = []
     loop_values = cif_parser.get_loop_values(block)
     all_coords_list = get_unitcell_coords_for_all_labels(block)
-    # Get the total number of atoms in the unit cell
 
+    # Get the total number of atoms in the unit cell
     for i, all_coords in enumerate(all_coords_list):
         points = flatten_original_coordinates(all_coords)
         atom_site_label = loop_values[0][i]
@@ -48,6 +48,7 @@ def get_unitcell_coords_for_all_labels(
             _,
             coordinates,
         ) = cif_parser.get_label_occupancy_coordinates(loop_values, i)
+
         coords_after_symmetry_operations = (
             get_unitcell_coords_after_sym_operations_per_label(
                 block,
@@ -56,23 +57,19 @@ def get_unitcell_coords_for_all_labels(
             )
         )
         coords_list.append(coords_after_symmetry_operations)
-
     return coords_list
 
 
 # Function to find and return the appropriate loop for symmetry operations
 def find_symmetry_operations(block):
     # Try to find _space_group_symop_operation_xyz
-    try:
+
+    if block.find_loop("_space_group_symop_operation_xyz"):
         return block.find_loop("_space_group_symop_operation_xyz")
-    except ValueError:
-        # If not found, try _symmetry_equiv_pos_as_xyz
-        try:
-            return block.find_loop("_symmetry_equiv_pos_as_xyz")
-        except ValueError:
-            # If neither is found, handle the error or return None
-            print("No symmetry operation tags found.")
-            return None
+    elif block.find_loop("_symmetry_equiv_pos_as_xyz"):
+        return block.find_loop("_symmetry_equiv_pos_as_xyz")
+    else:
+        raise ValueError("No symmetry operations found in the CIF file.")
 
 
 def get_unitcell_coords_after_sym_operations_per_label(
@@ -84,6 +81,7 @@ def get_unitcell_coords_after_sym_operations_per_label(
     Generate a list of coordinates for each atom
     site after applying symmetry operations.
     """
+
     symmetry_operations = find_symmetry_operations(block)
     if symmetry_operations is not None:
         all_coords = set()
