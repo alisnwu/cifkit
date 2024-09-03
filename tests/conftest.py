@@ -147,7 +147,7 @@ def radius_data_URhIn() -> dict:
         "U": {
             "CIF_radius": 1.377,
             "CIF_radius_refined": 1.6143,
-            "Pauling_radius_CN12": 1.51,
+            "Pauling_radius_CN12": 1.516,
         },
     }
 

@@ -19,7 +19,7 @@ def test_get_CIF_pauling_radii():
     expected = {
         "In": {"CIF_radius": 1.624, "Pauling_radius_CN12": 1.66},
         "Rh": {"CIF_radius": 1.345, "Pauling_radius_CN12": 1.342},
-        "U": {"CIF_radius": 1.377, "Pauling_radius_CN12": 1.51},
+        "U": {"CIF_radius": 1.377, "Pauling_radius_CN12": 1.516},
     }
     assert get_CIF_pauling_radius(test_elements) == expected
 
