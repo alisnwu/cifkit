@@ -342,23 +342,26 @@ def parse_atom_site_occupancy_info(file_path: str) -> dict:
 
 def check_unique_atom_site_labels(file_path: str):
     """Check whether all parsed atom site labels are unique."""
-    content_lines = get_line_content_from_tag(
-        file_path, "_atom_site_occupancy"
-    )
+    block = get_cif_block(file_path)
 
-    site_labels = set()
-    for line in content_lines:
-        parts = line.split()
-        if len(parts) != 8:
-            raise ValueError(CifParserError.WRONG_LOOP_VALUE_COUNT.value)
+    loop_values = get_loop_values(block)
 
-        parsed_site_label = parts[0]
-        parsed_element = parts[1]
-        site_labels.add(parsed_site_label)
+    # Check how many unique labels - use _atom_site_label of length 4
+    label_count = len(loop_values[0])
 
+    unique_site_labels = set()
+
+    # Collect all the site labels to a set
+    for j in range(label_count):
+        unique_site_labels.add(loop_values[0][j])
+
+    # Check the element can be parsed from the label
+    for j in range(label_count):
+        parsed_site_label = loop_values[0][j]
+        parsed_element = loop_values[1][j]
         if get_atom_type_from_label(parsed_site_label) != parsed_element:
             raise ValueError(CifParserError.INVALID_PARSED_ELEMENT.value)
 
-    # If the count of unique labels does not match the number of lines, raise an error
-    if len(content_lines) != len(site_labels):
+    # Check all the site labels are unique
+    if label_count != len(unique_site_labels):
         raise ValueError(CifParserError.DUPLICATE_LABELS.value)

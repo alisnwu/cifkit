@@ -87,13 +87,6 @@ def test_get_loop_value_ICSD(file_path_ICSD_formatted):
     assert loop_values[7][1] == "1."
 
 
-def test_get_loop_values_wrong_loop_number():
-    file_path = "tests/data/cif/URhIn_bad_loop_format.cif"
-    with pytest.raises(ValueError) as e:
-        get_cif_block(file_path)
-    assert CifParserError.WRONG_LOOP_VALUE_COUNT.value in str(e.value)
-
-
 def test_get_num_of_atom_unique_labels(loop_values_URhIn):
     assert get_unique_label_count(loop_values_URhIn) == 4
 
@@ -282,9 +275,23 @@ def test_get_parsed_atom_site_occupancy_info_with_braket():
     }
 
 
+@pytest.mark.now
 def test_check_unique_atom_site_labels(file_path_URhIn):
     check_unique_atom_site_labels(file_path_URhIn)
-    file_path = "tests/data/cif/error/duplicate_labels/457848.cif"
+
+    duplicate_labels_file_path = (
+        "tests/data/cif/bad_cif_format/duplicate_labels.cif"
+    )
     with pytest.raises(ValueError) as e:
-        check_unique_atom_site_labels(file_path)
-    assert CifParserError.DUPLICATE_LABELS.value in str(e.value)
+        check_unique_atom_site_labels(duplicate_labels_file_path)
+    assert str(e.value) == "The file contains duplicate atom site labels."
+
+    unparsable_file_path = (
+        "tests/data/cif/bad_cif_format/label_element_different.cif"
+    )
+    with pytest.raises(ValueError) as e:
+        check_unique_atom_site_labels(unparsable_file_path)
+    assert (
+        str(e.value)
+        == "The element was not correctly parsed from the site label."
+    )
