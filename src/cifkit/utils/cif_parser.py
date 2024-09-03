@@ -204,6 +204,8 @@ def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
         file_path, start_keyword
     )
 
+    print(start_index, end_index)
+
     if start_index is None or end_index is None:
         return None
 
@@ -232,11 +234,12 @@ def get_formula_structure_weight_s_group(
 
     values = [(block.find_value(key)) for key in keys]
 
-    formula = trim_string(values[0])
-    structure = clean_parsed_structure(values[1])
-    weight = get_string_to_formatted_float(values[2])
-    s_group_num = int(trim_string(values[3]))
-    s_group_name = trim_string(values[4])
+    # Process each value, only if it is not None
+    formula = trim_string(values[0]) if values[0] else None
+    structure = clean_parsed_structure(values[1]) if values[1] else None
+    weight = get_string_to_formatted_float(values[2]) if values[2] else None
+    s_group_num = int(trim_string(values[3])) if values[3] else None
+    s_group_name = trim_string(values[4]) if values[4] else None
 
     return (formula, structure, weight, s_group_num, s_group_name)
 
@@ -273,10 +276,15 @@ def get_unique_formulas_structures_weights_s_groups(
     return formulas, structures, weights, s_group_nums, s_group_names
 
 
-def get_tag_from_third_line(file_path: str) -> str:
+def get_tag_from_third_line(file_path: str, db_source="PCD") -> str:
     """
-    Extract the tag from the provided CIF file path.
+    Extract the tag from the provided CIF file path
+    appropriate for PCD db source.
     """
+
+    if not db_source == "PCD":
+        return None
+
     with open(file_path, "r") as f:
         # Read first three lines
         f.readline()  # First line
@@ -296,7 +304,7 @@ def get_tag_from_third_line(file_path: str) -> str:
         if len(parts) > 1:
             return "_".join(parts[1:])
         else:
-            return ""
+            return None
 
 
 def parse_atom_site_occupancy_info(file_path: str) -> dict:

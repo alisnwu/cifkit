@@ -439,7 +439,6 @@ Test stat histograms
 """
 
 
-@pytest.mark.now
 def test_generate_histogram(cif_ensemble_test):
     output_dir = "tests/data/cif/ensemble_test/histograms"
 

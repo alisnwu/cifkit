@@ -16,6 +16,7 @@ def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.composition_type == 3
     assert cif_URhIn.formula == "URhIn"
     assert cif_URhIn.structure == "ZrNiAl"
+    assert cif_URhIn.db_source == "PCD"
     assert cif_URhIn.weight == 455.8
     assert cif_URhIn.site_labels == ["In1", "U1", "Rh1", "Rh2"]
     assert cif_URhIn.space_group_name == "P-62m"
@@ -647,3 +648,21 @@ def test_init_without_mendeeleve_number():
         ("Pu", "Ga"),
         ("Ga", "Ga"),
     }
+
+
+"""
+Test file source type
+"""
+
+
+# def test_init_ICSD_file(tmpdir):
+#     file_path = "tests/data/cif/sources/ICSD/EntryWithCollCode43054.cif"
+
+#     copied_file_path = os.path.join(tmpdir, "EntryWithCollCode43054.cif")
+#     '''
+#     Fe1 Fe0+ 4 a 0.1352(4) 0.1352 0.1352 0.06(3) 1.
+#     Ge1 Ge0+ 4 a 0.8414(3) 0.8414 0.8414 0.13(3) 1.
+#     '''
+#     shutil.copyfile(file_path, copied_file_path)
+#     cif_ICSD = Cif(copied_file_path)
+#     # assert cif_ICSD.db_source == "ICSD"

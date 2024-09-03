@@ -53,6 +53,16 @@ def file_paths_test(cif_folder_path_test):
 
 
 """
+Cif - ICSD demo file
+"""
+
+
+@pytest.fixture(scope="module")
+def file_path_ICSD_formatted():
+    return "tests/data/cif/sources/ICSD/EntryWithCollCode43054_formatted.cif"
+
+
+"""
 Cif - URhIn
 """
 

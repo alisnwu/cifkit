@@ -34,6 +34,7 @@ def get_site_mixing_type(site_labels: list[str], atom_site_info: dict) -> str:
     """
     Get file-level atomic site mixing info.
     """
+    print(atom_site_info)
     is_full_occupancy = True
     coord_occupancy_sum = compute_coord_occupancy_sum(
         site_labels, atom_site_info
