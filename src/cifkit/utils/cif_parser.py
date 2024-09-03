@@ -10,6 +10,7 @@ from cifkit.utils.string_parser import (
     trim_string,
     get_atom_type_from_label,
     clean_parsed_structure,
+    strip_numbers_and_symbols,
 )
 from cifkit.utils import unit
 from cifkit.utils.error_messages import CifParserError
@@ -199,12 +200,12 @@ def get_start_end_line_indexes(
 def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
     """
     Returns a list containing file content with starting keyword.
+    This function only appropriate for PCD format for removing the author
+    section.
     """
     start_index, end_index = get_start_end_line_indexes(
         file_path, start_keyword
     )
-
-    print(start_index, end_index)
 
     if start_index is None or end_index is None:
         return None
@@ -279,7 +280,7 @@ def get_unique_formulas_structures_weights_s_groups(
 def get_tag_from_third_line(file_path: str, db_source="PCD") -> str:
     """
     Extract the tag from the provided CIF file path
-    appropriate for PCD db source.
+    appropriate for PCD db source only.
     """
 
     if not db_source == "PCD":
@@ -310,22 +311,21 @@ def get_tag_from_third_line(file_path: str, db_source="PCD") -> str:
 def parse_atom_site_occupancy_info(file_path: str) -> dict:
     """Parse atom site loop information including element, occupancy,
     fractional coordinates, multiplicity, and wyckoff symbol."""
-    content_lines = get_line_content_from_tag(
-        file_path, "_atom_site_occupancy"
-    )
+    block = get_cif_block(file_path)
+    loop_values = get_loop_values(block)
+    label_count = len(loop_values[0])
 
     parsed_data = {}
 
-    for line in content_lines:
-        parts = line.split()
-        atom_site_label = parts[0]
-        element = parts[1]
-        symmetry_multiplicity = int(parts[2])
-        wyckoff_symbol = parts[3]
-        x_frac_coord = get_string_to_formatted_float(parts[4])
-        y_frac_coord = get_string_to_formatted_float(parts[5])
-        z_frac_coord = get_string_to_formatted_float(parts[6])
-        site_occupancy = get_string_to_formatted_float(parts[7])
+    for i in range(label_count):
+        atom_site_label = loop_values[0][i]
+        element = strip_numbers_and_symbols(loop_values[1][i])
+        symmetry_multiplicity = int(loop_values[2][i])
+        wyckoff_symbol = loop_values[3][i]
+        x_frac_coord = get_string_to_formatted_float(loop_values[4][i])
+        y_frac_coord = get_string_to_formatted_float(loop_values[5][i])
+        z_frac_coord = get_string_to_formatted_float(loop_values[6][i])
+        site_occupancy = get_string_to_formatted_float(loop_values[7][i])
 
         parsed_data[atom_site_label] = {
             "element": element,

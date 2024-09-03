@@ -65,7 +65,7 @@ def test_get_loop_values(cif_block_URhIn):
     assert loop_values[1][3] == "Rh"
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_get_loop_value_ICSD(file_path_ICSD_formatted):
     block = get_cif_block(file_path_ICSD_formatted)
     loop_values = get_loop_values(block)
@@ -200,8 +200,10 @@ def test_get_tag_from_third_line():
     assert get_tag_from_third_line(file_path) == "rt_hex"
 
 
+@pytest.mark.fast
 def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
     atom_site_info = parse_atom_site_occupancy_info(file_path_URhIn)
+
     expected = {
         "In1": {
             "element": "In",
@@ -245,6 +247,32 @@ def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
 
 
 @pytest.mark.fast
+def test_get_parsed_atom_site_occupancy_info_ICSD(file_path_ICSD_formatted):
+    atom_site_info = parse_atom_site_occupancy_info(file_path_ICSD_formatted)
+
+    expected = {
+        "Fe1": {
+            "element": "Fe",
+            "site_occupancy": 1.0,
+            "symmetry_multiplicity": 4,
+            "wyckoff_symbol": "a",
+            "x_frac_coord": 0.1352,
+            "y_frac_coord": 0.1352,
+            "z_frac_coord": 0.1352,
+        },
+        "Ge1": {
+            "element": "Ge",
+            "site_occupancy": 1.0,
+            "symmetry_multiplicity": 4,
+            "wyckoff_symbol": "a",
+            "x_frac_coord": 0.8414,
+            "y_frac_coord": 0.8414,
+            "z_frac_coord": 0.8414,
+        },
+    }
+    assert atom_site_info == expected
+
+
 def test_get_parsed_atom_site_occupancy_info_with_braket():
     """
     Er7 Er 16 h 0.06284 0.06662 0.39495 1
@@ -252,7 +280,7 @@ def test_get_parsed_atom_site_occupancy_info_with_braket():
     `"""
     file_path = "tests/data/cif/cif_parser/1814810.cif"
     atom_site_info = parse_atom_site_occupancy_info(file_path)
-    print(atom_site_info)
+
     assert atom_site_info == {
         "Er7": {
             "element": "Er",
@@ -275,7 +303,7 @@ def test_get_parsed_atom_site_occupancy_info_with_braket():
     }
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_check_unique_atom_site_labels(file_path_URhIn):
     check_unique_atom_site_labels(file_path_URhIn)
 
