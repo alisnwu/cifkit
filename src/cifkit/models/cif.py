@@ -122,33 +122,8 @@ class Cif:
         """
         Initialize ExampleClass with custom parameters.
         TODO: Add more details about the class.
-
-        Args:
-            file_path (str): Description of param1 that initializes property_one.
-            is_formatted (bool): Description of param2 that initializes property_two.
-            logging_enabled (bool): Whether to log
-
-        Attributes:
-            unitcell_lengths (str): hello
-            unitcell_angles (str): hello
-            site_labels (str): hello
-            unique_elements (str): hello
-            formula (str): hello
-            structure (str): hello
-            weight (str): hello
-            site_mixing_type (str): hello
-            space_group_number (str): hello
-            space_group_name (str): hello
-            composition_type (str): hello
-            tag (str): hello
-            atom_site_info (str): hello
-            bond_pairs    (str): hello
-            bond_pairs_sorted_by_mendeleev (str): hello
-            site_label_pairs (str): hello
-            site_label_pairs_sorted_by_mendeleev (str): hello
-            mixing_info_per_label_pair (str): hello
-            mixing_info_per_label_pair_sorted_by_mendeleev (str): hello
         """
+
         self.file_path = file_path
         self.logging_enabled = logging_enabled
 
