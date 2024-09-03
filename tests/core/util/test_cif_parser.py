@@ -65,7 +65,7 @@ def test_get_loop_values(cif_block_URhIn):
     assert loop_values[1][3] == "Rh"
 
 
-@pytest.mark.fast
+@pytest.mark.now
 def test_get_loop_value_ICSD(file_path_ICSD_formatted):
     block = get_cif_block(file_path_ICSD_formatted)
     loop_values = get_loop_values(block)
@@ -200,7 +200,7 @@ def test_get_tag_from_third_line():
     assert get_tag_from_third_line(file_path) == "rt_hex"
 
 
-@pytest.mark.fast
+@pytest.mark.now
 def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
     atom_site_info = parse_atom_site_occupancy_info(file_path_URhIn)
 
@@ -246,7 +246,7 @@ def test_get_parsed_atom_site_occupancy_info(file_path_URhIn):
     assert atom_site_info == expected
 
 
-@pytest.mark.fast
+@pytest.mark.now
 def test_get_parsed_atom_site_occupancy_info_ICSD(file_path_ICSD_formatted):
     atom_site_info = parse_atom_site_occupancy_info(file_path_ICSD_formatted)
 
@@ -303,7 +303,7 @@ def test_get_parsed_atom_site_occupancy_info_with_braket():
     }
 
 
-@pytest.mark.fast
+@pytest.mark.now
 def test_check_unique_atom_site_labels(file_path_URhIn):
     check_unique_atom_site_labels(file_path_URhIn)
 

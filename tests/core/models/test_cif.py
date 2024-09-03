@@ -341,7 +341,6 @@ def test_CN_bond_counts_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
 @pytest.mark.slow
 def test_CN_bond_counts_by_best_methods_sorted_by_mendeleev(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_best_methods_sorted_by_mendeleev
-    print(result)
     assert result == {
         "In1": {("Rh", "In"): 4, ("U", "In"): 6, ("In", "In"): 4},
         "U1": {("U", "Rh"): 5, ("U", "In"): 6, ("U", "U"): 6},
@@ -544,8 +543,7 @@ def test_plot_polyhedrons(cif_ensemble_test):
 @pytest.mark.slow
 def test_plot_polyhedron_with_problem_by_min_dist_method():
     file_path = "tests/data/cif/polyhedron_error/1421162.cif"
-    cif = Cif(file_path)
-    print(cif.CN_connections_by_min_dist_method)
+    Cif(file_path)
 
 
 """
@@ -651,18 +649,35 @@ def test_init_without_mendeeleve_number():
 
 
 """
-Test file source type
+1. Test ICSD file
 """
 
 
-# def test_init_ICSD_file(tmpdir):
-#     file_path = "tests/data/cif/sources/ICSD/EntryWithCollCode43054.cif"
+@pytest.mark.now
+def test_init_ICSD_file(tmpdir):
+    file_path = "tests/data/cif/sources/ICSD/EntryWithCollCode43054.cif"
 
-#     copied_file_path = os.path.join(tmpdir, "EntryWithCollCode43054.cif")
-#     '''
-#     Fe1 Fe0+ 4 a 0.1352(4) 0.1352 0.1352 0.06(3) 1.
-#     Ge1 Ge0+ 4 a 0.8414(3) 0.8414 0.8414 0.13(3) 1.
-#     '''
-#     shutil.copyfile(file_path, copied_file_path)
-#     cif_ICSD = Cif(copied_file_path)
-#     # assert cif_ICSD.db_source == "ICSD"
+    copied_file_path = os.path.join(tmpdir, "EntryWithCollCode43054.cif")
+
+    shutil.copyfile(file_path, copied_file_path)
+    cif_ICSD = Cif(copied_file_path)
+    assert cif_ICSD.db_source == "ICSD"
+    assert cif_ICSD.unique_elements == {"Fe", "Ge"}
+    assert cif_ICSD.CN_unique_values_by_best_methods == {7, 13}
+
+
+"""
+2. Test COD file
+"""
+
+
+@pytest.mark.now
+def test_init_COD_file(tmpdir):
+    file_path = "tests/data/cif/sources/MS/U13Rh4.cif"
+
+    copied_file_path = os.path.join(tmpdir, "U13Rh4.cif")
+
+    shutil.copyfile(file_path, copied_file_path)
+    cif_MS = Cif(copied_file_path)
+
+    assert cif_MS.db_source == "MP"

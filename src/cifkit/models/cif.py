@@ -207,9 +207,9 @@ class Cif:
             self.space_group_number,
             self.space_group_name,
         ) = get_formula_structure_weight_s_group(self._block)
+        self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
         self.composition_type = len(self.unique_elements)
         self.tag = get_tag_from_third_line(self.file_path, self.db_source)
-        self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
         self.bond_pairs = get_bond_pairs(self.unique_elements)
         self.site_label_pairs = get_bond_pairs(self.site_labels)
         self.bond_pairs_sorted_by_mendeleev = get_pairs_sorted_by_mendeleev(

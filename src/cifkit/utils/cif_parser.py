@@ -87,12 +87,16 @@ def get_loop_tags() -> list[str]:
 
 def get_loop_values(block: Block) -> list[Column]:
     """
-    Retrieve a list of predefined loop tags for
-    atomic site description.
+    Retrieve a list of predefined loop tags for atomic site description.
+    If a tag is not found, None is inserted in its place in the list.
     """
     loop_tags = get_loop_tags()
 
-    loop_values = [block.find_loop(tag) for tag in loop_tags]
+    # Use a list comprehension with conditional handling for missing tags
+    loop_values = [
+        block.find_loop(tag) if block.find_loop(tag) is not None else None
+        for tag in loop_tags
+    ]
 
     return loop_values
 
@@ -109,11 +113,11 @@ def get_unique_elements_from_loop(loop_values: list) -> set[str]:
     Return a list of alphabetically sorted unique elements from loop values.
     """
     num_atom_labels = get_unique_label_count(loop_values)
-    element_list = set()
+    unique_elements = set()
     for i in range(num_atom_labels):
-        element = loop_values[1][i]
-        element_list.add(str(element))
-    return element_list
+        element = strip_numbers_and_symbols(loop_values[1][i])
+        unique_elements.add(str(element))
+    return unique_elements
 
 
 def get_unique_site_labels(loop_values: list) -> list[str]:
@@ -312,20 +316,41 @@ def parse_atom_site_occupancy_info(file_path: str) -> dict:
     """Parse atom site loop information including element, occupancy,
     fractional coordinates, multiplicity, and wyckoff symbol."""
     block = get_cif_block(file_path)
-    loop_values = get_loop_values(block)
-    label_count = len(loop_values[0])
+    loop_vals = get_loop_values(block)
+    label_count = len(loop_vals[0])
 
     parsed_data = {}
 
     for i in range(label_count):
-        atom_site_label = loop_values[0][i]
-        element = strip_numbers_and_symbols(loop_values[1][i])
-        symmetry_multiplicity = int(loop_values[2][i])
-        wyckoff_symbol = loop_values[3][i]
-        x_frac_coord = get_string_to_formatted_float(loop_values[4][i])
-        y_frac_coord = get_string_to_formatted_float(loop_values[5][i])
-        z_frac_coord = get_string_to_formatted_float(loop_values[6][i])
-        site_occupancy = get_string_to_formatted_float(loop_values[7][i])
+        # Safely extract data, assuming the possibility of None values in columns
+        atom_site_label = loop_vals[0][i] if loop_vals[0] else None
+        element = (
+            strip_numbers_and_symbols(loop_vals[1][i])
+            if loop_vals[1]
+            else None
+        )
+        symmetry_multiplicity = int(loop_vals[2][i]) if loop_vals[2] else None
+        wyckoff_symbol = loop_vals[3][i] if loop_vals[3] else None
+        x_frac_coord = (
+            get_string_to_formatted_float(loop_vals[4][i])
+            if loop_vals[4]
+            else None
+        )
+        y_frac_coord = (
+            get_string_to_formatted_float(loop_vals[5][i])
+            if loop_vals[5]
+            else None
+        )
+        z_frac_coord = (
+            get_string_to_formatted_float(loop_vals[6][i])
+            if loop_vals[6]
+            else None
+        )
+        site_occupancy = (
+            get_string_to_formatted_float(loop_vals[7][i])
+            if loop_vals[7]
+            else None
+        )
 
         parsed_data[atom_site_label] = {
             "element": element,
@@ -359,6 +384,7 @@ def check_unique_atom_site_labels(file_path: str):
     for j in range(label_count):
         parsed_site_label = loop_values[0][j]
         parsed_element = loop_values[1][j]
+        parsed_element = strip_numbers_and_symbols(parsed_element)
         if get_atom_type_from_label(parsed_site_label) != parsed_element:
             raise ValueError(CifParserError.INVALID_PARSED_ELEMENT.value)
 
