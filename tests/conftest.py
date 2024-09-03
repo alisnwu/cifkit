@@ -174,10 +174,10 @@ def radius_sum_data_URhIn() -> dict:
         "Pauling_radius_sum": {
             "In-In": 3.32,
             "In-Rh": 3.002,
-            "In-U": 3.17,
+            "In-U": 3.176,
             "Rh-Rh": 2.684,
-            "Rh-U": 2.852,
-            "U-U": 3.02,
+            "Rh-U": 2.858,
+            "U-U": 3.032,
         },
     }
 
@@ -237,7 +237,7 @@ def max_gaps_per_label_URhIn():
                 "CN": 17,
             },
             "dist_by_Pauling_radius_sum": {
-                "max_gap": 0.254,
+                "max_gap": 0.256,
                 "CN": 17,
             },
         },
@@ -248,7 +248,7 @@ def max_gaps_per_label_URhIn():
                 "max_gap": 0.418,
                 "CN": 9,
             },
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.4, "CN": 9},
+            "dist_by_Pauling_radius_sum": {"max_gap": 0.402, "CN": 9},
         },
         "Rh2": {
             "dist_by_shortest_dist": {"max_gap": 0.31, "CN": 9},
@@ -257,7 +257,7 @@ def max_gaps_per_label_URhIn():
                 "max_gap": 0.397,
                 "CN": 9,
             },
-            "dist_by_Pauling_radius_sum": {"max_gap": 0.378, "CN": 9},
+            "dist_by_Pauling_radius_sum": {"max_gap": 0.380, "CN": 9},
         },
     }
 
