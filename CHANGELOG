@@ -1,8 +1,14 @@
+## [1.0.4] - 2024-09-03
+
+### Fixed
+
+- do not print atom site info during Cif init
+
 ## [1.0.3] - 2024-09-03
 
 ### Added
 
-- Support .cif file formats of PCD, COD, Materials Studio, ICSD
+- support .cif file formats of PCD, COD, Materials Studio, ICSD
 
 ### Fixed
 
