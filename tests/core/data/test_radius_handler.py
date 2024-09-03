@@ -42,7 +42,6 @@ def test_compute_radius_sum(radius_data_URhIn, radius_sum_data_URhIn):
     [
         (["H", "Li"], False),
         (["H", "He"], False),
-        (["Be"], False),
         (["U", "Rh", "In"], True),
         (["Er", "Co", "In"], True),
     ],

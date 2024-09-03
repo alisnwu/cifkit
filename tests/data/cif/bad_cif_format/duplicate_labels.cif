@@ -98,10 +98,10 @@ loop_
  _atom_site_fract_y
  _atom_site_fract_z
  _atom_site_occupancy
- In1 In 3 g  1
- U1 U 3 f   1
- Rh1 Rh 2 d  1
- Rh2 Rh 1 a  1
+ In1 In 3 g 0.2505 0 0.5 1
+ In1 In 3 f 0.5925 0 0 1
+ Rh1 Rh 2 d 0.333333 0.666667 0.5 1
+ Rh2 Rh 1 a 0 0 0 1
 
 
 _exptl_crystal_colour                    ?

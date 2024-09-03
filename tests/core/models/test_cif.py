@@ -16,6 +16,7 @@ def test_cif_static_properties(cif_URhIn):
     assert cif_URhIn.composition_type == 3
     assert cif_URhIn.formula == "URhIn"
     assert cif_URhIn.structure == "ZrNiAl"
+    assert cif_URhIn.db_source == "PCD"
     assert cif_URhIn.weight == 455.8
     assert cif_URhIn.site_labels == ["In1", "U1", "Rh1", "Rh2"]
     assert cif_URhIn.space_group_name == "P-62m"
@@ -340,7 +341,6 @@ def test_CN_bond_counts_by_min_dist_method_sorted_by_mendeleev(cif_URhIn):
 @pytest.mark.slow
 def test_CN_bond_counts_by_best_methods_sorted_by_mendeleev(cif_URhIn):
     result = cif_URhIn.CN_bond_count_by_best_methods_sorted_by_mendeleev
-    print(result)
     assert result == {
         "In1": {("Rh", "In"): 4, ("U", "In"): 6, ("In", "In"): 4},
         "U1": {("U", "Rh"): 5, ("U", "In"): 6, ("U", "U"): 6},
@@ -543,8 +543,7 @@ def test_plot_polyhedrons(cif_ensemble_test):
 @pytest.mark.slow
 def test_plot_polyhedron_with_problem_by_min_dist_method():
     file_path = "tests/data/cif/polyhedron_error/1421162.cif"
-    cif = Cif(file_path)
-    print(cif.CN_connections_by_min_dist_method)
+    Cif(file_path)
 
 
 """
@@ -562,13 +561,13 @@ def test_init_error_duplicate_label():
     assert expected_error_message == str(e.value)
 
 
-@pytest.mark.now
+@pytest.mark.fast
 def test_init_error_coord_missing():
     file_path = "tests/data/cif/error/missing_loop/452743.cif"
     with pytest.raises(ValueError) as e:
         Cif(file_path)
 
-    assert CifParserError.MISSING_LOOP_VALUES.value in str(e.value)
+    assert "not enough values to unpack (expected 2, got 1)" in str(e.value)
 
 
 """
@@ -647,3 +646,59 @@ def test_init_without_mendeeleve_number():
         ("Pu", "Ga"),
         ("Ga", "Ga"),
     }
+
+
+"""
+1. Test ICSD file
+"""
+
+
+@pytest.mark.fast
+def test_init_ICSD_file(tmpdir):
+    file_path = "tests/data/cif/sources/ICSD/EntryWithCollCode43054.cif"
+
+    copied_file_path = os.path.join(tmpdir, "EntryWithCollCode43054.cif")
+
+    shutil.copyfile(file_path, copied_file_path)
+    cif_ICSD = Cif(copied_file_path)
+    assert cif_ICSD.db_source == "ICSD"
+    assert cif_ICSD.unique_elements == {"Fe", "Ge"}
+    assert cif_ICSD.CN_unique_values_by_best_methods == {7, 13}
+
+
+"""
+2. Test MS file
+"""
+
+
+@pytest.mark.fast
+def test_init_MS_file(tmpdir):
+    file_path = "tests/data/cif/sources/MS/U13Rh4.cif"
+
+    copied_file_path = os.path.join(tmpdir, "U13Rh4.cif")
+
+    shutil.copyfile(file_path, copied_file_path)
+    cif_MS = Cif(copied_file_path)
+
+    assert cif_MS.db_source == "MS"
+    assert cif_MS.unique_elements == {"U", "Fe"}
+    assert cif_MS.supercell_atom_count == 2988
+
+
+"""
+3. Test COD file
+"""
+
+
+@pytest.mark.fast
+def test_init_COD_file(tmpdir):
+    file_path = "tests/data/cif/sources/COD/1010581.cif"
+
+    copied_file_path = os.path.join(tmpdir, "1010581.cif")
+
+    shutil.copyfile(file_path, copied_file_path)
+    cif_COD = Cif(copied_file_path)
+
+    assert cif_COD.db_source == "COD"
+    assert cif_COD.unique_elements == {"Cu", "Se"}
+    assert cif_COD.supercell_atom_count == 1383

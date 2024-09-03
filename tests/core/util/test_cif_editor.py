@@ -3,10 +3,14 @@ import shutil
 import tempfile
 import os
 import filecmp
+import gemmi
 
 from cifkit.utils.cif_editor import (
     remove_author_loop,
+    add_hashtag_in_first_line,
 )
+
+from cifkit.utils.cif_parser import get_unitcell_lengths
 
 
 @pytest.fixture
@@ -29,3 +33,16 @@ def test_remove_author_loop(setup_and_teardown_file):
     assert filecmp.cmp(
         temp_file_path, reference_file_path, shallow=False
     ), "The modified file does not match the reference file."
+
+
+@pytest.mark.fast
+def test_hashtag_in_first_line(tmpdir):
+    temp_file_path = os.path.join(tmpdir, "test.cif")
+    origin_file_path = "tests/data/cif/sources/ICSD/EntryWithCollCode43054.cif"
+    shutil.copyfile(origin_file_path, temp_file_path)
+
+    add_hashtag_in_first_line(temp_file_path)
+
+    doc = gemmi.cif.read_file(temp_file_path)
+    block = doc.sole_block()
+    assert get_unitcell_lengths(block) == [4.7, 4.7, 4.7]

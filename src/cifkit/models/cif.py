@@ -26,10 +26,16 @@ from cifkit.utils.cif_parser import (
 from cifkit.preprocessors.format import (
     preprocess_label_element_loop_values,
 )
-from cifkit.utils.cif_editor import remove_author_loop
+from cifkit.utils.cif_editor import (
+    remove_author_loop,
+    add_hashtag_in_first_line,
+)
 from cifkit.utils.cif_parser import (
     check_unique_atom_site_labels,
 )
+
+# Identify .cif database source
+from cifkit.utils.cif_sourcer import get_cif_db_source
 
 # Supercell generation
 from cifkit.preprocessors.supercell import get_supercell_points
@@ -149,6 +155,7 @@ class Cif:
         """Initialize the Cif object with the file path."""
         self.file_name = os.path.basename(file_path)
         self.file_name_without_ext = os.path.splitext(self.file_name)[0]
+        self.db_source = get_cif_db_source(self.file_path)
         self.connections = None  # Private attribute to store connections
         self._shortest_pair_distance = None
 
@@ -169,7 +176,13 @@ class Cif:
     def _preprocess(self):
         """Preprocess each .cif file and check any error."""
         self._log_info(CifLog.PREPROCESSING.value)
-        remove_author_loop(self.file_path)
+
+        if self.db_source == "ICSD":
+            add_hashtag_in_first_line(self.file_path)
+
+        elif self.db_source == "PCD":
+            remove_author_loop(self.file_path)
+
         preprocess_label_element_loop_values(self.file_path)
         check_unique_atom_site_labels(self.file_path)
 
@@ -194,9 +207,9 @@ class Cif:
             self.space_group_number,
             self.space_group_name,
         ) = get_formula_structure_weight_s_group(self._block)
-        self.composition_type = len(self.unique_elements)
-        self.tag = get_tag_from_third_line(self.file_path)
         self.atom_site_info = parse_atom_site_occupancy_info(self.file_path)
+        self.composition_type = len(self.unique_elements)
+        self.tag = get_tag_from_third_line(self.file_path, self.db_source)
         self.bond_pairs = get_bond_pairs(self.unique_elements)
         self.site_label_pairs = get_bond_pairs(self.site_labels)
         self.bond_pairs_sorted_by_mendeleev = get_pairs_sorted_by_mendeleev(

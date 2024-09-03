@@ -5,6 +5,7 @@ from cifkit.utils.string_parser import (
     get_string_to_formatted_float,
     trim_string,
     clean_parsed_structure,
+    strip_numbers_and_symbols,
 )
 
 
@@ -86,3 +87,25 @@ def test_clean_parsed_formula(value_string, expected):
 )
 def test_clean_parsed_structure(value_string, expected):
     assert clean_parsed_structure(value_string) == expected
+
+
+@pytest.mark.parametrize(
+    "input_value, expected_output",
+    [
+        ("Se2-", "Se"),
+        ("Cu1+", "Cu"),
+        ("Sn0+", "Sn"),
+        ("Fe2O3", "FeO"),
+        ("H2SO4", "HSO"),
+        ("NaCl", "NaCl"),
+        ("Mg2+2", "Mg"),
+        ("3Li+", "Li"),
+        ("", ""),
+        ("123456", ""),
+        ("NO+-", "NO"),
+    ],
+)
+def test_strip_numbers_and_symbols(input_value, expected_output):
+    assert (
+        strip_numbers_and_symbols(input_value) == expected_output
+    ), f"Failed for input: {input_value}"

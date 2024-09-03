@@ -10,6 +10,7 @@ from cifkit.utils.string_parser import (
     trim_string,
     get_atom_type_from_label,
     clean_parsed_structure,
+    strip_numbers_and_symbols,
 )
 from cifkit.utils import unit
 from cifkit.utils.error_messages import CifParserError
@@ -86,12 +87,16 @@ def get_loop_tags() -> list[str]:
 
 def get_loop_values(block: Block) -> list[Column]:
     """
-    Retrieve a list of predefined loop tags for
-    atomic site description.
+    Retrieve a list of predefined loop tags for atomic site description.
+    If a tag is not found, None is inserted in its place in the list.
     """
     loop_tags = get_loop_tags()
 
-    loop_values = [block.find_loop(tag) for tag in loop_tags]
+    # Use a list comprehension with conditional handling for missing tags
+    loop_values = [
+        block.find_loop(tag) if block.find_loop(tag) is not None else None
+        for tag in loop_tags
+    ]
 
     return loop_values
 
@@ -108,11 +113,11 @@ def get_unique_elements_from_loop(loop_values: list) -> set[str]:
     Return a list of alphabetically sorted unique elements from loop values.
     """
     num_atom_labels = get_unique_label_count(loop_values)
-    element_list = set()
+    unique_elements = set()
     for i in range(num_atom_labels):
-        element = loop_values[1][i]
-        element_list.add(str(element))
-    return element_list
+        element = strip_numbers_and_symbols(loop_values[1][i])
+        unique_elements.add(str(element))
+    return unique_elements
 
 
 def get_unique_site_labels(loop_values: list) -> list[str]:
@@ -199,6 +204,8 @@ def get_start_end_line_indexes(
 def get_line_content_from_tag(file_path: str, start_keyword: str) -> list[str]:
     """
     Returns a list containing file content with starting keyword.
+    This function only appropriate for PCD format for removing the author
+    section.
     """
     start_index, end_index = get_start_end_line_indexes(
         file_path, start_keyword
@@ -232,11 +239,12 @@ def get_formula_structure_weight_s_group(
 
     values = [(block.find_value(key)) for key in keys]
 
-    formula = trim_string(values[0])
-    structure = clean_parsed_structure(values[1])
-    weight = get_string_to_formatted_float(values[2])
-    s_group_num = int(trim_string(values[3]))
-    s_group_name = trim_string(values[4])
+    # Process each value, only if it is not None
+    formula = trim_string(values[0]) if values[0] else None
+    structure = clean_parsed_structure(values[1]) if values[1] else None
+    weight = get_string_to_formatted_float(values[2]) if values[2] else None
+    s_group_num = int(trim_string(values[3])) if values[3] else None
+    s_group_name = trim_string(values[4]) if values[4] else None
 
     return (formula, structure, weight, s_group_num, s_group_name)
 
@@ -273,10 +281,15 @@ def get_unique_formulas_structures_weights_s_groups(
     return formulas, structures, weights, s_group_nums, s_group_names
 
 
-def get_tag_from_third_line(file_path: str) -> str:
+def get_tag_from_third_line(file_path: str, db_source="PCD") -> str:
     """
-    Extract the tag from the provided CIF file path.
+    Extract the tag from the provided CIF file path
+    appropriate for PCD db source only.
     """
+
+    if not db_source == "PCD":
+        return None
+
     with open(file_path, "r") as f:
         # Read first three lines
         f.readline()  # First line
@@ -302,22 +315,42 @@ def get_tag_from_third_line(file_path: str) -> str:
 def parse_atom_site_occupancy_info(file_path: str) -> dict:
     """Parse atom site loop information including element, occupancy,
     fractional coordinates, multiplicity, and wyckoff symbol."""
-    content_lines = get_line_content_from_tag(
-        file_path, "_atom_site_occupancy"
-    )
+    block = get_cif_block(file_path)
+    loop_vals = get_loop_values(block)
+    label_count = len(loop_vals[0])
 
     parsed_data = {}
 
-    for line in content_lines:
-        parts = line.split()
-        atom_site_label = parts[0]
-        element = parts[1]
-        symmetry_multiplicity = int(parts[2])
-        wyckoff_symbol = parts[3]
-        x_frac_coord = get_string_to_formatted_float(parts[4])
-        y_frac_coord = get_string_to_formatted_float(parts[5])
-        z_frac_coord = get_string_to_formatted_float(parts[6])
-        site_occupancy = get_string_to_formatted_float(parts[7])
+    for i in range(label_count):
+        # Safely extract data, assuming the possibility of None values in columns
+        atom_site_label = loop_vals[0][i] if loop_vals[0] else None
+        element = (
+            strip_numbers_and_symbols(loop_vals[1][i])
+            if loop_vals[1]
+            else None
+        )
+        symmetry_multiplicity = int(loop_vals[2][i]) if loop_vals[2] else None
+        wyckoff_symbol = loop_vals[3][i] if loop_vals[3] else None
+        x_frac_coord = (
+            get_string_to_formatted_float(loop_vals[4][i])
+            if loop_vals[4]
+            else None
+        )
+        y_frac_coord = (
+            get_string_to_formatted_float(loop_vals[5][i])
+            if loop_vals[5]
+            else None
+        )
+        z_frac_coord = (
+            get_string_to_formatted_float(loop_vals[6][i])
+            if loop_vals[6]
+            else None
+        )
+        site_occupancy = (
+            get_string_to_formatted_float(loop_vals[7][i])
+            if loop_vals[7]
+            else None
+        )
 
         parsed_data[atom_site_label] = {
             "element": element,
@@ -334,23 +367,29 @@ def parse_atom_site_occupancy_info(file_path: str) -> dict:
 
 def check_unique_atom_site_labels(file_path: str):
     """Check whether all parsed atom site labels are unique."""
-    content_lines = get_line_content_from_tag(
-        file_path, "_atom_site_occupancy"
-    )
+    block = get_cif_block(file_path)
 
-    site_labels = set()
-    for line in content_lines:
-        parts = line.split()
-        if len(parts) != 8:
-            raise ValueError(CifParserError.WRONG_LOOP_VALUE_COUNT.value)
+    loop_values = get_loop_values(block)
 
-        parsed_site_label = parts[0]
-        parsed_element = parts[1]
-        site_labels.add(parsed_site_label)
+    # Check how many unique labels - use _atom_site_label of length 4
+    label_count = len(loop_values[0])
+    if len(loop_values) == 0:
+        raise ValueError(CifParserError.MISSING_LOOP_VALUES.value)
 
+    unique_site_labels = set()
+
+    # Collect all the site labels to a set
+    for j in range(label_count):
+        unique_site_labels.add(loop_values[0][j])
+
+    # Check the element can be parsed from the label
+    for j in range(label_count):
+        parsed_site_label = loop_values[0][j]
+        parsed_element = loop_values[1][j]
+        parsed_element = strip_numbers_and_symbols(parsed_element)
         if get_atom_type_from_label(parsed_site_label) != parsed_element:
             raise ValueError(CifParserError.INVALID_PARSED_ELEMENT.value)
 
-    # If the count of unique labels does not match the number of lines, raise an error
-    if len(content_lines) != len(site_labels):
+    # Check all the site labels are unique
+    if label_count != len(unique_site_labels):
         raise ValueError(CifParserError.DUPLICATE_LABELS.value)
