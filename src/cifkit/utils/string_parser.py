@@ -49,3 +49,11 @@ def clean_parsed_structure(structure_type: str) -> str:
     Split the parsed structure text and remove "~".
     """
     return structure_type.split(",")[0].replace("~", "")
+
+
+def strip_numbers_and_symbols(value: str) -> str:
+    """
+    Removes all digits and '+' and '-' characters from the input string.
+    Some ICSD, COD have charges in atomic site element e.g. "Fe0+".
+    """
+    return re.sub(r"[\d\+\-]", "", value)
