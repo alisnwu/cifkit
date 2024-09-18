@@ -36,6 +36,7 @@ bibliography: paper.bib
 
 # Summary
 
+CIF (Crystallographic Information File) is a standard text file format for representing crystallographic information.
 `cifkit` is designed to provide a set of intuitive utility functions and
 variables for processing large datasets, on the order of tens of thousands of
 .cif files. `cifkit` serves as an engine for building Python applications that
