@@ -590,7 +590,7 @@ def test_init_without_radius_data():
 
 
 """
-Test files that is not full occupacny
+Test files that is not full occupancy
 """
 
 
