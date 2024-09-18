@@ -2,7 +2,7 @@ nav:
   - Getting started: index.md
   - Cif: notebooks/01_cif.ipynb
   - CifEnsemble: notebooks/02_cif_ensemble.ipynb
-  - API Reference: api_reference.md
+  - API Reference: api.md
 
 site_name: cifkit
 theme:

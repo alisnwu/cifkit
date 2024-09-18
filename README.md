@@ -4,6 +4,8 @@
 [![codecov](https://codecov.io/gh/bobleesj/cifkit/graph/badge.svg?token=AN2YAC337A)](https://codecov.io/gh/bobleesj/cifkit)
 ![Python - Version](https://img.shields.io/pypi/pyversions/quacc)
 [![PyPi version](https://img.shields.io/pypi/v/cifkit.svg)](https://pypi.python.org/pypi/cifkit)
+[![Conda version](https://img.shields.io/conda/vn/conda-forge/cifkit)](https://anaconda.org/conda-forge/cifkit)
+
 
 <a href="https://joss.theoj.org/papers/9016ae27b8c6fddffaae5aeb8be18d19"><img src="https://joss.theoj.org/papers/9016ae27b8c6fddffaae5aeb8be18d19/status.svg"></a>
 
@@ -101,7 +103,7 @@ mentioned above.
 ## Documentation
 
 - [Official documentation](https://bobleesj.github.io/cifkit)
-- [Developer guide](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md)
+- [Contribution guide](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md)
 - [MIT license](https://github.com/bobleesj/cifkit/blob/main/LICENSE)
 
 ## How to contribute

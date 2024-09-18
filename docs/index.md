@@ -3,9 +3,9 @@
 
 ## Statement of need
 
-`cifkit` distinguishes itself from existing libraries creating and manipulating .cif files by offering higher-level
+`cifkit` uses .cif files by offering higher-level
 functions and variables that enable users to perform complex tasks efficiently
-with a few lines of code. `cifkit` not only facilitates the visualization of
+with a few lines of code. `cifkit` facilitates the visualization of
 coordination geometry from each site but also extracts physics-based features
 like volume and packing efficiency, crucial for structural analysis in ML tasks.
 Additionally, it extracts atomic mixing information at the bond pair level—tasks
@@ -25,25 +25,112 @@ distances. It also excels in visualizing and cataloging CIF files, organizing
 them based on supercell size, tags, coordination numbers, elements, and atomic
 mixing, among other parameters.
 
+## TL;DR
+
+`cifkit` provides higher-level functions in just a few lines of code.
+
+- **Coordination geometry** - `cifkit` provides fuctions for visualing
+  coordination geometry from each site and extracts physics-based features like
+  volume and packing efficiency in each polyhedron.
+- **Atomic mixing** - `cifkit` extracts atomic mixing information at the bond
+  pair level—tasks that would otherwise require extensive manual effort using
+  GUI-based tools like VESTA, Diamond, and CrystalMaker.
+- **Filter** - `cifkit` offers features for preprocessing. It systematically
+  addresses common issues in CIF files from databases, such as incorrect loop
+  values and missing fractional coordinates, by standardizing and filtering out
+  ill-formatted files. It also preprocesses atomic site labels, transforming
+  labels such as 'M1' to 'Fe1' in files with atomic mixing.
+- **Sort** - `cifkit` allows you to copy, move, and sort `.cif` files based on
+  attributes such as coordination numbers, space groups, unit cells, shortest
+  distances, elements, and more.
+
+## Installation
+
+Python 3.10, 3.11, 3.12 are supported.
+
+![Python - Version](https://img.shields.io/pypi/pyversions/quacc)
+[![PyPi version](https://img.shields.io/pypi/v/cifkit.svg)](https://pypi.python.org/pypi/cifkit)
+[![Conda version](https://img.shields.io/conda/vn/conda-forge/cifkit)](https://anaconda.org/conda-forge/cifkit)
+
+
+Option 1. pip install
+
+```bash
+pip install cifkit
+```
+
+Option 2. conda install
+
+```bash
+conda install cifkit
+```
+
+If you are new to Conda, feel free to read the following blog posts:
+
+- [How to use Python package manager for beginners (Ft. Conda with Cheatsheet)](https://bobleesj.github.io/tutorial/2024/02/26/intro-to-python-package-manager.html)
+- [Why there are two Python installation methods (Ft. Conda and pip)](https://bobleesj.github.io/tutorial/2024/08/31/conda-pip-installation.html)
+
+
 ## Overview
 
-Designed for individuals with minimal programming experience, `cifkit` provides
-two primary objects: `Cif` and `CifEnsemble`.
+`cifkit` provide two primary classes: `Cif` and `CifEnsemble`.
 
 ### Cif
 
-**`Cif`** is initialized with a `.cif` file path. It parses the `.cif` file,
+`Cif` is initialized with a `.cif` file path. It parses the `.cif` file,
 generates supercells, and computes nearest neighbors. It also determines
 coordination numbers using four different methods and generates polyhedrons for
 each site.
 
+The example below uses `cifkit` to visualize the polyhedron generated from each atomic site based on the
+coordination number geometry.
+
+```python
+from cifkit import Cif
+
+cif = Cif("your_cif_file_path")
+site_labels = cif.site_labels
+
+# Loop through each site label
+for label in site_labels:
+    # Dipslay each polyhedron, .png saved for each label
+    cif.plot_polyhedron(label, is_displayed=True)
+```
+
+![Polyhedron generation](assets/img/ErCoIn_polyhedron.png)
+
+For more, visit [https://bobleesj.github.io/cifkit/notebooks/01_cif](https://bobleesj.github.io/cifkit/notebooks/01_cif) for a full tutorial with an interactive Google Codelab link.
+
 ### CifEnsemble
 
-**`CifEnsemble`** is initialized with a folder path containing `.cif` files. It
+`CifEnsemble` is initialized with a folder path containing `.cif` files. It
 identifies unique attributes, such as space groups and elements, across the
 `.cif` files, moves and copies files based on these attributes. It generates
 histograms for all attributes.
 
+
+The following example generates a distribution of structure.
+
+```python
+from cifkit import CifEnsemble
+
+ensemble = CifEnsemble("cif_containing_folder_path")
+ensemble.generate_structure_histogram()
+```
+
+![structure distribution](assets/img/histogram-structure.png)
+
+Basde on your visual histogram above, you can copy and move .cif files based on specific attributes:
+
+```python
+# Return file paths matching structures either Co1.75Ge or CoIn2
+ensemble.filter_by_structures(["Co1.75Ge", "CoIn2"])
+
+# Return file path matching CeAl2Ga2
+ensemble.filter_by_structures("CeAl2Ga2")
+```
+
+For more, visit [https://bobleesj.github.io/cifkit/notebooks/02_cif_ensemble/](https://bobleesj.github.io/cifkit/notebooks/02_cif_ensemble/) for a full tutorial with an interactive Google Codelab link.
 
 ## Research projects using `cifkit`
 
@@ -115,5 +202,5 @@ Please consider citing `cifkit` if it has been useful for your research:
 
 ## Other links
 
-- [Developer guide](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md)
+- [Contribution guide](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md)
 - [MIT license](https://github.com/bobleesj/cifkit/blob/main/LICENSE)
