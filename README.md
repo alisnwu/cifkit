@@ -7,8 +7,8 @@
 
 <a href="https://joss.theoj.org/papers/9016ae27b8c6fddffaae5aeb8be18d19"><img src="https://joss.theoj.org/papers/9016ae27b8c6fddffaae5aeb8be18d19/status.svg"></a>
 
-![Logo light mode](assets/img/logo-black.png#gh-light-mode-only "cifkit logo light")
-![Logo dark mode](assets/img/logo-color.png#gh-dark-mode-only "cifkit logo dark")
+![Logo light mode](docs/assets/img/logo-black.png#gh-light-mode-only "cifkit logo light")
+![Logo dark mode](docs/assets/img/logo-color.png#gh-dark-mode-only "cifkit logo dark")
 
 `cifkit` is designed to provide a set of fully-tested utility functions and
 variables for handling large datasets, on the order of tens of thousands, of
