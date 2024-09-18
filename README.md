@@ -36,30 +36,42 @@ variables for handling large datasets, on the order of tens of thousands, of
   attributes such as coordination numbers, space groups, unit cells, shortest
   distances, elements, and more.
 
-### Example
+### Example usage 1
 
-You can visualize the polyhedron generated from each atomic site based on the
+The example below uses `cifkit` to visualize the polyhedron generated from each atomic site based on the
 coordination number geometry.
 
 ```python
 from cifkit import Cif
 
-# Example usage
 cif = Cif("your_cif_file_path")
 site_labels = cif.site_labels
 
-# Loop through each site
+# Loop through each site label
 for label in site_labels:
-    # Dipslay each polyhedron, a file saved for each
+    # Dipslay each polyhedron, .png saved for each label
     cif.plot_polyhedron(label, is_displayed=True)
 ```
 
 ![Polyhedron generation](assets/img/ErCoIn_polyhedron.png)
 
-For more, polease read the official documention here
-https://bobleesj.github.io/cifkit
+### Example Usage 2
 
-## Documentations
+The following example generates a distribution of structure.
+
+```python
+from cifkit import CifEnsemble
+
+ensemble = CifEnsemble("cif_containing_folder_path")
+ensemble.generate_structure_histogram()
+```
+
+![structure distribution](assets/img/histogram-structure.png)
+
+To learn more, please read the official documention here:
+https://bobleesj.github.io/cifkit.
+
+## Documentation
 
 - [Official documentation](https://bobleesj.github.io/cifkit)
 - [Developer guide](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md)
@@ -75,7 +87,7 @@ Here is how you can contribute to the `cifkit` project if you found it helpful:
 - Create a new issue for any bugs or feature requests
   [here](https://github.com/bobleesj/cifkit/issues)
 - Fork the repository and consider contributing changes via a pull request.
-  [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members).
+  [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/fork).
   Check out
   [CONTRIBUTING.md](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md)
   for instructions.

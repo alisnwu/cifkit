@@ -61,10 +61,17 @@ pip install -e .
 This command installs the project in "editable" mode so that changes you make to
 the code are immediately available in the environment.
 
-## Step 6: Make Changes and Push to Your Fork
+## Step 6: Make Changes and Test
 
-Make the necessary changes to the code. After completing your changes, stage and
-commit your work:
+Make the necessary changes to the code. Run unit tests locally:
+
+```bash
+pytest
+```
+
+## Step 7: Push to Your Fork
+
+After completing your changes, stage and commit your work:
 
 ```bash
 git add .
@@ -72,7 +79,8 @@ git commit -m "Describe your changes"
 git push origin branch-name
 ```
 
-## Step 7: Create a Pull Request
+
+## Step 8: Create a Pull Request
 
 Once your changes are pushed to your fork, go to the original repository on
 GitHub. Visit https://github.com/bobleesj/cifkit and you should see a new button
