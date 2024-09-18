@@ -36,12 +36,16 @@ bibliography: paper.bib
 
 # Summary
 
-`cifkit` provides higher-level utility functions and variables from .cif files, which are standard file formats for storing crystallographic data such as atomic fractional coordinates, symmetry operations, and unit cell dimensions. `cifkit` serves as an engine for building Python applications that automate crystal structure analysis, enabling the extraction of physics-based
-information crucial for understanding geometric configurations and identifying
-irregularities. `cifkit` also offers various tools for determining coordination
-numbers, plotting coordination geometry-based polyhedron from each site,
-calculating bond fractions, moving and copying .cif files based on a set of
-attributes, and determining atomic mixing information.
+`cifkit` provides higher-level utility functions and variables from .cif files,
+which are standard file formats for storing crystallographic data such as atomic
+fractional coordinates, symmetry operations, and unit cell dimensions. `cifkit`
+serves as an engine for building Python applications that automate crystal
+structure analysis, enabling the extraction of physics-based information crucial
+for understanding geometric configurations and identifying irregularities.
+`cifkit` also offers various tools for determining coordination numbers,
+plotting coordination geometry-based polyhedron from each site, calculating bond
+fractions, moving and copying .cif files based on a set of attributes, and
+determining atomic mixing information.
 
 # Statement of need
 
@@ -55,13 +59,37 @@ Similarly, the Atomic Simulation Environment (ASE) [@larsen_atomic_2017]
 provides a suite of powerful tools for generating and running atomistic
 simulations.
 
-`cifkit` distinguishes itself from existing libraries by offering higher-level functions and variables that enable users to perform complex tasks efficiently with a few lines of code. `cifkit` not only facilitates the visualization of coordination geometry from each site but also extracts physics-based features like volume and packing efficiency, crucial for structural analysis in ML tasks. Additionally, it extracts atomic mixing information at the bond pair level—tasks that would otherwise require extensive manual effort using GUI-based tools like VESTA, Diamond, and CrystalMaker, due to the lack of readily available higher-level functions.
+`cifkit` distinguishes itself from existing libraries by offering higher-level
+functions and variables that enable users to perform complex tasks efficiently
+with a few lines of code. `cifkit` not only facilitates the visualization of
+coordination geometry from each site but also extracts physics-based features
+like volume and packing efficiency, crucial for structural analysis in ML tasks.
+Additionally, it extracts atomic mixing information at the bond pair level—tasks
+that would otherwise require extensive manual effort using GUI-based tools like
+VESTA, Diamond, and CrystalMaker, due to the lack of readily available
+higher-level functions.
 
-Further enhancing its utility, cifkit excels in sorting, preprocessing, and understanding the distribution of underlying CIF files. Common issues in CIF files from databases, such as incorrect loop values and missing fractional coordinates, are systematically addressed as cifkit standardizes and filters out ill-formatted files. It also preprocesses atomic site labels, transforming labels such as 'M1' to 'Fe1' in files with atomic mixing. Beyond error correction, cifkit provides functionalities to copy, move, and sort files based on attributes like coordination numbers, space groups, unit cells, and shortest distances. It also excels in visualizing and cataloging CIF files, organizing them based on supercell size, tags, coordination numbers, elements, and atomic mixing, among other parameters.
+Further enhancing its utility, cifkit excels in sorting, preprocessing, and
+understanding the distribution of underlying CIF files. Common issues in CIF
+files from databases, such as incorrect loop values and missing fractional
+coordinates, are systematically addressed as cifkit standardizes and filters out
+ill-formatted files. It also preprocesses atomic site labels, transforming
+labels such as 'M1' to 'Fe1' in files with atomic mixing. Beyond error
+correction, cifkit provides functionalities to copy, move, and sort files based
+on attributes like coordination numbers, space groups, unit cells, and shortest
+distances. It also excels in visualizing and cataloging CIF files, organizing
+them based on supercell size, tags, coordination numbers, elements, and atomic
+mixing, among other parameters.
 
 # Examples
 
-cifkit is designed to minmize the reliance on API documentation for useres with limtied programming experience. By simplifying user interactions while maintaining robust functionality, cifkit enables a broader range of scientists to leverage computational tools for complex tasks such as extracting descriptors for geometry-based polyhedra from each atomic site. The full installation process can be executed via a Jupyter notebook, which is distributed through the Google Colab URL provided in the official documentation.
+cifkit is designed to minmize the reliance on API documentation for useres with
+limtied programming experience. By simplifying user interactions while
+maintaining robust functionality, cifkit enables a broader range of scientists
+to leverage computational tools for complex tasks such as extracting descriptors
+for geometry-based polyhedra from each atomic site. The full installation
+process can be executed via a Jupyter notebook, which is distributed through the
+Google Colab URL provided in the official documentation.
 
 ```python
 from cifkit import Cif, Example
