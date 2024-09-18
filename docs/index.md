@@ -11,6 +11,14 @@ set of attributes, and determine atomic mixing information in 2-3 lines of code.
 
 ## Installation
 
+Please use one of the Python versions (>=3.10) and the latest PyPI version below!
+
+![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)
+![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)
+![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)
+[![PyPi version](https://img.shields.io/pypi/v/cifkit.svg)](https://pypi.python.org/pypi/cifkit)
+
+
 Install `cifkit` via:
 
 ```bash
