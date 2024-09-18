@@ -53,7 +53,7 @@ for label in site_labels:
     cif.plot_polyhedron(label, is_displayed=True)
 ```
 
-![Polyhedron generation](assets/img/ErCoIn_polyhedron.png)
+![Polyhedron generation](docs/assets/img/ErCoIn_polyhedron.png)
 
 ### Example Usage 2 - sort
 
@@ -66,20 +66,37 @@ ensemble = CifEnsemble("cif_containing_folder_path")
 ensemble.generate_structure_histogram()
 ```
 
-![structure distribution](assets/img/histogram-structure.png)
+![structure distribution](docs/assets/img/histogram-structure.png)
 
 Basde on your visual histogram above, you can copy and move .cif files based on specific attributes:
 
 ```python
 # Return file paths matching structures either Co1.75Ge or CoIn2
-ensemble_test.filter_by_structures(["Co1.75Ge", "CoIn2"])
+ensemble.filter_by_structures(["Co1.75Ge", "CoIn2"])
 
 # Return file path matching CeAl2Ga2
-ensemble_test.filter_by_structures("CeAl2Ga2")
+ensemble.filter_by_structures("CeAl2Ga2")
 ```
 
 To learn more, please read the official documention here:
 https://bobleesj.github.io/cifkit.
+
+## Quotes
+
+Here is a quote illustrating how `cifkit` addresses one of the challenges
+mentioned above.
+
+> "I am building an X-Ray diffraction analysis (XRD) pattern visualization
+> script for my lab using `pymatgen`. I feel like `cifkit` integrated really
+> well into my existing stable of libraries, while surpassing some alternatives
+> in preprocessing and parsing. For example, it was often unclear at what stage
+> an error occurred—whether during pre-processing with `CifParser`, or XRD plot
+> generation with `diffraction.core` in `pymatgen`. The pre-processing logic in
+> `cifkit` was communicated clearly, both in documentation and in actual
+> outputs, allowing me to catch errors in my data before it was used in my
+> visualizations. I now use `cifkit` by default for processing CIFs before they
+> pass through the rest of my pipeline." - Alex Vtorov
+`
 
 ## Documentation
 
