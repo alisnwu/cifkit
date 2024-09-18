@@ -17,7 +17,7 @@ variables for handling large datasets, on the order of tens of thousands, of
 > The current codebase and documentation are actively being improved as of Sep
 > 18, 2024.
 
-## What cifkit does
+## Features:
 
 `cifkit` provides higher-level functions in just a few lines of code.
 
@@ -36,7 +36,7 @@ variables for handling large datasets, on the order of tens of thousands, of
   attributes such as coordination numbers, space groups, unit cells, shortest
   distances, elements, and more.
 
-### Example usage 1
+### Example usage 1 - coordination geometry
 
 The example below uses `cifkit` to visualize the polyhedron generated from each atomic site based on the
 coordination number geometry.
@@ -55,7 +55,7 @@ for label in site_labels:
 
 ![Polyhedron generation](assets/img/ErCoIn_polyhedron.png)
 
-### Example Usage 2
+### Example Usage 2 - sort
 
 The following example generates a distribution of structure.
 
@@ -67,6 +67,16 @@ ensemble.generate_structure_histogram()
 ```
 
 ![structure distribution](assets/img/histogram-structure.png)
+
+Basde on your visual histogram above, you can copy and move .cif files based on specific attributes:
+
+```python
+# Return file paths matching structures either Co1.75Ge or CoIn2
+ensemble_test.filter_by_structures(["Co1.75Ge", "CoIn2"])
+
+# Return file path matching CeAl2Ga2
+ensemble_test.filter_by_structures("CeAl2Ga2")
+```
 
 To learn more, please read the official documention here:
 https://bobleesj.github.io/cifkit.
