@@ -12,7 +12,6 @@ readme = "README.md"
 license = {file = "LICENSE"}
 keywords = ["cif", "solid-state", "high-throughput", "crystallography"]
 
-
 [project.urls]
 Documentation = "https://bobleesj.github.io/cifkit"
 Repository = "https://github.com/bobleesj/cifkit"
@@ -25,5 +24,23 @@ where = ["src"]
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements/run.txt"]}
 
-[tool.ruff]
+[tool.black]
 line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git\
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build/
+  | buck-out
+  | build
+  | dist
+  | blib2to3
+  | tests/data/
+  | hooks/post_gen_project.py$
+  | .*\.py$
+  | .*\.toml$
+)/
+'''

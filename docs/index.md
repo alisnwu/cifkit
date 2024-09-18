@@ -9,6 +9,14 @@ determining coordination numbers, plotting polyhedrons from each site based on
 the coordination numbers, bond fractions, move and copy `.cif` files based on a
 set of attributes, and determine atomic mixing information in 2-3 lines of code.
 
+### Google Codelab
+
+You can also run the examples using Google Codelab by clicking the link below:
+
+<a href="https://colab.research.google.com/drive/1mZLFWyYblc2gxRqjP7CejZcUNGbQBzwo#scrollTo=WzjDKPmC5I67" target="_blank">
+    <img src="https://img.shields.io/badge/Google%20Colab-Open-blue.svg" alt="Open In Colab">
+</a>
+
 ## Installation
 
 Please use one of the Python versions (>=3.10) and the latest PyPI version below!
@@ -33,6 +41,8 @@ pip install cifkit pyvista gemmi
 
 `gemmi` is used for parsing `.cif` files. `pyvista` is used for plotting
 polyhedrons.
+
+
 
 ## Start with CifEnsemble
 
@@ -156,11 +166,6 @@ ensemble.move_cif_files(file_paths, dest_dir_path)
 ensemble.copy_cif_files(file_paths, dest_dir_path)
 ```
 
-## Are you ready?
-
-Now, if you are interested in working with individual `.cif` files and learn
-more about all features in `cifkit`, let's visit the `Example notebooks` section
-[here](https://bobleesj.github.io/cifkit/notebooks/00_Intro/)!
 
 ## Research projects using `cifkit`
 

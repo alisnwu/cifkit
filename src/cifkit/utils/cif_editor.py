@@ -1,4 +1,5 @@
 import os
+
 from cifkit.utils import cif_parser
 
 

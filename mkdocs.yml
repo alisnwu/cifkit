@@ -1,3 +1,9 @@
+nav:
+  - Getting started: index.md
+  - Cif: notebooks/01_cif.ipynb
+  - CifEnsemble: notebooks/02_cif_ensemble.ipynb
+  - API Reference: api_reference.md
+
 site_name: cifkit
 theme:
   name: material
@@ -54,5 +60,5 @@ plugins:
           paths: [src]
           options:
             show_source: false
-
+            show_root_heading: true     # Show module names as headings
   - mkdocs-jupyter

@@ -204,7 +204,7 @@ Here is how you can contribute to the `cifkit` project if you found it helpful:
   find `cifkit` helpful as well.
   [![Star GitHub repository](https://img.shields.io/github/stars/bobleesj/cifkit.svg?style=social)](https://github.com/bobleesj/cifkit/stargazers)
 - Fork the repository and consider contributing changes via a pull request.
-  [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members)
+  [![Fork GitHub repository](https://img.shields.io/github/forks/bobleesj/cifkit?style=social)](https://github.com/bobleesj/cifkit/network/members). Check out [CONTRIBUTING.md](https://github.com/bobleesj/cifkit/blob/main/CONTRIBUTING.md) for instructions.
 - If you have any suggestions or need further clarification on how to use
   `cifkit`, please feel free to reach out to Sangjoon Bob Lee
   ([@bobleesj](https://github.com/bobleesj)).
