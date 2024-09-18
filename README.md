@@ -21,8 +21,7 @@ The documentation is available here: https://bobleesj.github.io/cifkit
 functions for handling large datasets, on the order of tens of thousands, of
 `.cif` files.
 
-> The current codebase and documentation are actively being improved as of July
-> 8, 2024.
+> The current codebase and documentation are actively being improved as of Sep 18, 2024.
 
 ## Motivation
 
