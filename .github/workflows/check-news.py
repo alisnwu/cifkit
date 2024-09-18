@@ -17,19 +17,28 @@ def get_added_files(pr: PullRequest.PullRequest):
 
 
 def check_news_file(pr):
-    return any(map(lambda file_name: fnmatch(file_name, "news/*.rst"), get_added_files(pr)))
+    return any(
+        map(
+            lambda file_name: fnmatch(file_name, "news/*.rst"),
+            get_added_files(pr),
+        )
+    )
 
 
 def get_pr_number():
     number = os.environ["PR_NUMBER"]
     if not number:
-        raise Exception(f"Pull request number is not found `PR_NUMBER={number}")
+        raise Exception(
+            f"Pull request number is not found `PR_NUMBER={number}"
+        )
     return int(number)
 
 
 def get_old_comment(pr: PullRequest.PullRequest):
     for comment in pr.get_issue_comments():
-        if ("github-actions" in comment.user.login) and ("No news item is found" in comment.body):
+        if ("github-actions" in comment.user.login) and (
+            "No news item is found" in comment.body
+        ):
             return comment
 
 
