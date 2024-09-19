@@ -1,6 +1,8 @@
 """Check if the PR has a news item.
 
-Put a warning comment if it doesn't.
+Put a warning comment and fail the CI if it doesn't.
+
+Code modified from https://github.com/xonsh/xonsh
 """
 
 import os
@@ -9,15 +11,13 @@ from fnmatch import fnmatch
 from github import Github, PullRequest
 
 
-def get_added_files(pr: PullRequest.PullRequest):
-    print(pr, pr.number)
-    for file in pr.get_files():
-        if file.status == "added":
-            yield file.filename
-
-
-def check_news_file(pr):
-    return any(map(lambda file_name: fnmatch(file_name, "news/*.rst"), get_added_files(pr)))
+def check_news_file(pr: PullRequest.PullRequest):
+    # Get the list of files changed in the PR
+    changed_files = pr.get_files()
+    for file in changed_files:
+        if file.status == 'added' and file.filename.startswith('news/'):
+            return True
+    return False
 
 
 def get_pr_number():
