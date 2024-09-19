@@ -14,8 +14,12 @@ from github import Github, PullRequest
 def check_news_file(pr: PullRequest.PullRequest):
     # Get the list of files changed in the PR
     changed_files = pr.get_files()
+    pattern = 'news/*.rst'
     for file in changed_files:
-        if file.status == 'added' and file.filename.startswith('news/'):
+        if (
+            file.status == 'added' and
+            fnmatch(file.filename, pattern)
+        ):
             return True
     return False
 
