@@ -53,10 +53,10 @@ def main():
         else:
             pr.create_issue_comment(
                 """\
-**Warning!** No news item is found for this PR. If this is a user-facing change/feature/fix,
-please add a news item by copying the format from `news/TEMPLATE.rst`.
-"""
-        )
+                **Warning!** No news item is found for this PR. If this is a user-facing change/feature/fix,
+                please add a news item by copying the format from `news/TEMPLATE.rst`.
+                """
+                )
         assert False
 
 

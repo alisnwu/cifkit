@@ -1,11 +1,12 @@
 import os
+
 from cifkit.utils import cif_parser
 
 
 def remove_author_loop(file_path: str) -> None:
     """
     Remove the author section from a .cif file to prevent parsing problems
-    caused by a wrongly formatted author block. THis is a common issue in
+    caused by a wrongly formatted author block. This is a common issue in
     PCD files.
     """
     (

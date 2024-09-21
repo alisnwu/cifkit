@@ -1,10 +1,12 @@
+import logging
 import os
 import shutil
+
 import pytest
-import logging
+
 from cifkit import Cif
-from cifkit.utils.error_messages import CifParserError
 from cifkit.utils import folder
+from cifkit.utils.error_messages import CifParserError
 
 
 @pytest.mark.fast
@@ -590,7 +592,7 @@ def test_init_without_radius_data():
 
 
 """
-Test files that is not full occupacny
+Test files that is not full occupancy
 """
 
 

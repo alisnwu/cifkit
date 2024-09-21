@@ -1,15 +1,12 @@
-import pytest
+import filecmp
+import os
 import shutil
 import tempfile
-import os
-import filecmp
+
 import gemmi
+import pytest
 
-from cifkit.utils.cif_editor import (
-    remove_author_loop,
-    add_hashtag_in_first_line,
-)
-
+from cifkit.utils.cif_editor import add_hashtag_in_first_line, remove_author_loop
 from cifkit.utils.cif_parser import get_unitcell_lengths
 
 
